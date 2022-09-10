@@ -1,10 +1,12 @@
 import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
 import { appId } from '@utils/environment'
 import authRoutes from './auth'
+import notificationRoutes from './notifications'
 import usersRoutes from './users'
 
 export const routes: Route[] = [
 	...authRoutes,
+	...notificationRoutes,
 	...usersRoutes,
 	{
 		path: '/',

@@ -1,4 +1,4 @@
-import { IAuthRepository } from '../i-repositories/auth'
+import { IAuthRepository } from '../irepositories/auth'
 import { Credential, PasswordResetInput, RegisterInput } from '../types'
 import { AuthTypes } from '@stranerd/api-commons'
 import { UserToModel } from '../../data/models/users'

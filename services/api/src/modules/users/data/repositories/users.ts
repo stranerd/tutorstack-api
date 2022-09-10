@@ -2,7 +2,7 @@ import { IUserRepository } from '../../domain/i-repositories/users'
 import { UserBio, UserRoles } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
 import { User } from '../mongooseModels/users'
-import { mongoose, parseQueryParams } from '@stranerd/api-commons'
+import { parseQueryParams } from '@stranerd/api-commons'
 import { UserFromModel } from '../models/users'
 
 export class UserRepository implements IUserRepository {

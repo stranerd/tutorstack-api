@@ -1,9 +1,9 @@
 import { createTransport } from 'nodemailer'
 import { appInstance, emails, isDev } from '@utils/environment'
-import { EmailsUseCases } from '@modules/emails'
+import { EmailsUseCases } from '@modules/notifications'
 import { EmailsList, TypedEmail } from '@utils/types/email'
 
-export const sendMail = async (email: TypedEmail) => {
+const sendMail = async (email: TypedEmail) => {
 	const { to, subject, content, from = EmailsList.NO_REPLY } = email
 	const { clientId, privateKey } = emails[from]
 

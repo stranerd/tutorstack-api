@@ -1,6 +1,6 @@
 import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
 import { ErrorFromModel } from '../models/errors'
-import { ErrorChangeStreamCallbacks } from '@utils/changeStreams/emails/errors'
+import { ErrorChangeStreamCallbacks } from '@utils/changeStreams/notifications/errors'
 import { ErrorEntity } from '../../domain/entities/errors'
 import { ErrorMapper } from '../mappers/errors'
 
@@ -46,6 +46,6 @@ const Schema = new mongoose.Schema<ErrorFromModel>({
 	}
 }, { timestamps: { currentTime: Date.now } })
 
-export const Error = mongoose.model<ErrorFromModel>('EmailsError', Schema)
+export const Error = mongoose.model<ErrorFromModel>('NotificationsEmailsError', Schema)
 
 generateChangeStreams<ErrorFromModel, ErrorEntity>(Error, ErrorChangeStreamCallbacks, new ErrorMapper().mapFrom).then()

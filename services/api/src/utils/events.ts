@@ -1,8 +1,8 @@
 import { CronTypes, MediaOutput } from '@stranerd/api-commons'
 import { TypedEmail } from '@utils/types/email'
 import { appInstance } from '@utils/environment'
-import { sendMailAndCatchError } from '@utils/modules/emails'
-import { EmailsUseCases } from '@modules/emails'
+import { sendMailAndCatchError } from '@utils/modules/notifications/emails'
+import { EmailsUseCases } from '@modules/notifications'
 import { StorageUseCases } from '@modules/storage'
 import { deleteUnverifiedUsers } from '@utils/modules/auth'
 
