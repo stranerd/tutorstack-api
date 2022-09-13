@@ -1,5 +1,5 @@
 import { UserEntity } from '../entities/users'
-import { UserBio, UserRoles } from '../types'
+import { UserBio, UserMeta, UserRoles } from '../types'
 import { QueryParams, QueryResults } from '@stranerd/api-commons'
 
 export interface IUserRepository {
@@ -18,4 +18,6 @@ export interface IUserRepository {
 	updateUserStatus (userId: string, socketId: string, add: boolean): Promise<boolean>
 
 	resetAllUsersStatus (): Promise<boolean>
+
+	incrementUserMeta (userId: string, key: UserMeta, value: 1 | -1): Promise<void>
 }

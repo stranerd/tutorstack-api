@@ -1,5 +1,5 @@
 import { IUserRepository } from '../../domain/i-repositories/users'
-import { UserBio, UserRoles } from '../../domain/types'
+import { UserBio, UserMeta, UserRoles } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
 import { User } from '../mongooseModels/users'
 import { parseQueryParams } from '@stranerd/api-commons'
@@ -66,5 +66,13 @@ export class UserRepository implements IUserRepository {
 			$set: { 'status.connections': [] }
 		})
 		return !!res.acknowledged
+	}
+
+	async incrementUserMeta (userId: string, key: UserMeta, value: 1 | -1) {
+		await User.findByIdAndUpdate(userId, {
+			$inc: {
+				[`meta.${key}`]: value
+			}
+		})
 	}
 }

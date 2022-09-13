@@ -1,5 +1,6 @@
 export enum SupportedAuthRoles {
 	isAdmin = 'isAdmin',
+	isTutor = 'isTutor',
 	isSuperAdmin = 'isSuperAdmin',
 }
 

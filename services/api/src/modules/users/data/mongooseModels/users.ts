@@ -3,6 +3,7 @@ import { UserFromModel } from '../models/users'
 import { UserChangeStreamCallbacks } from '@utils/changeStreams/users/users'
 import { UserEntity } from '../../domain/entities/users'
 import { UserMapper } from '../mappers/users'
+import { UserMeta } from '../../domain/types'
 
 const UserSchema = new mongoose.Schema<UserFromModel>({
 	_id: {
@@ -30,6 +31,13 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 			default: null
 		}
 	},
+	meta: Object.fromEntries(
+		Object.keys(UserMeta).map((key) => [key, {
+			type: Number,
+			required: false,
+			default: 0
+		}])
+	),
 	status: {
 		connections: {
 			type: [String],

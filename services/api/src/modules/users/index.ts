@@ -7,4 +7,4 @@ export const UsersUseCases = new UsersUseCase(userRepository)
 
 export { UserFromModel } from './data/models/users'
 export { UserEntity } from './domain/entities/users'
-export { UserBio, UserRoles } from './domain/types'
+export { UserBio, UserRoles, EmbeddedUser, UserMeta } from './domain/types'

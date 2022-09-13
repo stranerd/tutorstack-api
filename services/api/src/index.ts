@@ -1,9 +1,10 @@
-import { getNewServerInstance, OnJoinFn } from '@stranerd/api-commons'
+import { getNewServerInstance } from '@stranerd/api-commons'
 import { appId, appInstance, port } from '@utils/environment'
 import { subscribers } from '@utils/events'
 import { routes } from '@application/routes'
 import { UsersUseCases } from '@modules/users'
 import { startJobs } from '@utils/jobs'
+import { registerSockets } from '@utils/sockets'
 
 const app = getNewServerInstance(routes, {
 	onConnect: async (userId, socketId) => {
@@ -24,13 +25,7 @@ const start = async () => {
 			})
 	)
 
-	const isMine: OnJoinFn = async ({ channel, user }) => user ? `${channel}/${user.id}` : null
-	const isOpen: OnJoinFn = async ({ channel }) => channel
-
-	getSocketEmitter().register('users/customers', isMine)
-	getSocketEmitter().register('users/transactions', isMine)
-	getSocketEmitter().register('users/users', isOpen)
-
+	await registerSockets()
 	await UsersUseCases.resetAllUsersStatus()
 
 	await app.start(port)

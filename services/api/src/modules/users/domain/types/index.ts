@@ -22,3 +22,17 @@ export type UserStatus = {
 	connections: string[]
 	lastUpdatedAt: number
 }
+
+export enum UserMeta {
+	questions = 'questions',
+	answers = 'answers',
+	bestAnswers = 'bestAnswers'
+}
+
+export type UserMetaType = Record<UserMeta, number>
+
+export type EmbeddedUser = {
+	id: string
+	bio: UserBio
+	roles: UserRoles
+}

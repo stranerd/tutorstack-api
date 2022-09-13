@@ -1,5 +1,5 @@
 import { IUserRepository } from '../i-repositories/users'
-import { UserBio, UserRoles } from '../types'
+import { UserBio, UserMeta, UserRoles } from '../types'
 import { QueryParams } from '@stranerd/api-commons'
 
 export class UsersUseCase {
@@ -39,5 +39,9 @@ export class UsersUseCase {
 
 	async updateUserWithRoles (params: { id: string, data: UserRoles, timestamp: number }) {
 		return await this.repository.updateUserWithRoles(params.id, params.data, params.timestamp)
+	}
+
+	async incrementMeta (params: { id: string, value: 1 | -1, property: UserMeta }) {
+		return await this.repository.incrementUserMeta(params.id, params.property, params.value)
 	}
 }
