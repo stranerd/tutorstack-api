@@ -16,6 +16,7 @@
 		"@google-cloud/storage": "^6.4.2",
 		"@stranerd/api-commons": "^3.15.4",
 		"axios": "^0.27.2",
+		"firebase-admin": "^11.0.1",
 		"nodemailer": "^6.7.8"
 	},
 	"devDependencies": {
