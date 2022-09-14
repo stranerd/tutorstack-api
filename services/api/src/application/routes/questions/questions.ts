@@ -64,5 +64,31 @@ export const questionsRoutes: Route[] = [
 				}
 			})
 		]
+	},
+	{
+		path: '/questions/questions/:id/hold',
+		method: 'post',
+		controllers: [
+			requireAuthUser,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await QuestionController.HoldQuestion(req)
+				}
+			})
+		]
+	},
+	{
+		path: '/questions/questions/:id/release',
+		method: 'post',
+		controllers: [
+			requireAuthUser,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await QuestionController.ReleaseQuestion(req)
+				}
+			})
+		]
 	}
 ]

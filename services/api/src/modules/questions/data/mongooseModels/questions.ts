@@ -35,6 +35,11 @@ const Schema = new mongoose.Schema<QuestionFromModel>({
 		required: false,
 		default: null
 	},
+	heldBy: {
+		type: mongoose.Schema.Types.Mixed as unknown as QuestionFromModel['heldBy'],
+		required: false,
+		default: null
+	},
 	createdAt: {
 		type: Number,
 		required: false,

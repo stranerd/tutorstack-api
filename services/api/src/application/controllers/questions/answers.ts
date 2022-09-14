@@ -47,10 +47,12 @@ export class AnswerController {
 			attachment: { required: true, rules: [Validation.isNotTruncated, Validation.isVideo] }
 		})
 
-		const question = await QuestionsUseCases.find(req.body.questionId)
+		const authUserId = req.authUser!.id
+		const question = await QuestionsUseCases.find(data.questionId)
 		if (!question) throw new BadRequestError('question not found')
-		if (question.getIsAnswered()) throw new BadRequestError('question already answered')
-		const user = await UsersUseCases.find(req.authUser!.id)
+		if (question.isAnswered()) throw new BadRequestError('question already answered')
+		if (question.isHeldBy(authUserId)) throw new BadRequestError('you can\'t answer a question you are not holding')
+		const user = await UsersUseCases.find(authUserId)
 		if (!user) throw new BadRequestError('user not found')
 		const attachment = await StorageUseCases.upload('questions/answers', data.attachment)
 		return await AnswersUseCases.add({ ...data, attachment, user: user.getEmbedded() })

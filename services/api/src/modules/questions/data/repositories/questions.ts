@@ -63,4 +63,15 @@ export class QuestionRepository implements IQuestionRepository {
 		const questions = await Question.deleteMany({ subjectId })
 		return questions.acknowledged
 	}
+
+	async hold (id: string, userId: string, hold: boolean) {
+		const find = hold ?
+			{ _id: id, heldBy: null } :
+			{ _id: id, 'heldBy.userId': userId }
+		const set = hold ?
+			{ $set: { heldBy: { userId, heldAt: Date.now() } } } :
+			{ $set: { heldBy: null } }
+		const question = await Question.findOneAndUpdate(find, set, { new: true })
+		return this.mapper.mapFrom(question)
+	}
 }

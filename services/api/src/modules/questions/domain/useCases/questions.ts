@@ -41,4 +41,8 @@ export class QuestionsUseCase {
 	async deleteSubjectQuestions (subjectId: string) {
 		return await this.repository.deleteSubjectQuestions(subjectId)
 	}
+
+	async hold (data: { id: string, userId: string, hold: boolean }) {
+		return await this.repository.hold(data.id, data.userId, data.hold)
+	}
 }

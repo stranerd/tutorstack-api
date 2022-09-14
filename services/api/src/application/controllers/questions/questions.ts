@@ -69,4 +69,18 @@ export class QuestionController {
 		if (isDeleted) return isDeleted
 		throw new NotAuthorizedError()
 	}
+
+	static async HoldQuestion (req: Request) {
+		const authUserId = req.authUser!.id
+		const question = await QuestionsUseCases.hold({ id: req.params.id, userId: authUserId, hold: true })
+		if (question) return question
+		throw new NotAuthorizedError()
+	}
+
+	static async ReleaseQuestion (req: Request) {
+		const authUserId = req.authUser!.id
+		const question = await QuestionsUseCases.hold({ id: req.params.id, userId: authUserId, hold: false })
+		if (question) return question
+		throw new NotAuthorizedError()
+	}
 }

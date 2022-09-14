@@ -12,4 +12,5 @@ export interface IQuestionRepository {
 	updateUserBio: (user: EmbeddedUser) => Promise<boolean>
 	updateAnswers: (id: string, answerId: string, userId: string, add: boolean) => Promise<boolean>
 	deleteSubjectQuestions: (subjectId: string) => Promise<boolean>
+	hold: (id: string, userId: string, hold: boolean) => Promise<QuestionEntity | null>
 }
