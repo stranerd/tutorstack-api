@@ -24,4 +24,8 @@ export interface IUserRepository {
 	updateUserTutors (userId: string, tutorId: string, add: boolean): Promise<UserEntity | null>
 
 	removeSavedTutors (tutorId: string): Promise<boolean>
+
+	updateTutorSubjects (userId: string, subjectId: string, add: boolean): Promise<UserEntity | null>
+
+	removeSavedSubjects (subjectId: string): Promise<boolean>
 }

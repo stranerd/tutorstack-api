@@ -50,6 +50,13 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 			default: 0
 		}
 	},
+	tutor: {
+		subjects: {
+			type: [String],
+			required: false,
+			default: []
+		}
+	},
 	tutors: {
 		type: [String],
 		required: false,

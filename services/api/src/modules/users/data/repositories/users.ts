@@ -85,4 +85,16 @@ export class UserRepository implements IUserRepository {
 		const res = await User.updateMany({ tutors: tutorId }, { $pull: { tutors: tutorId } })
 		return !!res.acknowledged
 	}
+
+	async updateTutorSubjects (userId: string, subjectId: string, add: boolean) {
+		const user = await User.findOneAndUpdate(
+			{ _id: userId, ...(add ? { 'tutors.subjects.0': { $exists: false } } : {}) },
+			{ [add ? '$addToSet' : '$pull']: { 'tutor.subjects': subjectId } })
+		return this.mapper.mapFrom(user)
+	}
+
+	async removeSavedSubjects (subjectId: string) {
+		const res = await User.updateMany({ 'tutor.subjects': subjectId }, { $pull: { 'tutor.subjects': subjectId } })
+		return !!res.acknowledged
+	}
 }

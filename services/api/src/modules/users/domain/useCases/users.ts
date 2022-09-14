@@ -52,4 +52,12 @@ export class UsersUseCase {
 	async removeSavedTutors (tutorId: string) {
 		return await this.repository.removeSavedTutors(tutorId)
 	}
+
+	async updateTutorSubjects (input: { userId: string, subjectId: string, add: boolean }) {
+		return await this.repository.updateTutorSubjects(input.userId, input.subjectId, input.add)
+	}
+
+	async removeSavedSubjects (subjectId: string) {
+		return await this.repository.removeSavedSubjects(subjectId)
+	}
 }

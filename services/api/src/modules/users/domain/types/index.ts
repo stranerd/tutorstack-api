@@ -25,6 +25,10 @@ export type UserStatus = {
 	lastUpdatedAt: number
 }
 
+export type UserTutor = {
+	subjects: string[]
+}
+
 export enum UserMeta {
 	questions = 'questions',
 	answers = 'answers',

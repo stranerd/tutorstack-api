@@ -1,6 +1,7 @@
 import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { QuestionsUseCases, SubjectEntity, SubjectFromModel } from '@modules/questions'
 import { getSocketEmitter } from '@index'
+import { UsersUseCases } from '@modules/users'
 
 export const SubjectChangeStreamCallbacks: ChangeStreamCallbacks<SubjectFromModel, SubjectEntity> = {
 	created: async ({ after }) => {
@@ -14,6 +15,7 @@ export const SubjectChangeStreamCallbacks: ChangeStreamCallbacks<SubjectFromMode
 	deleted: async ({ before }) => {
 		await getSocketEmitter().emitDeleted('questions/subjects', before)
 		await getSocketEmitter().emitDeleted(`questions/subjects/${before.id}`, before)
+		await UsersUseCases.removeSavedSubjects(before.id)
 		await QuestionsUseCases.deleteSubjectQuestions(before.id)
 	}
 }
