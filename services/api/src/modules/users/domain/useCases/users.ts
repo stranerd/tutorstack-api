@@ -1,4 +1,4 @@
-import { IUserRepository } from '../i-repositories/users'
+import { IUserRepository } from '../irepositories/users'
 import { UserBio, UserMeta, UserRoles } from '../types'
 import { QueryParams } from '@stranerd/api-commons'
 

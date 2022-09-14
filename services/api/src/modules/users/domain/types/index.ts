@@ -1,6 +1,8 @@
 import { MediaOutput } from '@stranerd/api-commons'
 import { AuthRoles } from '@utils/types'
 
+export type Media = MediaOutput
+
 export type UserBio = {
 	email: string
 	name: {
@@ -8,7 +10,7 @@ export type UserBio = {
 		last: string
 		full: string
 	}
-	photo: MediaOutput | null
+	photo: Media | null
 }
 
 export type UserRoles = AuthRoles

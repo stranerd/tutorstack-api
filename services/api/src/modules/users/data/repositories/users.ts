@@ -1,4 +1,4 @@
-import { IUserRepository } from '../../domain/i-repositories/users'
+import { IUserRepository } from '../../domain/irepositories/users'
 import { UserBio, UserMeta, UserRoles } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
 import { User } from '../mongooseModels/users'
