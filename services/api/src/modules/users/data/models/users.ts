@@ -10,4 +10,5 @@ export interface UserToModel {
 	dates: UserDates
 	meta: UserMetaType
 	status: UserStatus
+	tutors: string[]
 }

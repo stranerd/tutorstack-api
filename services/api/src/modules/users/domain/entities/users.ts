@@ -8,14 +8,10 @@ export class UserEntity extends BaseEntity {
 	public readonly dates: UserDates
 	public readonly meta: UserMetaType
 	public readonly status: UserStatus
+	public readonly tutors: string[]
 
 	constructor ({
-		             id,
-		             bio,
-		             roles,
-		             dates,
-		             meta,
-		             status
+		             id, bio, roles, dates, meta, status, tutors
 	             }: UserConstructorArgs) {
 		super()
 		this.id = id
@@ -24,6 +20,7 @@ export class UserEntity extends BaseEntity {
 		this.dates = dates
 		this.meta = meta
 		this.status = status
+		this.tutors = tutors
 	}
 
 	getEmbedded (): EmbeddedUser {
@@ -42,4 +39,5 @@ type UserConstructorArgs = {
 	dates: UserDates
 	meta: UserMetaType
 	status: UserStatus
+	tutors: string[]
 }

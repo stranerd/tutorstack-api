@@ -14,8 +14,9 @@ export const NotificationsUseCases = new NotificationsUseCase(notificationReposi
 export const TokensUseCases = new TokensUseCase(tokenRepository)
 
 export { ErrorFromModel } from './data/models/errors'
-export { NotificationFromModel } from './data/models/notifications'
+export { NotificationFromModel, NotificationToModel } from './data/models/notifications'
 export { TokenFromModel } from './data/models/tokens'
 export { ErrorEntity } from './domain/entities/errors'
 export { NotificationEntity } from './domain/entities/notifications'
 export { TokenEntity } from './domain/entities/tokens'
+export { NotificationType } from './domain/types'

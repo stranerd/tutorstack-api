@@ -49,6 +49,11 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 			required: false,
 			default: 0
 		}
+	},
+	tutors: {
+		type: [String],
+		required: false,
+		default: []
 	}
 }, { minimize: false })
 

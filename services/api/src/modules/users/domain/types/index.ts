@@ -27,7 +27,8 @@ export type UserStatus = {
 
 export enum UserMeta {
 	questions = 'questions',
-	answers = 'answers'
+	answers = 'answers',
+	students = 'students'
 }
 
 export type UserMetaType = Record<UserMeta, number>

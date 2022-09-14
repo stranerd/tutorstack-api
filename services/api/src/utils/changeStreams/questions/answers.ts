@@ -1,9 +1,11 @@
-import { ChangeStreamCallbacks } from '@stranerd/api-commons'
+import { ChangeStreamCallbacks, Validation } from '@stranerd/api-commons'
 import { AnswerEntity, AnswerFromModel, QuestionsUseCases } from '@modules/questions'
 import { getSocketEmitter } from '@index'
 import { UserMeta, UsersUseCases } from '@modules/users'
 import { EventTypes, publishers } from '@utils/events'
 import { releaseQuestion } from '@utils/modules/questions/questions'
+import { sendNotification } from '@utils/modules/notifications/notifications'
+import { NotificationType } from '@modules/notifications'
 
 export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel, AnswerEntity> = {
 	created: async ({ after }) => {
@@ -11,6 +13,15 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 		await getSocketEmitter().emitCreated(`questions/answers/${after.id}`, after)
 
 		await releaseQuestion(after.questionId, after.user.id)
+
+		const question = await QuestionsUseCases.find(after.questionId)
+		if (question) await sendNotification([question.user.id], {
+			title: `${question.user.bio.name.full} answered your question`,
+			body: Validation.extractTextFromHTML(question.body),
+			data: { type: NotificationType.NewAnswer, questionId: after.questionId, answerId: after.id },
+			sendEmail: true
+		})
+
 		await UsersUseCases.incrementMeta({ id: after.user.id, value: 1, property: UserMeta.answers })
 		await QuestionsUseCases.updateAnswers({
 			questionId: after.questionId,
