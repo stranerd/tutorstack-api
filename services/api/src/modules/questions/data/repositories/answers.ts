@@ -3,7 +3,7 @@ import { AnswerMapper } from '../mappers/answers'
 import { AnswerFromModel, AnswerToModel } from '../models/answers'
 import { Answer } from '../mongooseModels/answers'
 import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { AnswerMetaType, EmbeddedUser } from '../../domain/types'
+import { EmbeddedUser } from '../../domain/types'
 
 export class AnswerRepository implements IAnswerRepository {
 	private static instance: AnswerRepository
@@ -55,12 +55,5 @@ export class AnswerRepository implements IAnswerRepository {
 	async deleteQuestionAnswers (questionId: string) {
 		const answers = await Answer.deleteMany({ questionId })
 		return !!answers.acknowledged
-	}
-
-	async updateMeta (id: string, property: AnswerMetaType, value: 1 | -1) {
-		const answer = await Answer.findByIdAndUpdate(id, {
-			$inc: { [`meta.${property}`]: value }
-		})
-		return !!answer
 	}
 }

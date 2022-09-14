@@ -2,10 +2,8 @@ import { IQuestionRepository } from '../../domain/irepositories/questions'
 import { QuestionMapper } from '../mappers/questions'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
 import { Question } from '../mongooseModels/questions'
-import { Answer } from '../mongooseModels/answers'
-import { mongoose, parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser, QuestionMetaType } from '../../domain/types'
-import { BEST_ANSWERS_COUNT } from '../../domain/entities/questions'
+import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
+import { EmbeddedUser } from '../../domain/types'
 
 export class QuestionRepository implements IQuestionRepository {
 	private static instance: QuestionRepository
@@ -44,29 +42,6 @@ export class QuestionRepository implements IQuestionRepository {
 		return this.mapper.mapFrom(question)
 	}
 
-	async updateBestAnswer (questionId: string, answerId: string, userId: string, add: boolean) {
-		const session = await mongoose.startSession()
-		let res = null as any
-		await session.withTransaction(async (session) => {
-			const question = await Question.findOneAndUpdate({
-				_id: questionId, 'user.id': userId,
-				...(add ? { [`bestAnswers.${BEST_ANSWERS_COUNT}`]: { $exists: false } } : { 'bestAnswers': answerId })
-			}, {
-				[add ? '$addToSet' : 'pull']: { bestAnswers: answerId }
-			}, { session, new: true })
-			const answer = question ? await Answer.findOneAndUpdate({
-				_id: answerId,
-				questionId
-			}, { $set: { best: add } }, {
-				session, new: true
-			}) : null
-			res = !!question && !!answer
-			return res
-		})
-		await session.endSession()
-		return res
-	}
-
 	async updateAnswers (id: string, answerId: string, userId: string, add: boolean) {
 		const question = await Question.findByIdAndUpdate(id, {
 			[add ? '$addToSet' : '$pull']: { answers: { id: answerId, userId } }
@@ -87,12 +62,5 @@ export class QuestionRepository implements IQuestionRepository {
 	async deleteSubjectQuestions (subjectId: string) {
 		const questions = await Question.deleteMany({ subjectId })
 		return questions.acknowledged
-	}
-
-	async updateMeta (id: string, property: QuestionMetaType, value: 1 | -1) {
-		const question = await Question.findByIdAndUpdate(id, {
-			$inc: { [`meta.${property}`]: value }
-		})
-		return !!question
 	}
 }

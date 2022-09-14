@@ -1,7 +1,7 @@
 import { QuestionEntity } from '../entities/questions'
 import { QuestionToModel } from '../../data/models/questions'
 import { QueryParams, QueryResults } from '@stranerd/api-commons'
-import { EmbeddedUser, QuestionMetaType } from '../types'
+import { EmbeddedUser } from '../types'
 
 export interface IQuestionRepository {
 	add: (data: QuestionToModel) => Promise<QuestionEntity>
@@ -11,7 +11,5 @@ export interface IQuestionRepository {
 	delete: (id: string, userId: string) => Promise<boolean>
 	updateUserBio: (user: EmbeddedUser) => Promise<boolean>
 	updateAnswers: (id: string, answerId: string, userId: string, add: boolean) => Promise<boolean>
-	updateBestAnswer: (id: string, answerId: string, userId: string, add: boolean) => Promise<boolean>
 	deleteSubjectQuestions: (subjectId: string) => Promise<boolean>
-	updateMeta: (id: string, property: QuestionMetaType, value: 1 | -1) => Promise<boolean>
 }

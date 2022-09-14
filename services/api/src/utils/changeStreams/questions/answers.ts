@@ -21,23 +21,6 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 		await getSocketEmitter().emitUpdated('questions/answers', after)
 		await getSocketEmitter().emitUpdated(`questions/answers/${after.id}`, after)
 
-		if (changes.best) await UsersUseCases.incrementMeta({
-			id: before.user.id,
-			value: after.best ? 1 : -1,
-			property: UserMeta.bestAnswers
-		})
-
-		if (!after.best && changes.meta?.likes && after.meta.likes >= 20) {
-			const question = await QuestionsUseCases.find(after.questionId)
-			const markBest = question && !question.isAnswered && !question.answers.find((a) => a.id === after.id)
-			if (markBest) await QuestionsUseCases.updateBestAnswer({
-				id: question!.id,
-				answerId: after.id,
-				userId: question!.user.id,
-				add: true
-			})
-		}
-
 		if (changes.attachment) await publishers[EventTypes.DELETEFILE].publish(before.attachment)
 	},
 	deleted: async ({ before }) => {
@@ -53,16 +36,5 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 		})
 
 		await publishers[EventTypes.DELETEFILE].publish(before.attachment)
-
-		if (before.best) {
-			await UsersUseCases.incrementMeta({ id: before.user.id, value: -1, property: UserMeta.bestAnswers })
-			const question = await QuestionsUseCases.find(before.questionId)
-			if (question) await QuestionsUseCases.updateBestAnswer({
-				id: question.id,
-				userId: question.user.id,
-				answerId: before.id,
-				add: false
-			})
-		}
 	}
 }

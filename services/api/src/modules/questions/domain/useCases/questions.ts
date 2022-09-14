@@ -1,7 +1,7 @@
 import { IQuestionRepository } from '../irepositories/questions'
 import { QuestionToModel } from '../../data/models/questions'
 import { QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser, QuestionMetaType } from '../types'
+import { EmbeddedUser } from '../types'
 
 export class QuestionsUseCase {
 	private repository: IQuestionRepository
@@ -26,10 +26,6 @@ export class QuestionsUseCase {
 		return await this.repository.get(query)
 	}
 
-	async updateBestAnswer (input: { id: string, answerId: string, userId: string, add: boolean }) {
-		return await this.repository.updateBestAnswer(input.id, input.answerId, input.userId, input.add)
-	}
-
 	async update (input: { id: string, userId: string, data: Partial<QuestionToModel> }) {
 		return await this.repository.update(input.id, input.userId, input.data)
 	}
@@ -44,9 +40,5 @@ export class QuestionsUseCase {
 
 	async deleteSubjectQuestions (subjectId: string) {
 		return await this.repository.deleteSubjectQuestions(subjectId)
-	}
-
-	async updateMeta (data: { id: string, property: QuestionMetaType, value: 1 | -1 }) {
-		return this.repository.updateMeta(data.id, data.property, data.value)
 	}
 }

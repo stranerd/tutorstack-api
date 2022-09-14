@@ -1,4 +1,4 @@
-import { AnswersUseCases, QuestionsUseCases, SubjectsUseCases } from '@modules/questions'
+import { QuestionsUseCases, SubjectsUseCases } from '@modules/questions'
 import { UsersUseCases } from '@modules/users'
 import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
 import { StorageUseCases } from '@modules/storage'
@@ -61,31 +61,6 @@ export class QuestionController {
 		const attachment = data.attachment ? await StorageUseCases.upload('questions/questions', data.attachment) : null
 
 		return await QuestionsUseCases.add({ ...data, attachment, user: user.getEmbedded() })
-	}
-
-	static async MarkBestAnswer (req: Request) {
-		const authUserId = req.authUser!.id
-
-		const { answerId } = validate({
-			answerId: req.body.answerId
-		}, {
-			answerId: { required: true, rules: [Validation.isString] }
-		})
-
-		const question = await QuestionsUseCases.find(req.params.id)
-		const answer = await AnswersUseCases.find(answerId)
-		if (!question) throw new BadRequestError('question not found')
-		if (!answer || answer.questionId !== question.id) throw new BadRequestError('invalid answer')
-		if (question.user.id !== authUserId) throw new NotAuthorizedError()
-		if (question.isAnswered) throw new BadRequestError('question is already answered')
-		if (question.bestAnswers.find((a) => a === answerId)) throw new BadRequestError('answer is already marked best answer')
-
-		return await QuestionsUseCases.updateBestAnswer({
-			id: question.id,
-			answerId,
-			userId: authUserId,
-			add: true
-		})
 	}
 
 	static async DeleteQuestion (req: Request) {

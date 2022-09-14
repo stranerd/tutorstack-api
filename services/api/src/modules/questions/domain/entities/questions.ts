@@ -1,7 +1,5 @@
 import { BaseEntity } from '@stranerd/api-commons'
-import { EmbeddedUser, Media, QuestionMeta } from '../types'
-
-export const BEST_ANSWERS_COUNT = 1
+import { EmbeddedUser, Media } from '../types'
 
 export class QuestionEntity extends BaseEntity {
 	public readonly id: string
@@ -10,16 +8,13 @@ export class QuestionEntity extends BaseEntity {
 	public readonly subjectId: string
 	public readonly topic: string
 	public readonly user: EmbeddedUser
-	public readonly bestAnswers: string[]
 	public readonly answers: { id: string, userId: string }[]
-	public readonly meta: QuestionMeta
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
 	constructor ({
 		             id, body, subjectId, topic, attachment,
-		             bestAnswers, createdAt, user,
-		             meta, answers, updatedAt
+		             createdAt, user, answers, updatedAt
 	             }: QuestionConstructorArgs) {
 		super()
 		this.id = id
@@ -28,15 +23,13 @@ export class QuestionEntity extends BaseEntity {
 		this.subjectId = subjectId
 		this.topic = topic
 		this.user = user
-		this.bestAnswers = bestAnswers
 		this.answers = answers
-		this.meta = meta
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
 
-	get isAnswered () {
-		return this.bestAnswers.length > BEST_ANSWERS_COUNT - 1
+	getIsAnswered () {
+		return !!this.answers.length
 	}
 }
 
@@ -47,9 +40,7 @@ type QuestionConstructorArgs = {
 	subjectId: string
 	topic: string
 	user: EmbeddedUser
-	bestAnswers: string[]
 	answers: { id: string, userId: string }[]
-	meta: QuestionMeta
 	createdAt: number
 	updatedAt: number
 }

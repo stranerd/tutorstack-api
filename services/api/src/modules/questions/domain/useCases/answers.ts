@@ -1,7 +1,7 @@
 import { IAnswerRepository } from '../irepositories/answers'
 import { AnswerToModel } from '../../data/models/answers'
 import { QueryParams } from '@stranerd/api-commons'
-import { AnswerMetaType, EmbeddedUser } from '../types'
+import { EmbeddedUser } from '../types'
 
 export class AnswersUseCase {
 	private repository: IAnswerRepository
@@ -36,10 +36,6 @@ export class AnswersUseCase {
 
 	async deleteQuestionAnswers (questionId: string) {
 		return await this.repository.deleteQuestionAnswers(questionId)
-	}
-
-	async updateMeta (data: { id: string, property: AnswerMetaType, value: 1 | -1 }) {
-		return this.repository.updateMeta(data.id, data.property, data.value)
 	}
 }
 
