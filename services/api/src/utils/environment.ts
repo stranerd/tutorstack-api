@@ -19,6 +19,12 @@ export const emails = Object.fromEntries(
 	}])
 )
 
+const flutterwave = JSON.parse(getEnvOrFail('FLUTTERWAVE') || '{}')
+export const flutterwaveConfig = {
+	secretKey: flutterwave.secretKey,
+	publicKey: flutterwave.publicKey
+}
+
 export const accessTokenKey = getEnvOrFail('ACCESS_TOKEN_KEY')
 export const refreshTokenKey = getEnvOrFail('REFRESH_TOKEN_KEY')
 export const mongoDbURI = getEnvOrFail('MONGODB_URI')

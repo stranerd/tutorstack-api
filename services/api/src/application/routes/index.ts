@@ -4,12 +4,14 @@ import authRoutes from './auth'
 import notificationRoutes from './notifications'
 import questionRoutes from './questions'
 import usersRoutes from './users'
+import paymentRoutes from './payment'
 
 export const routes: Route[] = [
 	...authRoutes,
 	...notificationRoutes,
 	...questionRoutes,
 	...usersRoutes,
+	...paymentRoutes,
 	{
 		path: '/',
 		method: 'get',
