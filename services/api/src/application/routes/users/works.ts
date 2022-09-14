@@ -1,67 +1,67 @@
 import { makeController, requireAuthUser, Route, StatusCodes } from '@stranerd/api-commons'
-import { AnswerController } from '../../controllers/questions/answers'
+import { WorkController } from '../../controllers/users/works'
 import { isTutor } from '@application/middlewares'
 
-export const answersRoutes: Route[] = [
+export const worksRoutes: Route[] = [
 	{
-		path: '/questions/answers',
+		path: '/users/works',
 		method: 'get',
 		controllers: [
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.GetAnswers(req)
+					result: await WorkController.GetWorks(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers/:id',
+		path: '/users/works/:id',
 		method: 'get',
 		controllers: [
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.FindAnswer(req)
+					result: await WorkController.FindWork(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers/:id',
+		path: '/users/works/:id',
 		method: 'put',
 		controllers: [
-			requireAuthUser, isTutor,
+			requireAuthUser,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.UpdateAnswer(req)
+					result: await WorkController.UpdateWork(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers',
+		path: '/users/works',
 		method: 'post',
 		controllers: [
 			requireAuthUser, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.CreateAnswer(req)
+					result: await WorkController.CreateWork(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers/:id',
+		path: '/users/works/:id',
 		method: 'delete',
 		controllers: [
-			requireAuthUser, isTutor,
+			requireAuthUser,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.DeleteAnswer(req)
+					result: await WorkController.DeleteWork(req)
 				}
 			})
 		]

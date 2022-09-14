@@ -1,67 +1,67 @@
 import { makeController, requireAuthUser, Route, StatusCodes } from '@stranerd/api-commons'
-import { AnswerController } from '../../controllers/questions/answers'
+import { EducationController } from '../../controllers/users/educations'
 import { isTutor } from '@application/middlewares'
 
-export const answersRoutes: Route[] = [
+export const educationsRoutes: Route[] = [
 	{
-		path: '/questions/answers',
+		path: '/users/educations',
 		method: 'get',
 		controllers: [
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.GetAnswers(req)
+					result: await EducationController.GetEducations(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers/:id',
+		path: '/users/educations/:id',
 		method: 'get',
 		controllers: [
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.FindAnswer(req)
+					result: await EducationController.FindEducation(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers/:id',
+		path: '/users/educations/:id',
 		method: 'put',
 		controllers: [
-			requireAuthUser, isTutor,
+			requireAuthUser,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.UpdateAnswer(req)
+					result: await EducationController.UpdateEducation(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers',
+		path: '/users/educations',
 		method: 'post',
 		controllers: [
 			requireAuthUser, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.CreateAnswer(req)
+					result: await EducationController.CreateEducation(req)
 				}
 			})
 		]
 	},
 	{
-		path: '/questions/answers/:id',
+		path: '/users/educations/:id',
 		method: 'delete',
 		controllers: [
-			requireAuthUser, isTutor,
+			requireAuthUser,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await AnswerController.DeleteAnswer(req)
+					result: await EducationController.DeleteEducation(req)
 				}
 			})
 		]
