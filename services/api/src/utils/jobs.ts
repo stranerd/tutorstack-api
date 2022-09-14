@@ -2,9 +2,8 @@ import { CronTypes } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
 import { EmailsUseCases, NotificationsUseCases } from '@modules/notifications'
 import { sendMailAndCatchError } from '@utils/modules/notifications/emails'
-import { TypedEmail } from '@utils/types/email'
+import { DelayedEvent, TypedEmail } from '@utils/types'
 import { deleteUnverifiedUsers } from '@utils/modules/auth'
-import { DelayedEvent } from '@utils/types/bull'
 
 export const startJobs = async () => {
 	await appInstance.job.startProcessingQueues<DelayedEvent, any>([

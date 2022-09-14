@@ -3,7 +3,7 @@ import { NotificationEntity, NotificationFromModel } from '@modules/notification
 import { getSocketEmitter } from '@index'
 import { sendPushNotification } from '@utils/modules/notifications/push'
 import { EventTypes, publishers } from '@utils/events'
-import { EmailsList } from '@utils/types/email'
+import { EmailsList } from '@utils/types'
 import { UsersUseCases } from '@modules/users'
 
 export const NotificationChangeStreamCallbacks: ChangeStreamCallbacks<NotificationFromModel, NotificationEntity> = {
