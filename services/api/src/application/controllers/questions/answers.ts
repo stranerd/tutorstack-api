@@ -51,7 +51,7 @@ export class AnswerController {
 		const question = await QuestionsUseCases.find(data.questionId)
 		if (!question) throw new BadRequestError('question not found')
 		if (question.isAnswered()) throw new BadRequestError('question already answered')
-		if (question.isHeldBy(authUserId)) throw new BadRequestError('you can\'t answer a question you are not holding')
+		if (!question.isHeldBy(authUserId)) throw new BadRequestError('you can\'t answer a question you are not holding')
 		const user = await UsersUseCases.find(authUserId)
 		if (!user) throw new BadRequestError('user not found')
 		const attachment = await StorageUseCases.upload('questions/answers', data.attachment)

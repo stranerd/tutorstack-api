@@ -2,10 +2,11 @@ import { CronTypes } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
 import { EmailsUseCases, NotificationsUseCases } from '@modules/notifications'
 import { sendMailAndCatchError } from '@utils/modules/notifications/emails'
-import { DelayedEvent } from '@utils/types'
+import { DelayedEvent, DelayedJobs } from '@utils/types'
 import { deleteUnverifiedUsers } from '@utils/modules/auth'
 import { retryTransactions } from '@utils/modules/payment/transactions'
 import { CardsUseCases } from '@modules/payment'
+import { releaseQuestion } from '@utils/modules/questions/questions'
 
 export const startJobs = async () => {
 	await appInstance.job.startProcessingQueues<DelayedEvent, any>([
@@ -14,7 +15,8 @@ export const startJobs = async () => {
 		{ name: CronTypes.weekly, cron: '0 0 * * SUN' },
 		{ name: CronTypes.monthly, cron: '0 0 1 * *' }
 	], {
-		onDelayed: async () => {
+		onDelayed: async (data) => {
+			if (data.type === DelayedJobs.HoldQuestion) await releaseQuestion(data.data.questionId, data.data.userId)
 		},
 		onCronLike: async () => {
 		},

@@ -1,5 +1,6 @@
 import { makeController, requireAuthUser, Route, StatusCodes } from '@stranerd/api-commons'
 import { QuestionController } from '../../controllers/questions/questions'
+import { isTutor } from '@application/middlewares'
 
 export const questionsRoutes: Route[] = [
 	{
@@ -69,7 +70,7 @@ export const questionsRoutes: Route[] = [
 		path: '/questions/questions/:id/hold',
 		method: 'post',
 		controllers: [
-			requireAuthUser,
+			requireAuthUser, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
@@ -82,7 +83,7 @@ export const questionsRoutes: Route[] = [
 		path: '/questions/questions/:id/release',
 		method: 'post',
 		controllers: [
-			requireAuthUser,
+			requireAuthUser, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,

@@ -1,5 +1,5 @@
 import { BaseEntity } from '@stranerd/api-commons'
-import { EmbeddedUser, Media, QuestionHeld } from '../types'
+import { EmbeddedUser, MAX_ANSWERS_COUNT, Media, QuestionHeld } from '../types'
 
 export class QuestionEntity extends BaseEntity {
 	public readonly id: string
@@ -31,7 +31,7 @@ export class QuestionEntity extends BaseEntity {
 	}
 
 	isAnswered () {
-		return !!this.answers.length
+		return this.answers.length >= MAX_ANSWERS_COUNT
 	}
 
 	isHeldBy (userId: string) {

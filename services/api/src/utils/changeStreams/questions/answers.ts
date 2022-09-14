@@ -3,12 +3,14 @@ import { AnswerEntity, AnswerFromModel, QuestionsUseCases } from '@modules/quest
 import { getSocketEmitter } from '@index'
 import { UserMeta, UsersUseCases } from '@modules/users'
 import { EventTypes, publishers } from '@utils/events'
+import { releaseQuestion } from '@utils/modules/questions/questions'
 
 export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel, AnswerEntity> = {
 	created: async ({ after }) => {
 		await getSocketEmitter().emitCreated('questions/answers', after)
 		await getSocketEmitter().emitCreated(`questions/answers/${after.id}`, after)
 
+		await releaseQuestion(after.questionId, after.user.id)
 		await UsersUseCases.incrementMeta({ id: after.user.id, value: 1, property: UserMeta.answers })
 		await QuestionsUseCases.updateAnswers({
 			questionId: after.questionId,

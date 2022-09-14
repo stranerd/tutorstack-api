@@ -3,6 +3,7 @@ import { AnswersUseCases, QuestionEntity, QuestionFromModel } from '@modules/que
 import { UserMeta, UsersUseCases } from '@modules/users'
 import { getSocketEmitter } from '@index'
 import { EventTypes, publishers } from '@utils/events'
+import { holdQuestion, releaseQuestion } from '@utils/modules/questions/questions'
 
 export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromModel, QuestionEntity> = {
 	created: async ({ after }) => {
@@ -16,6 +17,10 @@ export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromMo
 		await getSocketEmitter().emitUpdated(`questions/questions/${after.id}`, after)
 
 		if (changes.attachment && before.attachment) await publishers[EventTypes.DELETEFILE].publish(before.attachment)
+		if (changes.heldBy) await Promise.all([
+			holdQuestion(after),
+			before.heldBy && releaseQuestion(before.id, before.heldBy.userId)
+		])
 	},
 	deleted: async ({ before }) => {
 		await getSocketEmitter().emitDeleted('questions/questions', before)

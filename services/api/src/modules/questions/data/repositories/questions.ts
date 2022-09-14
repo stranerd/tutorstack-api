@@ -3,7 +3,7 @@ import { QuestionMapper } from '../mappers/questions'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
 import { Question } from '../mongooseModels/questions'
 import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../../domain/types'
+import { EmbeddedUser, MAX_ANSWERS_COUNT } from '../../domain/types'
 
 export class QuestionRepository implements IQuestionRepository {
 	private static instance: QuestionRepository
@@ -66,10 +66,12 @@ export class QuestionRepository implements IQuestionRepository {
 
 	async hold (id: string, userId: string, hold: boolean) {
 		const find = hold ?
-			{ _id: id, heldBy: null } :
+			{ _id: id, heldBy: null, [`answers.${MAX_ANSWERS_COUNT - 1}`]: { $exists: false } } :
 			{ _id: id, 'heldBy.userId': userId }
+		const now = Date.now()
+		const release = now + (60 * 60 * 1000)
 		const set = hold ?
-			{ $set: { heldBy: { userId, heldAt: Date.now() } } } :
+			{ $set: { heldBy: { userId, heldAt: now, releasedAt: release } } } :
 			{ $set: { heldBy: null } }
 		const question = await Question.findOneAndUpdate(find, set, { new: true })
 		return this.mapper.mapFrom(question)
