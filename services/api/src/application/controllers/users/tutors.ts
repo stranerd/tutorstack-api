@@ -1,6 +1,6 @@
 import { UsersUseCases } from '@modules/users'
 import { BadRequestError, Request, validate, Validation } from '@stranerd/api-commons'
-import { SupportedAuthRoles } from '@utils/types'
+import { AuthRole } from '@utils/types'
 import { SubjectsUseCases } from '@modules/questions'
 
 export class TutorsController {
@@ -15,7 +15,7 @@ export class TutorsController {
 
 		if (data.add) {
 			const tutor = await UsersUseCases.find(data.tutorId)
-			if (!tutor || !tutor.roles[SupportedAuthRoles.isTutor]) throw new BadRequestError('invalid tutorId')
+			if (!tutor || !tutor.roles[AuthRole.isTutor]) throw new BadRequestError('invalid tutorId')
 		}
 
 		const authUserId = req.authUser!.id

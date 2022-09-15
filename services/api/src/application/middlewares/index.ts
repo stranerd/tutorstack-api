@@ -1,4 +1,4 @@
-import { SupportedAuthRoles } from '@utils/types'
+import { AuthRole } from '@utils/types'
 import { BadRequestError, makeMiddleware, NotAuthenticatedError, NotAuthorizedError } from '@stranerd/api-commons'
 
 export const cannotModifyMyRole = makeMiddleware(
@@ -11,7 +11,7 @@ export const cannotModifyMyRole = makeMiddleware(
 
 export const isAdmin = makeMiddleware(
 	async (request) => {
-		const isAdmin = request.authUser?.roles?.[SupportedAuthRoles.isAdmin] || request.authUser?.roles?.['isSuperAdmin']
+		const isAdmin = request.authUser?.roles?.[AuthRole.isAdmin] || request.authUser?.roles?.['isSuperAdmin']
 		if (!request.authUser) throw new NotAuthenticatedError()
 		if (!isAdmin) throw new NotAuthorizedError()
 	}
@@ -19,7 +19,7 @@ export const isAdmin = makeMiddleware(
 
 export const isTutor = makeMiddleware(
 	async (request) => {
-		const isTutor = request.authUser?.roles?.[SupportedAuthRoles.isTutor]
+		const isTutor = request.authUser?.roles?.[AuthRole.isTutor]
 		if (!request.authUser) throw new NotAuthenticatedError()
 		if (!isTutor) throw new NotAuthorizedError()
 	}

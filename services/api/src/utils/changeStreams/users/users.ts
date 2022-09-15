@@ -2,7 +2,7 @@ import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { UserEntity, UserFromModel, UsersUseCases } from '@modules/users'
 import { getSocketEmitter } from '@index'
 import { AnswersUseCases, QuestionsUseCases } from '@modules/questions'
-import { SupportedAuthRoles } from '@utils/types'
+import { AuthRole } from '@utils/types'
 import { sendNotification } from '@utils/modules/notifications/notifications'
 import { NotificationType } from '@modules/notifications'
 
@@ -22,8 +22,8 @@ export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, Use
 			userBio: after.bio,
 			userRoles: after.roles
 		})))
-		if (changes.roles?.[SupportedAuthRoles.isTutor]) {
-			const upgraded = after.roles[SupportedAuthRoles.isTutor]
+		if (changes.roles?.[AuthRole.isTutor]) {
+			const upgraded = after.roles[AuthRole.isTutor]
 			if (!upgraded) await UsersUseCases.removeSavedTutors(before.id)
 			await sendNotification([after.id], {
 				title: 'Tutoring role updated',
