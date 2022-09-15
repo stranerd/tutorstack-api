@@ -1,10 +1,10 @@
 import { UsersUseCases } from '@modules/users'
-import { BadRequestError, Request, validate, Validation } from '@stranerd/api-commons'
+import { BadRequestError, NotAuthorizedError, Request, validate, Validation } from '@stranerd/api-commons'
 import { AuthRole } from '@utils/types'
 import { SubjectsUseCases } from '@modules/questions'
 
 export class TutorsController {
-	static async saveTutors (req: Request) {
+	static async updateUserTutors (req: Request) {
 		const data = validate({
 			tutorId: req.body.tutorId,
 			add: req.body.add
@@ -18,11 +18,12 @@ export class TutorsController {
 			if (!tutor || !tutor.roles[AuthRole.isTutor]) throw new BadRequestError('invalid tutorId')
 		}
 
-		const authUserId = req.authUser!.id
-		return await UsersUseCases.updateUserTutors({ ...data, userId: authUserId })
+		const user = await UsersUseCases.updateUserTutors({ ...data, userId: req.authUser!.id })
+		if (user) return user
+		throw new NotAuthorizedError()
 	}
 
-	static async saveSubjects (req: Request) {
+	static async updateTutorSubjects (req: Request) {
 		const data = validate({
 			subjectId: req.body.subjectId,
 			add: req.body.add
@@ -36,7 +37,29 @@ export class TutorsController {
 			if (!subject) throw new BadRequestError('invalid subjectId')
 		}
 
-		const authUserId = req.authUser!.id
-		return await UsersUseCases.updateTutorSubjects({ ...data, userId: authUserId })
+		const user = await UsersUseCases.updateTutorSubjects({ ...data, userId: req.authUser!.id })
+		if (user) return user
+		throw new NotAuthorizedError()
+	}
+
+	static async updateAvailability (req: Request) {
+		const aDayInMs = 24 * 60 * 60 * 1000
+		const today = Math.floor(Date.now() / aDayInMs) * aDayInMs
+		const aWeekFromNow = today + (aDayInMs * 7)
+
+		const data = validate({
+			time: req.body.time,
+			add: req.body.add
+		}, {
+			time: {
+				required: true,
+				rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(today, 'cannot set time less than today'), Validation.isLessThanOrEqualToX(aWeekFromNow, 'cannot set time more than a week ahead')]
+			},
+			add: { required: true, rules: [Validation.isBoolean] }
+		})
+
+		const user = await UsersUseCases.updateAvailability({ ...data, userId: req.authUser!.id })
+		if (user) return user
+		throw new NotAuthorizedError()
 	}
 }

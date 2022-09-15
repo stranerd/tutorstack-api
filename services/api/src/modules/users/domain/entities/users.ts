@@ -25,12 +25,29 @@ export class UserEntity extends BaseEntity {
 		this.tutors = tutors
 	}
 
+	static getLastHour (time: number) {
+		const anHourInMs = 60 * 60 * 1000
+		return Math.floor(time / anHourInMs) * anHourInMs
+	}
+
 	getEmbedded (): EmbeddedUser {
 		return {
 			id: this.id,
 			bio: this.bio,
 			roles: this.roles
 		}
+	}
+
+	isFreeBetween (from: number, to: number) {
+		const anHourInMs = 60 * 60 * 1000
+		const hasNoBookedSession = this.tutor.availability.booked.every((e) => from >= e.to || to <= e.from)
+		const hourFrom = UserEntity.getLastHour(from)
+		const hourTo = UserEntity.getLastHour(to)
+		const hoursBetween = new Array((hourTo - hourFrom) / anHourInMs)
+			.fill(0)
+			.map((_, i) => (i * anHourInMs) + hourFrom)
+		const free = hoursBetween.every((hr) => this.tutor.availability.free.includes(hr))
+		return hasNoBookedSession && free
 	}
 }
 

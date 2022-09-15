@@ -60,4 +60,12 @@ export class UsersUseCase {
 	async removeSavedSubjects (subjectId: string) {
 		return await this.repository.removeSavedSubjects(subjectId)
 	}
+
+	async updateAvailability (input: { userId: string, time: number, add: boolean }) {
+		return await this.repository.updateAvailability(input.userId, input.time, input.add)
+	}
+
+	async removeOldAvailability () {
+		return await this.repository.removeOldAvailability()
+	}
 }

@@ -7,6 +7,7 @@ import { deleteUnverifiedUsers } from '@utils/modules/auth'
 import { retryTransactions } from '@utils/modules/payment/transactions'
 import { CardsUseCases } from '@modules/payment'
 import { releaseQuestion } from '@utils/modules/questions/questions'
+import { UsersUseCases } from '@modules/users'
 
 export const startJobs = async () => {
 	await appInstance.job.startProcessingQueues<DelayedEvent, any>([
@@ -27,7 +28,9 @@ export const startJobs = async () => {
 				await retryTransactions(60 * 60 * 1000)
 				await appInstance.job.retryAllFailedJobs()
 			}
-			if (type === CronTypes.daily) await deleteUnverifiedUsers()
+			if (type === CronTypes.daily) await Promise.all([
+				deleteUnverifiedUsers(), UsersUseCases.removeOldAvailability()
+			])
 			if (type === CronTypes.weekly) await NotificationsUseCases.deleteOldSeen()
 			if (type === CronTypes.monthly) await CardsUseCases.markExpireds()
 		}

@@ -28,4 +28,8 @@ export interface IUserRepository {
 	updateTutorSubjects (userId: string, subjectId: string, add: boolean): Promise<UserEntity | null>
 
 	removeSavedSubjects (subjectId: string): Promise<boolean>
+
+	updateAvailability (userId: string, time: number, add: boolean): Promise<UserEntity | null>
+
+	removeOldAvailability (): Promise<boolean>
 }

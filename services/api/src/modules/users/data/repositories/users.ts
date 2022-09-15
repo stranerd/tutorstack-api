@@ -2,8 +2,9 @@ import { IUserRepository } from '../../domain/irepositories/users'
 import { UserBio, UserMeta, UserRoles } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
 import { User } from '../mongooseModels/users'
-import { parseQueryParams } from '@stranerd/api-commons'
+import { mongoose, parseQueryParams } from '@stranerd/api-commons'
 import { UserFromModel } from '../models/users'
+import { UserEntity } from '../../domain/entities/users'
 
 export class UserRepository implements IUserRepository {
 	private static instance: UserRepository
@@ -95,6 +96,33 @@ export class UserRepository implements IUserRepository {
 
 	async removeSavedSubjects (subjectId: string) {
 		const res = await User.updateMany({ 'tutor.subjects': subjectId }, { $pull: { 'tutor.subjects': subjectId } })
+		return !!res.acknowledged
+	}
+
+	async updateAvailability (userId: string, time: number, add: boolean) {
+		const session = await mongoose.startSession()
+		let res = null as any
+		await session.withTransaction(async (session) => {
+			const userModel = await User.findById(userId, null, { session })
+			const user = this.mapper.mapFrom(userModel)
+			const lastHour = UserEntity.getLastHour(time)
+			if (!add && user && !user.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000)) return null
+			const updatedUser = await User.findByIdAndUpdate(userId,
+				{ [add ? '$addToSet' : '$pull']: { 'tutor.availability.free': lastHour } },
+				{ session, new: true })
+			res = updatedUser
+			return updatedUser
+		})
+		await session.endSession()
+		return this.mapper.mapFrom(res)
+	}
+
+	async removeOldAvailability () {
+		const time = UserEntity.getLastHour(Date.now())
+		const res = await User.updateMany(
+			{ 'tutor.availability.free': time },
+			{ $pull: { 'tutor.availability.free': { $lt: time } } }
+		)
 		return !!res.acknowledged
 	}
 }
