@@ -1,6 +1,6 @@
-import { makeController, requireAuthUser, Route, StatusCodes } from '@stranerd/api-commons'
+import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
 import { WorkController } from '../../controllers/users/works'
-import { isTutor } from '@application/middlewares'
+import { isAuthenticated, isTutor } from '@application/middlewares'
 
 export const worksRoutes: Route[] = [
 	{
@@ -31,7 +31,7 @@ export const worksRoutes: Route[] = [
 		path: '/users/works/:id',
 		method: 'put',
 		controllers: [
-			requireAuthUser,
+			isAuthenticated,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
@@ -44,7 +44,7 @@ export const worksRoutes: Route[] = [
 		path: '/users/works',
 		method: 'post',
 		controllers: [
-			requireAuthUser, isTutor,
+			isAuthenticated, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
@@ -57,7 +57,7 @@ export const worksRoutes: Route[] = [
 		path: '/users/works/:id',
 		method: 'delete',
 		controllers: [
-			requireAuthUser,
+			isAuthenticated,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,

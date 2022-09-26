@@ -1,6 +1,6 @@
-import { makeController, requireAuthUser, Route, StatusCodes } from '@stranerd/api-commons'
+import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
 import { AnswerController } from '../../controllers/questions/answers'
-import { isTutor } from '@application/middlewares'
+import { isAuthenticated, isTutor } from '@application/middlewares'
 
 export const answersRoutes: Route[] = [
 	{
@@ -31,7 +31,7 @@ export const answersRoutes: Route[] = [
 		path: '/questions/answers/:id',
 		method: 'put',
 		controllers: [
-			requireAuthUser, isTutor,
+			isAuthenticated, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
@@ -44,7 +44,7 @@ export const answersRoutes: Route[] = [
 		path: '/questions/answers',
 		method: 'post',
 		controllers: [
-			requireAuthUser, isTutor,
+			isAuthenticated, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
@@ -57,7 +57,7 @@ export const answersRoutes: Route[] = [
 		path: '/questions/answers/:id',
 		method: 'delete',
 		controllers: [
-			requireAuthUser, isTutor,
+			isAuthenticated, isTutor,
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
