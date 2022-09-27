@@ -108,7 +108,7 @@ export class UserRepository implements IUserRepository {
 			const lastHour = UserEntity.getLastHour(time)
 			if (!add && user && !user.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000)) return null
 			const updatedUser = await User.findByIdAndUpdate(userId,
-				{ [add ? '$addToSet' : '$pull']: { 'tutor.availability.free': lastHour } },
+				{ [add ? '$addToSet' : '$pull']: { 'availability.free': lastHour } },
 				{ session, new: true })
 			res = updatedUser
 			return updatedUser
@@ -120,8 +120,8 @@ export class UserRepository implements IUserRepository {
 	async removeOldAvailability () {
 		const time = UserEntity.getLastHour(Date.now())
 		const res = await User.updateMany(
-			{ 'tutor.availability.free': time },
-			{ $pull: { 'tutor.availability.free': { $lt: time } } }
+			{ 'availability.free': time },
+			{ $pull: { 'availability.free': { $lt: time } } }
 		)
 		return !!res.acknowledged
 	}
