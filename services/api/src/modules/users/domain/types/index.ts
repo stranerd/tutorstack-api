@@ -27,10 +27,11 @@ export type UserStatus = {
 
 export type UserTutor = {
 	subjects: string[]
-	availability: {
-		free: number[]
-		booked: { sessionId: string, from: number, to: number }[]
-	}
+}
+
+export type UserAvailability = {
+	free: number[]
+	booked: { sessionId: string, from: number, to: number }[]
 }
 
 export enum UserMeta {
