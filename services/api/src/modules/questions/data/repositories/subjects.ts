@@ -27,7 +27,9 @@ export class SubjectRepository implements ISubjectRepository {
 	}
 
 	async add (data: SubjectToModel) {
-		const subject = await new Subject(data).save()
+		const subject = await Subject.findOneAndUpdate(data, {
+			$setOnInsert: data
+		}, { new: true, upsert: true })
 		return this.mapper.mapFrom(subject)!
 	}
 

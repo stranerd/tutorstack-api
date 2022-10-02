@@ -1,8 +1,8 @@
-export declare enum DelayedJobs {
+export enum DelayedJobs {
 	HoldQuestion = 'HoldQuestion'
 }
 
-export declare type DelayedEvent = {
+export type DelayedEvent = {
 	type: DelayedJobs.HoldQuestion,
 	data: { questionId: string, userId: string }
 }

@@ -24,7 +24,7 @@ export const tutorsRoutes: Route[] = [
 			makeController(async (req) => {
 				return {
 					status: StatusCodes.Ok,
-					result: await TutorsController.updateUserTutors(req)
+					result: await TutorsController.updateTutorSubjects(req)
 				}
 			})
 		]

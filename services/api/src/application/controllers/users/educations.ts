@@ -28,7 +28,7 @@ export class EducationController {
 			degree: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
 			from: { required: true, rules: [Validation.isNumber] },
 			to: { required: true, rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(req.body.from)] },
-			verification: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] }
+			verification: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isFile] }
 		})
 		if (uploadedVerification) data.verification = await StorageUseCases.upload('users/educations', uploadedVerification)
 		const validateData = {

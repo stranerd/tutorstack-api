@@ -21,7 +21,7 @@ export class AnswerController {
 		const data = validate({
 			attachment: uploadedAttachment as any
 		}, {
-			attachment: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] }
+			attachment: { required: true, rules: [Validation.isNotTruncated, Validation.isVideo] }
 		})
 		if (uploadedAttachment) data.attachment = await StorageUseCases.upload('questions/answers', uploadedAttachment)
 		const validateData = {
