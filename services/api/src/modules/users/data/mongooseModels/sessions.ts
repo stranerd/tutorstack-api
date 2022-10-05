@@ -37,6 +37,22 @@ const SessionSchema = new mongoose.Schema<SessionFromModel>({
 		type: [mongoose.Schema.Types.Mixed] as unknown as SessionFromModel['attachments'],
 		required: true
 	},
+	startedAt: {
+		type: Number,
+		required: true
+	},
+	lengthInMinutes: {
+		type: Number,
+		required: true
+	},
+	price: {
+		type: Number,
+		required: true
+	},
+	currency: {
+		type: String,
+		required: true
+	},
 	createdAt: {
 		type: Number,
 		required: false,

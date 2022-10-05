@@ -15,4 +15,8 @@ export class StorageUseCase {
 	async upload (path: string, media: MediaInput) {
 		return await this.repository.upload(path, media)
 	}
+
+	async uploadMany (path: string, media: MediaInput[]) {
+		return await Promise.all(media.map(async (m) => await this.repository.upload(path, m)))
+	}
 }

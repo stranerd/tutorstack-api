@@ -15,6 +15,8 @@ export class SessionMapper extends BaseMapper<SessionFromModel, SessionToModel, 
 			attachments: param.attachments,
 			startedAt: param.startedAt,
 			lengthInMinutes: param.lengthInMinutes,
+			price: param.price,
+			currency: param.currency,
 			createdAt: param.createdAt,
 			updatedAt: param.updatedAt
 		})
@@ -24,13 +26,14 @@ export class SessionMapper extends BaseMapper<SessionFromModel, SessionToModel, 
 		return {
 			tutor: param.tutor,
 			students: param.students,
-			paid: param.paid,
 			subjectId: param.subjectId,
 			topic: param.topic,
 			description: param.description,
 			attachments: param.attachments,
 			startedAt: param.startedAt,
-			lengthInMinutes: param.lengthInMinutes
+			lengthInMinutes: param.lengthInMinutes,
+			price: param.price,
+			currency: param.currency
 		}
 	}
 }

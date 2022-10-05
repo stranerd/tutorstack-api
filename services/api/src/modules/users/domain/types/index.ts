@@ -2,6 +2,7 @@ import { MediaOutput } from '@stranerd/api-commons'
 import { AuthRoles } from '@utils/types'
 
 export type Media = MediaOutput
+export { Currencies } from '@modules/payment'
 
 export type UserBio = {
 	email: string
