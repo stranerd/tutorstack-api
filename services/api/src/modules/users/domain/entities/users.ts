@@ -41,6 +41,14 @@ export class UserEntity extends BaseEntity {
 		return Math.floor(time / anHourInMs) * anHourInMs
 	}
 
+	static getHoursBetween (from: number, to: number) {
+		if (to <= from) return [from]
+		const anHourInMs = 60 * 60 * 1000
+		return new Array((to - from) / anHourInMs)
+			.fill(0)
+			.map((_, i) => (i * anHourInMs) + from)
+	}
+
 	getEmbedded (): EmbeddedUser {
 		return {
 			id: this.id,
@@ -50,13 +58,10 @@ export class UserEntity extends BaseEntity {
 	}
 
 	isFreeBetween (from: number, to: number) {
-		const anHourInMs = 60 * 60 * 1000
 		const hasNoBookedSession = this.availability.booked.every((e) => from >= e.to || to <= e.from)
 		const hourFrom = UserEntity.getLastHour(from)
 		const hourTo = UserEntity.getLastHour(to)
-		const hoursBetween = new Array((hourTo - hourFrom) / anHourInMs)
-			.fill(0)
-			.map((_, i) => (i * anHourInMs) + hourFrom)
+		const hoursBetween = UserEntity.getHoursBetween(hourFrom, hourTo)
 		const free = hoursBetween.every((hr) => this.availability.free.includes(hr))
 		return hasNoBookedSession && free
 	}
