@@ -5,6 +5,7 @@ import notificationRoutes from './notifications'
 import questionRoutes from './questions'
 import usersRoutes from './users'
 import paymentRoutes from './payment'
+import sessionsRoutes from './sessions'
 
 export const routes: Route[] = [
 	...authRoutes,
@@ -12,6 +13,7 @@ export const routes: Route[] = [
 	...questionRoutes,
 	...usersRoutes,
 	...paymentRoutes,
+	...sessionsRoutes,
 	{
 		path: '/',
 		method: 'get',

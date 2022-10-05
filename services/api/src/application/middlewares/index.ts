@@ -32,7 +32,7 @@ export const isAdmin = makeMiddleware(
 	async (request) => {
 		const isAdmin = request.authUser?.roles?.[AuthRole.isAdmin] || request.authUser?.roles?.['isSuperAdmin']
 		if (!request.authUser) throw new NotAuthenticatedError()
-		if (!isAdmin) throw new NotAuthorizedError()
+		if (!isAdmin) throw new NotAuthorizedError('only admins can access this route')
 	}
 )
 
@@ -40,6 +40,6 @@ export const isTutor = makeMiddleware(
 	async (request) => {
 		const isTutor = request.authUser?.roles?.[AuthRole.isTutor]
 		if (!request.authUser) throw new NotAuthenticatedError()
-		if (!isTutor) throw new NotAuthorizedError()
+		if (!isTutor) throw new NotAuthorizedError('only tutors can access this route')
 	}
 )

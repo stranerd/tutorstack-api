@@ -12,8 +12,9 @@ export const registerSockets = () => {
 	getSocketEmitter().register('payment/cards', isMine)
 	getSocketEmitter().register('payment/transactions', isMine)
 	getSocketEmitter().register('payment/wallets', isMine)
-	getSocketEmitter().register('users/educations', isOpen)
-	getSocketEmitter().register('users/sessions', isMine)
-	getSocketEmitter().register('users/users', isOpen)
-	getSocketEmitter().register('users/works', isOpen)
+	getSocketEmitter().register('as/educations', isOpen)
+	getSocketEmitter().register('as/as', isOpen)
+	getSocketEmitter().register('as/works', isOpen)
+	getSocketEmitter().register('users/users', isMine)
+	getSocketEmitter().register('users/availabilities', isOpen)
 }

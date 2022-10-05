@@ -2,7 +2,6 @@ import { MediaOutput } from '@stranerd/api-commons'
 import { AuthRoles } from '@utils/types'
 
 export type Media = MediaOutput
-export { Currencies } from '@modules/payment'
 
 export type UserBio = {
 	email: string
@@ -28,11 +27,6 @@ export type UserStatus = {
 
 export type UserTutor = {
 	subjects: string[]
-}
-
-export type UserAvailability = {
-	free: number[]
-	booked: { sessionId: string, from: number, to: number }[]
 }
 
 export enum UserMeta {

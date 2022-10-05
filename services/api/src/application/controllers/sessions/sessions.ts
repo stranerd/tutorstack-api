@@ -1,6 +1,8 @@
-import { SessionEntity, SessionsUseCases, UsersUseCases } from '@modules/users'
+import { AvailabilitiesUseCases, SessionEntity, SessionsUseCases } from '@modules/sessions'
+import { UsersUseCases } from '@modules/users'
 import {
 	BadRequestError,
+	Conditions,
 	NotAuthorizedError,
 	NotFoundError,
 	QueryParams,
@@ -27,6 +29,7 @@ export class SessionsController {
 	}
 
 	static async createSession (req: Request) {
+		// TODO: port to availability entity
 		const data = validate({
 			tutorId: req.body.tutorId,
 			invites: req.body.invites,
@@ -55,18 +58,20 @@ export class SessionsController {
 
 		const subject = await SubjectsUseCases.find(data.subjectId)
 		if (!subject) throw new BadRequestError('subject not found')
-		const [tutor, user, ...invites]  = await Promise.all([data.tutorId, req.authUser!.id, ...data.invites]
-			.map(async (userId) => await UsersUseCases.find(userId)))
+		const memberIds = [data.tutorId, req.authUser!.id, ...data.invites]
+		const [tutor, user, ...invites]  = await Promise.all(memberIds.map(async (userId) => await UsersUseCases.find(userId)))
 		if (!tutor) throw new BadRequestError('tutor not found')
 		if (!user) throw new BadRequestError('profile not found')
 		if (invites.includes(null)) throw new BadRequestError('some invites not found')
 		const members = [user, ...invites]
 		const start = data.startedAt
 		const end = start + (data.lengthInMinutes * 60 * 1000)
-		if (!tutor!.isFreeBetween(start, end)) throw new BadRequestError('tutor is not free within this time period')
-		if (!members.some((m) => !m!.isFreeBetween(start, end))) throw new BadRequestError('some users are not free within this time period')
+		const { results: availabilities } = await AvailabilitiesUseCases.get({
+			where: [{ field: 'userId', condition: Conditions.in, value: memberIds }]
+		})
+		if (!availabilities.some((m) => !m!.isFreeBetween(start, end))) throw new BadRequestError('some participants are not free within this time period')
 
-		const attachments = await StorageUseCases.uploadMany('users/sessions/attachments', data.attachments)
+		const attachments = await StorageUseCases.uploadMany('sessions/attachments', data.attachments)
 
 		return await SessionsUseCases.add({
 			tutor: tutor.getEmbedded(), students: members.map((m) => m!.getEmbedded()),

@@ -1,5 +1,4 @@
 import {
-	UserAvailability,
 	UserBio,
 	UserDates,
 	UserMetaType,
@@ -20,5 +19,4 @@ export interface UserToModel {
 	status: UserStatus
 	tutors: string[]
 	tutor: UserTutor
-	availability: UserAvailability
 }

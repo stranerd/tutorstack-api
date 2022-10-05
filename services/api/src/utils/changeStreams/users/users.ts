@@ -8,11 +8,11 @@ import { NotificationType } from '@modules/notifications'
 
 export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, UserEntity> = {
 	created: async ({ after }) => {
-		await getSocketEmitter().emitCreated('users/users', after)
+		await getSocketEmitter().emitCreated('as/as', after)
 		await getSocketEmitter().emitCreated(`users/users/${after.id}`, after)
 	},
 	updated: async ({ after, before, changes }) => {
-		await getSocketEmitter().emitUpdated('users/users', after)
+		await getSocketEmitter().emitUpdated('as/as', after)
 		await getSocketEmitter().emitUpdated(`users/users/${after.id}`, after)
 		const updatedBioOrRoles = !!changes.bio || !!changes.roles
 		if (updatedBioOrRoles) await Promise.all([
@@ -29,7 +29,7 @@ export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, Use
 		}
 	},
 	deleted: async ({ before }) => {
-		await getSocketEmitter().emitDeleted('users/users', before)
+		await getSocketEmitter().emitDeleted('as/as', before)
 		await getSocketEmitter().emitDeleted(`users/users/${before.id}`, before)
 	}
 }

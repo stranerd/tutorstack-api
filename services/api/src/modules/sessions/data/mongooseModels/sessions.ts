@@ -1,6 +1,6 @@
 import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
 import { SessionFromModel } from '../models/sessions'
-import { SessionChangeStreamCallbacks } from '@utils/changeStreams/users/sessions'
+import { SessionChangeStreamCallbacks } from '@utils/changeStreams/sessions/sessions'
 import { SessionEntity } from '../../domain/entities/sessions'
 import { SessionMapper } from '../mappers/sessions'
 

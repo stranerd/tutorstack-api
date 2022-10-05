@@ -61,18 +61,6 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 		type: [String],
 		required: false,
 		default: []
-	},
-	availability: {
-		free: {
-			type: [Number],
-			required: false,
-			default: []
-		},
-		booked: {
-			type: [mongoose.Schema.Types.Mixed],
-			required: false,
-			default: []
-		}
 	}
 }, { minimize: false })
 

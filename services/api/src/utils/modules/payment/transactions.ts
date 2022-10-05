@@ -1,6 +1,6 @@
 import { TransactionEntity, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
 import { Conditions } from '@stranerd/api-commons'
-import { SessionsUseCases } from '@modules/users'
+import { SessionsUseCases } from '@modules/sessions'
 
 export const fulfillTransaction = async (transaction: TransactionEntity) => {
 	if (transaction.data.type === TransactionType.PayForSession){

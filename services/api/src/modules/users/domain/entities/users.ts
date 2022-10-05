@@ -1,6 +1,5 @@
 import {
 	EmbeddedUser,
-	UserAvailability,
 	UserBio,
 	UserDates,
 	UserMetaType,
@@ -19,10 +18,9 @@ export class UserEntity extends BaseEntity {
 	public readonly status: UserStatus
 	public readonly tutor: UserTutor
 	public readonly tutors: string[]
-	public readonly availability: UserAvailability
 
 	constructor ({
-		             id, bio, roles, dates, meta, status, tutors, tutor, availability
+		             id, bio, roles, dates, meta, status, tutors, tutor
 	             }: UserConstructorArgs) {
 		super()
 		this.id = id
@@ -33,7 +31,6 @@ export class UserEntity extends BaseEntity {
 		this.status = status
 		this.tutor = tutor
 		this.tutors = tutors
-		this.availability = availability
 	}
 
 	static getLastHour (time: number) {
@@ -56,15 +53,6 @@ export class UserEntity extends BaseEntity {
 			roles: this.roles
 		}
 	}
-
-	isFreeBetween (from: number, to: number) {
-		const hasNoBookedSession = this.availability.booked.every((e) => from >= e.to || to <= e.from)
-		const hourFrom = UserEntity.getLastHour(from)
-		const hourTo = UserEntity.getLastHour(to)
-		const hoursBetween = UserEntity.getHoursBetween(hourFrom, hourTo)
-		const free = hoursBetween.every((hr) => this.availability.free.includes(hr))
-		return hasNoBookedSession && free
-	}
 }
 
 type UserConstructorArgs = {
@@ -76,5 +64,4 @@ type UserConstructorArgs = {
 	status: UserStatus
 	tutor: UserTutor
 	tutors: string[]
-	availability: UserAvailability
 }

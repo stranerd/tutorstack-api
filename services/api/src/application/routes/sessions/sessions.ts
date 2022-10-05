@@ -1,5 +1,5 @@
 import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { SessionsController } from '../../controllers/users/sessions'
+import { SessionsController } from '../../controllers/sessions/sessions'
 
 export const sessionsRoutes: Route[] = [
 	{
