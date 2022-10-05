@@ -1,8 +1,15 @@
-import { TransactionEntity, TransactionStatus, TransactionsUseCases } from '@modules/payment'
+import { TransactionEntity, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
 import { Conditions } from '@stranerd/api-commons'
+import { SessionsUseCases } from '@modules/users'
 
 export const fulfillTransaction = async (transaction: TransactionEntity) => {
-	console.log(transaction)
+	if (transaction.data.type === TransactionType.PayForSession){
+		await SessionsUseCases.updatePaid({ id: transaction.data.sessionId, userId: transaction.userId, add: true })
+		await TransactionsUseCases.update({
+			id: transaction.id,
+			data: { status: TransactionStatus.settled }
+		})
+	}
 }
 
 export const retryTransactions = async (timeInMs: number) => {
