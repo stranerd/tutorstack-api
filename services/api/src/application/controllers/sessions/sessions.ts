@@ -97,7 +97,7 @@ export class SessionsController {
 
 		const successful = await StripePayment.chargeCard({
 			userId: card.userId, email, token: card.token,
-			currency: Currencies.USD, amount: 0
+			currency: session.currency, amount: session.price
 		})
 
 		await TransactionsUseCases.create({
