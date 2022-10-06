@@ -4,6 +4,18 @@ import { isAuthenticated, isTutor } from '@application/middlewares'
 
 export const availabilitiesRoutes: Route[] = [
 	{
+		path: '/sessions/availabilities/:userId',
+		method: 'get',
+		controllers: [
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await AvailabilitiesController.getUser(req)
+				}
+			})
+		]
+	},
+	{
 		path: '/sessions/availabilities/',
 		method: 'post',
 		controllers: [

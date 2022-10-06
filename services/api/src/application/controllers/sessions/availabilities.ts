@@ -2,6 +2,10 @@ import { AvailabilitiesUseCases } from '@modules/sessions'
 import { NotAuthorizedError, Request, validate, Validation } from '@stranerd/api-commons'
 
 export class AvailabilitiesController {
+	static async getUser (req: Request) {
+		return await AvailabilitiesUseCases.getUser(req.params.userId)
+	}
+
 	static async updateAvailability (req: Request) {
 		const aDayInMs = 24 * 60 * 60 * 1000
 		const today = Math.floor(Date.now() / aDayInMs) * aDayInMs

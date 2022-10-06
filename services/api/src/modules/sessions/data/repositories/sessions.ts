@@ -38,7 +38,7 @@ export class SessionRepository implements ISessionRepository {
 		const end = start + (data.lengthInMinutes * 60 * 1000)
 		await session.withTransaction(async (session) => {
 			const participants = [data.tutor.id, ...data.students.map((s) => s.id)]
-			const availabilities = (await Availability.find({ _id: { $in: participants } }, { session }))
+			const availabilities = (await Availability.find({ _id: { $in: participants } }, {},{ session }))
 				.map((u) => this.availabilityMapper.mapFrom(u)!)
 			for (const availability of availabilities) if (availability.isFreeBetween(start, end)) throw new Error('some as are not free within this time period')
 			res = await new Session(data).save({ session })

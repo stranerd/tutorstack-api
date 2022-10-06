@@ -35,6 +35,6 @@ const AvailabilitySchema = new mongoose.Schema<AvailabilityFromModel>({
 	}
 }, { minimize: false })
 
-export const Availability = mongoose.model<AvailabilityFromModel>('Availability', AvailabilitySchema)
+export const Availability = mongoose.model<AvailabilityFromModel>('SessionsAvailability', AvailabilitySchema)
 
 generateChangeStreams<AvailabilityFromModel, AvailabilityEntity>(Availability, AvailabilityChangeStreamCallbacks, new AvailabilityMapper().mapFrom).then()

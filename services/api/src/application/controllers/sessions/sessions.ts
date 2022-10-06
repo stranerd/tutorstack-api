@@ -4,7 +4,6 @@ import {
 	BadRequestError,
 	Conditions,
 	NotAuthorizedError,
-	NotFoundError,
 	QueryParams,
 	Request,
 	validate,
@@ -14,6 +13,7 @@ import { SubjectsUseCases } from '@modules/questions'
 import { StorageUseCases } from '@modules/storage'
 import { CardsUseCases, Currencies, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
 import { StripePayment } from '@utils/modules/payment/stripe'
+import { AuthRole } from '@utils/types'
 
 export class SessionsController {
 	static async getSessions (req: Request) {
@@ -23,8 +23,7 @@ export class SessionsController {
 
 	static async findSession (req: Request) {
 		const session = await SessionsUseCases.find(req.params.id)
-		if (!session) throw new NotFoundError()
-		if (!session.getParticipants().includes(req.authUser!.id)) throw new NotAuthorizedError()
+		if (!session || !session.getParticipants().includes(req.authUser!.id)) return null
 		return session
 	}
 
@@ -36,7 +35,7 @@ export class SessionsController {
 			subjectId: req.body.subjectId,
 			topic: req.body.topic,
 			description: req.body.description,
-			attachments: req.files.attachments,
+			attachments: req.files.attachments ?? [],
 			startedAt: req.body.startedAt,
 			lengthInMinutes: req.body.lengthInMinutes
 		}, {
@@ -56,11 +55,12 @@ export class SessionsController {
 			lengthInMinutes: { required: true, rules: [Validation.isNumber, Validation.arrayContainsX(SessionEntity.lengthsInMinutes, (cur, val) => cur === val)] }
 		})
 
+		if (data.tutorId === req.authUser!.id) throw new BadRequestError('you can\'t book a session with yourself')
 		const subject = await SubjectsUseCases.find(data.subjectId)
 		if (!subject) throw new BadRequestError('subject not found')
-		const memberIds = [data.tutorId, req.authUser!.id, ...data.invites]
+		const memberIds = [...new Set([data.tutorId, req.authUser!.id, ...data.invites]).values()]
 		const [tutor, user, ...invites]  = await Promise.all(memberIds.map(async (userId) => await UsersUseCases.find(userId)))
-		if (!tutor) throw new BadRequestError('tutor not found')
+		if (!tutor || !tutor.roles[AuthRole.isTutor]) throw new BadRequestError('tutor not found')
 		if (!user) throw new BadRequestError('profile not found')
 		if (invites.includes(null)) throw new BadRequestError('some invites not found')
 		const members = [user, ...invites]

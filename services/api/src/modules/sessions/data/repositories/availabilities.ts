@@ -43,7 +43,7 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 			const lastHour = AvailabilityEntity.getLastHour(time)
 			if (!add && availability && !availability.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000)) return null
 			const updatedAvailability = await Availability.findByIdAndUpdate(availability.id,
-				{ [add ? '$addToSet' : '$pull']: { 'availability.free': lastHour } },
+				{ [add ? '$addToSet' : '$pull']: { 'free': lastHour } },
 				{ session, new: true })
 			res = updatedAvailability
 			return updatedAvailability
@@ -55,8 +55,8 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 	async removeOld () {
 		const time = AvailabilityEntity.getLastHour(Date.now())
 		const res = await Availability.updateMany(
-			{ 'availability.free': time },
-			{ $pull: { 'availability.free': { $lt: time } } }
+			{ 'free': time },
+			{ $pull: { 'free': { $lt: time } } }
 		)
 		return !!res.acknowledged
 	}

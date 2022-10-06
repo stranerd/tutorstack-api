@@ -2,7 +2,6 @@ import { UsersUseCases } from '@modules/users'
 import {
 	BadRequestError,
 	NotAuthorizedError,
-	NotFoundError,
 	QueryParams,
 	Request, validate,
 	Validation
@@ -17,9 +16,7 @@ export class UsersController {
 	}
 
 	static async findUser (req: Request) {
-		const user = await UsersUseCases.find(req.params.id)
-		if (!user) throw new NotFoundError()
-		return user
+		return await UsersUseCases.find(req.params.id)
 	}
 
 	static async updateUserTutors (req: Request) {
