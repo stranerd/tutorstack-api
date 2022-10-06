@@ -54,5 +54,31 @@ export const sessionsRoutes: Route[] = [
 				}
 			})
 		]
+	},
+	{
+		path: '/sessions/sessions/:id/close',
+		method: 'post',
+		controllers: [
+			isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await SessionsController.closeSession(req)
+				}
+			})
+		]
+	},
+	{
+		path: '/sessions/sessions/:id/cancel',
+		method: 'post',
+		controllers: [
+			isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await SessionsController.cancelSession(req)
+				}
+			})
+		]
 	}
 ]

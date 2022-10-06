@@ -9,4 +9,6 @@ export interface ISessionRepository {
 	find: (id: string) => Promise<SessionEntity | null>
 	updateUserBio: (user: EmbeddedUser) => Promise<boolean>
 	updatePaid: (id: string, userId: string, add: boolean) => Promise<boolean>
+	close: (id: string, userId: string) => Promise<boolean>
+	cancel: (id: string, userId: string, reason: string) => Promise<boolean>
 }

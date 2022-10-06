@@ -111,4 +111,22 @@ export class SessionsController {
 
 		return successful
 	}
+
+	static async closeSession (req: Request) {
+		const ended = await SessionsUseCases.close({ id: req.params.id, tutorId: req.authUser!.id })
+		if (ended) return ended
+		throw new NotAuthorizedError()
+	}
+
+	static async cancelSession (req: Request) {
+		const { reason } = validate({
+			reason: req.body.reason
+		}, {
+			reason: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] }
+		})
+
+		const cancelled = await SessionsUseCases.cancel({ id: req.params.id, reason, userId: req.authUser!.id })
+		if (cancelled) return cancelled
+		throw new NotAuthorizedError()
+	}
 }

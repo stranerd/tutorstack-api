@@ -41,6 +41,10 @@ const SessionSchema = new mongoose.Schema<SessionFromModel>({
 		type: Number,
 		required: true
 	},
+	endedAt: {
+		type: Number,
+		required: true
+	},
 	lengthInMinutes: {
 		type: Number,
 		required: true
@@ -57,6 +61,16 @@ const SessionSchema = new mongoose.Schema<SessionFromModel>({
 		type: Number,
 		required: false,
 		default: Date.now
+	},
+	cancelled: {
+		type: mongoose.Schema.Types.Mixed,
+		required: false,
+		default: null
+	},
+	closedAt: {
+		type: Number,
+		required: false,
+		default: null
 	},
 	updatedAt: {
 		type: Number,

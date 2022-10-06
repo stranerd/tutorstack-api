@@ -1,4 +1,4 @@
-import { Currencies, EmbeddedUser, Media } from '../types'
+import { Currencies, EmbeddedUser, Media, SessionCancelled } from '../types'
 import { BaseEntity } from '@stranerd/api-commons'
 
 export class SessionEntity extends BaseEntity {
@@ -11,15 +11,19 @@ export class SessionEntity extends BaseEntity {
 	public readonly description: string
 	public readonly attachments: Media[]
 	public readonly startedAt: number
+	public readonly endedAt: number
 	public readonly lengthInMinutes: number
 	public readonly price: number
 	public readonly currency: Currencies
+	public readonly cancelled: SessionCancelled | null
+	public readonly closedAt: number | null
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
 	constructor ({
 		             id, tutor, students, paid, subjectId, topic, description, attachments,
-		             startedAt, lengthInMinutes, price, currency, createdAt, updatedAt
+		             startedAt, closedAt, lengthInMinutes, price, currency,
+		             cancelled, endedAt, createdAt, updatedAt
 	             }: SessionConstructorArgs) {
 		super()
 		this.id = id
@@ -31,9 +35,12 @@ export class SessionEntity extends BaseEntity {
 		this.description = description
 		this.attachments = attachments
 		this.startedAt = startedAt
+		this.endedAt = endedAt
 		this.lengthInMinutes = lengthInMinutes
 		this.price = price
 		this.currency = currency
+		this.cancelled = cancelled
+		this.closedAt = closedAt
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
@@ -63,9 +70,12 @@ type SessionConstructorArgs = {
 	description: string
 	attachments: Media[]
 	startedAt: number
+	endedAt: number
 	lengthInMinutes: number
 	price: number
 	currency: Currencies
+	cancelled: SessionCancelled | null
+	closedAt: number | null
 	createdAt: number
 	updatedAt: number
 }

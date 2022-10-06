@@ -29,4 +29,12 @@ export class SessionsUseCase {
 	async updatePaid (data: { id: string, userId: string, add: boolean }) {
 		return await this.repository.updatePaid(data.id, data.userId, data.add)
 	}
+
+	async close (data: { id: string, tutorId: string }) {
+		return await this.repository.close(data.id, data.tutorId)
+	}
+
+	async cancel (data: { id: string, userId: string, reason: string }) {
+		return await this.repository.cancel(data.id, data.userId, data.reason)
+	}
 }

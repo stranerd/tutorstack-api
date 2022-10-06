@@ -14,9 +14,12 @@ export class SessionMapper extends BaseMapper<SessionFromModel, SessionToModel, 
 			description: param.description,
 			attachments: param.attachments,
 			startedAt: param.startedAt,
+			endedAt: param.endedAt,
 			lengthInMinutes: param.lengthInMinutes,
 			price: param.price,
 			currency: param.currency,
+			cancelled: param.cancelled,
+			closedAt: param.closedAt,
 			createdAt: param.createdAt,
 			updatedAt: param.updatedAt
 		})

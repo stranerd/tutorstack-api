@@ -38,10 +38,13 @@ export class SessionRepository implements ISessionRepository {
 		const end = start + (data.lengthInMinutes * 60 * 1000)
 		await session.withTransaction(async (session) => {
 			const participants = [data.tutor.id, ...data.students.map((s) => s.id)]
-			const availabilities = (await Availability.find({ _id: { $in: participants } }, {},{ session }))
-				.map((u) => this.availabilityMapper.mapFrom(u)!)
-			for (const availability of availabilities) if (availability.isFreeBetween(start, end)) throw new Error('some as are not free within this time period')
-			res = await new Session(data).save({ session })
+			for (const userId of participants) {
+				const availability = this.availabilityMapper.mapFrom(
+					await Availability.findOneAndUpdate({ userId }, { $setOnInsert: { userId } }, { upsert: true, new: true, session })
+				)!
+				if (!availability.isFreeBetween(start, end)) throw new Error('some as are not free within this time period')
+			}
+			res = await new Session({ ...data, endedAt: end }).save({ session })
 			await Availability.updateMany({ _id: { $in: participants } }, {
 				$addToSet: { 'booked': { sessionId: res._id, from: start, to: end } }
 			}, { session })
@@ -70,5 +73,52 @@ export class SessionRepository implements ISessionRepository {
 			[add ? '$addToSet' : '$pull']: { paid: userId }
 		})
 		return !!session
+	}
+
+	async close (id: string, userId: string) {
+		let res = false
+		const session = await mongoose.startSession()
+		await session.withTransaction(async (session) => {
+			const updatedSession = this.mapper.mapFrom(await Session.findOneAndUpdate(
+				{ _id: id, closedAt: null, cancelled: null, 'tutor.id': userId },
+				{ $set: { closedAt: Date.now() } },
+				{ session }
+			))
+			if (!updatedSession) return false
+			const participants = [updatedSession.tutor.id, ...updatedSession.students.map((s) => s.id)]
+			await Availability.updateMany({ _id: { $in: participants } }, {
+				pull: { 'booked': { sessionId: updatedSession.id, from: updatedSession.startedAt, to: updatedSession.endedAt } }
+			}, { session })
+			res = !!updatedSession
+			return res
+		})
+		await session.endSession()
+		return res
+	}
+
+	async cancel (id: string, userId: string, reason: string) {
+		let res = false
+		const session = await mongoose.startSession()
+		await session.withTransaction(async (session) => {
+			const sessionToUpdate = this.mapper.mapFrom(await Session.findById(id))
+			if (!sessionToUpdate || sessionToUpdate.closedAt !== null || sessionToUpdate.cancelled !== null) return false
+			// eslint-disable-next-line no-empty
+			else if (sessionToUpdate.tutor.id === userId) {}
+			else if (sessionToUpdate.students.at(0)?.id === userId && sessionToUpdate.startedAt < Date.now()) return false
+			else return false
+			const updatedSession = await Session.findByIdAndUpdate(id,
+				{ $set: { cancelled: { userId, reason, at: Date.now() } } },
+				{ session }
+			)
+			if (!updatedSession) return false
+			const participants = [sessionToUpdate.tutor.id, ...sessionToUpdate.students.map((s) => s.id)]
+			await Availability.updateMany({ _id: { $in: participants } }, {
+				pull: { 'booked': { sessionId: updatedSession.id, from: updatedSession.startedAt, to: updatedSession.endedAt } }
+			}, { session })
+			res = !!updatedSession
+			return res
+		})
+		await session.endSession()
+		return res
 	}
 }
