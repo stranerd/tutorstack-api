@@ -46,7 +46,6 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 		required: false,
 		default: {} as unknown as UserFromModel['roles']
 	},
-
 	lastSignedInAt: {
 		type: Number,
 		required: false,

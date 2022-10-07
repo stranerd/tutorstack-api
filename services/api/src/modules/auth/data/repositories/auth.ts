@@ -9,7 +9,8 @@ import {
 	MediaOutput,
 	mongoose,
 	Random,
-	readEmailFromPug, signinWithGoogle,
+	readEmailFromPug,
+	signinWithGoogle,
 	ValidationError
 } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
@@ -129,7 +130,7 @@ export class AuthRepository implements IAuthRepository {
 		} as unknown as MediaOutput : null
 
 		return this.authorizeSocial(AuthTypes.google, {
-			email, photo, name: { first: data.first_name, last : data.last_name},
+			email, photo, name: { first: data.first_name, last: data.last_name },
 			isVerified: data.email_verified === 'true'
 		})
 	}
