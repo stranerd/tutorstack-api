@@ -40,7 +40,11 @@ export class SessionRepository implements ISessionRepository {
 			const participants = [data.tutor.id, ...data.students.map((s) => s.id)]
 			for (const userId of participants) {
 				const availability = this.availabilityMapper.mapFrom(
-					await Availability.findOneAndUpdate({ userId }, { $setOnInsert: { userId } }, { upsert: true, new: true, session })
+					await Availability.findOneAndUpdate({ userId }, { $setOnInsert: { userId } }, {
+						upsert: true,
+						new: true,
+						session
+					})
 				)!
 				if (!availability.isFreeBetween(start, end)) throw new Error('some as are not free within this time period')
 			}
@@ -87,7 +91,13 @@ export class SessionRepository implements ISessionRepository {
 			if (!updatedSession) return false
 			const participants = [updatedSession.tutor.id, ...updatedSession.students.map((s) => s.id)]
 			await Availability.updateMany({ _id: { $in: participants } }, {
-				pull: { 'booked': { sessionId: updatedSession.id, from: updatedSession.startedAt, to: updatedSession.endedAt } }
+				pull: {
+					'booked': {
+						sessionId: updatedSession.id,
+						from: updatedSession.startedAt,
+						to: updatedSession.endedAt
+					}
+				}
 			}, { session })
 			res = !!updatedSession
 			return res
@@ -103,17 +113,23 @@ export class SessionRepository implements ISessionRepository {
 			const sessionToUpdate = this.mapper.mapFrom(await Session.findById(id))
 			if (!sessionToUpdate || sessionToUpdate.closedAt !== null || sessionToUpdate.cancelled !== null) return false
 			// eslint-disable-next-line no-empty
-			else if (sessionToUpdate.tutor.id === userId) {}
-			else if (sessionToUpdate.students.at(0)?.id === userId && sessionToUpdate.startedAt < Date.now()) return false
+			else if (sessionToUpdate.tutor.id === userId) {
+			} else if (sessionToUpdate.students.at(0)?.id === userId && sessionToUpdate.startedAt < Date.now()) return false
 			else return false
 			const updatedSession = await Session.findByIdAndUpdate(id,
-				{ $set: { cancelled: { userId, reason, at: Date.now() } } },
+				{ $set: { cancelled: { userId, reason, at: Date.now() }, closedAt: Date.now() } },
 				{ session }
 			)
 			if (!updatedSession) return false
 			const participants = [sessionToUpdate.tutor.id, ...sessionToUpdate.students.map((s) => s.id)]
 			await Availability.updateMany({ _id: { $in: participants } }, {
-				pull: { 'booked': { sessionId: updatedSession.id, from: updatedSession.startedAt, to: updatedSession.endedAt } }
+				pull: {
+					'booked': {
+						sessionId: updatedSession.id,
+						from: updatedSession.startedAt,
+						to: updatedSession.endedAt
+					}
+				}
 			}, { session })
 			res = !!updatedSession
 			return res

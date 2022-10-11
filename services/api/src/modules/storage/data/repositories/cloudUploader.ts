@@ -7,7 +7,7 @@ export class CloudUploaderRepository implements IUploaderRepository {
 	private bucket: Bucket
 
 	constructor () {
-		this.bucket = new Storage().bucket(`tutorstack${environment}.appspot.com`)
+		this.bucket = new Storage().bucket(`tutorstack${environment}`)
 	}
 
 	async delete (path: string) {
