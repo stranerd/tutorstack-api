@@ -144,6 +144,7 @@ export class AuthRepository implements IAuthRepository {
 			photo: data.photo,
 			authTypes: [type],
 			password: '',
+			description: '',
 			isVerified: data.isVerified
 		}, type)
 

@@ -22,7 +22,7 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 			sendEmail: true
 		})
 
-		await UsersUseCases.incrementMeta({ id: after.user.id, value: 1, property: UserMeta.answers })
+		await UsersUseCases.incrementMeta({ ids: [after.user.id], value: 1, property: UserMeta.answers })
 		await QuestionsUseCases.updateAnswers({
 			questionId: after.questionId,
 			answerId: after.id,
@@ -40,7 +40,7 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 		await getSocketEmitter().emitDeleted('questions/answers', before)
 		await getSocketEmitter().emitDeleted(`questions/answers/${before.id}`, before)
 
-		await UsersUseCases.incrementMeta({ id: before.user.id, value: -1, property: UserMeta.answers })
+		await UsersUseCases.incrementMeta({ ids: [before.user.id], value: -1, property: UserMeta.answers })
 		await QuestionsUseCases.updateAnswers({
 			questionId: before.questionId,
 			answerId: before.id,

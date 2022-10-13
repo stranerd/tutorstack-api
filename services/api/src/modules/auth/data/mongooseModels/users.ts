@@ -21,6 +21,11 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 		required: false,
 		default: ''
 	},
+	description: {
+		type: String,
+		required: false,
+		default: ''
+	},
 	name: {
 		type: mongoose.Schema.Types.Mixed,
 		required: true

@@ -10,7 +10,7 @@ export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromMo
 		await getSocketEmitter().emitCreated('questions/questions', after)
 		await getSocketEmitter().emitCreated(`questions/questions/${after.id}`, after)
 
-		await UsersUseCases.incrementMeta({ id: after.user.id, value: 1, property: UserMeta.questions })
+		await UsersUseCases.incrementMeta({ ids: [after.user.id], value: 1, property: UserMeta.questions })
 	},
 	updated: async ({ before, after, changes }) => {
 		await getSocketEmitter().emitUpdated('questions/questions', after)
@@ -28,7 +28,7 @@ export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromMo
 
 		await AnswersUseCases.deleteQuestionAnswers(before.id)
 
-		await UsersUseCases.incrementMeta({ id: before.user.id, value: -1, property: UserMeta.questions })
+		await UsersUseCases.incrementMeta({ ids: [before.user.id], value: -1, property: UserMeta.questions })
 
 		if (before.attachment) await publishers[EventTypes.DELETEFILE].publish(before.attachment)
 	}

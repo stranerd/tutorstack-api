@@ -6,6 +6,7 @@ export class AuthUserEntity extends BaseEntity {
 	public readonly id: string
 	public readonly email: string
 	public readonly password: string
+	public readonly description: string
 	public readonly name: { first: string, last: string }
 	public readonly photo: MediaOutput | null
 	public readonly isVerified: boolean
@@ -20,6 +21,7 @@ export class AuthUserEntity extends BaseEntity {
 		this.email = data.email
 		this.password = data.password
 		this.name = data.name
+		this.description = data.description
 		this.photo = data.photo
 		this.isVerified = data.isVerified
 		this.authTypes = data.authTypes
@@ -44,6 +46,7 @@ interface UserConstructorArgs {
 	id: string;
 	email: string;
 	password: string;
+	description: string;
 	roles: AuthRoles;
 	name: { first: string, last: string }
 	photo: MediaOutput | null;

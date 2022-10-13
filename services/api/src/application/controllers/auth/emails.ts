@@ -10,6 +10,7 @@ export class EmailsController {
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
 			password: req.body.password,
+			description: req.body.description,
 			photo: req.files.photo?.[0] ?? null
 		}
 
@@ -27,6 +28,7 @@ export class EmailsController {
 			firstName,
 			lastName,
 			password,
+			description,
 			photo: userPhoto
 		} = validate(userCredential, {
 			email: { required: true, rules: [Validation.isEmail, isUniqueInDb] },
@@ -36,12 +38,13 @@ export class EmailsController {
 			},
 			photo: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] },
 			firstName: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			lastName: { required: true, rules: [Validation.isString] }
+			lastName: { required: true, rules: [Validation.isString] },
+			description: { required: true, rules: [Validation.isString] }
 		})
 		const photo = userPhoto ? await StorageUseCases.upload('profiles', userPhoto) : null
 		const validateData = {
 			name: { first: firstName, last: lastName },
-			email, password, photo
+			email, password, photo, description
 		}
 
 		const updatedUser = user

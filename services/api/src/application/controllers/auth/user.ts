@@ -20,17 +20,19 @@ export class UserController {
 		const data = validate({
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
+			description: req.body.description,
 			photo: uploadedPhoto as any
 		}, {
 			firstName: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
 			lastName: { required: true, rules: [Validation.isString] },
+			description: { required: true, rules: [Validation.isString] },
 			photo: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] }
 		})
-		const { firstName, lastName } = data
+		const { firstName, lastName, description } = data
 		if (uploadedPhoto) data.photo = await StorageUseCases.upload('profiles', uploadedPhoto)
 
 		const validateData = {
-			name: { first: firstName, last: lastName },
+			name: { first: firstName, last: lastName }, description,
 			...(changedPhoto ? { photo: data.photo } : {})
 		}
 

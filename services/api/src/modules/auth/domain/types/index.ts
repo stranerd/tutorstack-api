@@ -2,6 +2,7 @@ import { MediaOutput } from '@stranerd/api-commons'
 
 export interface UserUpdateInput {
 	name: { first: string, last: string }
+	description: string
 	photo: MediaOutput | null
 }
 

@@ -5,6 +5,7 @@ export type Media = MediaOutput
 
 export type UserBio = {
 	email: string
+	description: string
 	name: {
 		first: string
 		last: string
@@ -32,7 +33,9 @@ export type UserTutor = {
 export enum UserMeta {
 	questions = 'questions',
 	answers = 'answers',
-	students = 'students'
+	students = 'students',
+	sessionsAttended = 'sessionsAttended',
+	sessionsHosted = 'sessionsHosted'
 }
 
 export type UserMetaType = Record<UserMeta, number>

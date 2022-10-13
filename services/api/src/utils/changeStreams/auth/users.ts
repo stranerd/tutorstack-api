@@ -10,6 +10,7 @@ export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, Aut
 			data: {
 				name: after.allNames,
 				email: after.email,
+				description: after.description,
 				photo: after.photo
 			},
 			timestamp: after.signedUpAt
@@ -29,6 +30,7 @@ export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, Aut
 			data: {
 				name: after.allNames,
 				email: after.email,
+				description: after.description,
 				photo: after.photo
 			},
 			timestamp: Date.now()

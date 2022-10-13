@@ -1,6 +1,7 @@
 import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { SessionEntity, SessionFromModel } from '@modules/sessions'
 import { getSocketEmitter } from '@index'
+import { UserMeta, UsersUseCases } from '@modules/users'
 
 export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromModel, SessionEntity> = {
 	created: async ({ after }) => {
@@ -11,13 +12,25 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 			})
 		)
 	},
-	updated: async ({ after }) => {
+	updated: async ({ after, changes }) => {
 		await Promise.all(
 			after.getParticipants().map(async (id) => {
 				await getSocketEmitter().emitUpdated(`sessions/sessions/${id}`, after)
 				await getSocketEmitter().emitUpdated(`sessions/sessions/${id}/${after.id}`, after)
 			})
 		)
+		if (changes.closedAt && after.closedAt && !after.cancelled) await Promise.all([
+			UsersUseCases.incrementMeta({
+				ids: after.students.map((s) => s.id),
+				value: 1,
+				property: UserMeta.sessionsAttended
+			}),
+			UsersUseCases.incrementMeta({
+				ids: [after.tutor.id],
+				value: 1,
+				property: UserMeta.sessionsHosted
+			})
+		])
 	},
 	deleted: async ({ before }) => {
 		await Promise.all(
@@ -26,5 +39,17 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				await getSocketEmitter().emitDeleted(`sessions/sessions/${id}/${before.id}`, before)
 			})
 		)
+		if (before.closedAt && !before.cancelled) await Promise.all([
+			UsersUseCases.incrementMeta({
+				ids: before.students.map((s) => s.id),
+				value: -1,
+				property: UserMeta.sessionsAttended
+			}),
+			UsersUseCases.incrementMeta({
+				ids: [before.tutor.id],
+				value: -1,
+				property: UserMeta.sessionsHosted
+			})
+		])
 	}
 }

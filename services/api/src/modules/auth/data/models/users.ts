@@ -11,6 +11,7 @@ export interface UserFromModel extends UserToModel {
 export interface UserToModel {
 	email: string
 	password: string
+	description: string
 	name: { first: string, last: string }
 	photo: MediaOutput | null
 	isVerified: boolean

@@ -1,5 +1,5 @@
 import { ChangeStreamCallbacks } from '@stranerd/api-commons'
-import { UserEntity, UserFromModel, UsersUseCases } from '@modules/users'
+import { UserEntity, UserFromModel, UserMeta, UsersUseCases } from '@modules/users'
 import { getSocketEmitter } from '@index'
 import { AnswersUseCases, QuestionsUseCases } from '@modules/questions'
 import { AuthRole } from '@utils/types'
@@ -8,11 +8,11 @@ import { NotificationType } from '@modules/notifications'
 
 export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, UserEntity> = {
 	created: async ({ after }) => {
-		await getSocketEmitter().emitCreated('as/as', after)
+		await getSocketEmitter().emitCreated('users/users', after)
 		await getSocketEmitter().emitCreated(`users/users/${after.id}`, after)
 	},
 	updated: async ({ after, before, changes }) => {
-		await getSocketEmitter().emitUpdated('as/as', after)
+		await getSocketEmitter().emitUpdated('users/users', after)
 		await getSocketEmitter().emitUpdated(`users/users/${after.id}`, after)
 		const updatedBioOrRoles = !!changes.bio || !!changes.roles
 		if (updatedBioOrRoles) await Promise.all([
@@ -27,9 +27,17 @@ export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, Use
 				sendEmail: true, data: { type: NotificationType.RoleUpdated }
 			})
 		}
+		if (changes.tutors) {
+			const added = after.tutors.filter((t) => !before.tutors.includes(t))
+			const removed = before.tutors.filter((t) => !after.tutors.includes(t))
+			await Promise.all([
+				UsersUseCases.incrementMeta({ ids: added, value: 1, property: UserMeta.students }),
+				UsersUseCases.incrementMeta({ ids: removed, value: -1, property: UserMeta.students })
+			])
+		}
 	},
 	deleted: async ({ before }) => {
-		await getSocketEmitter().emitDeleted('as/as', before)
+		await getSocketEmitter().emitDeleted('users/users', before)
 		await getSocketEmitter().emitDeleted(`users/users/${before.id}`, before)
 	}
 }

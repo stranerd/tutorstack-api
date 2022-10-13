@@ -10,6 +10,7 @@ export class UserMapper extends BaseMapper<UserFromModel, UserToModel, AuthUserE
 			password: param.password,
 			roles: param.roles,
 			name: param.name,
+			description: param.description,
 			photo: param.photo,
 			isVerified: param.isVerified,
 			authTypes: param.authTypes,
@@ -21,6 +22,7 @@ export class UserMapper extends BaseMapper<UserFromModel, UserToModel, AuthUserE
 	mapTo (param: AuthUserEntity) {
 		return {
 			email: param.email,
+			description: param.description,
 			password: param.password,
 			roles: param.roles,
 			name: param.name,
