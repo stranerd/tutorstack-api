@@ -4,7 +4,7 @@ import { AvailabilityMapper } from '../mappers/availabilities'
 import { SessionFromModel, SessionToModel } from '../models/sessions'
 import { Session } from '../mongooseModels/sessions'
 import { Availability } from '../mongooseModels/availabilities'
-import { mongoose, parseQueryParams, QueryParams } from '@stranerd/api-commons'
+import { BadRequestError, mongoose, parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { EmbeddedUser } from '../../domain/types'
 
 export class SessionRepository implements ISessionRepository {
@@ -46,7 +46,7 @@ export class SessionRepository implements ISessionRepository {
 						session
 					})
 				)!
-				if (!availability.isFreeBetween(start, end)) throw new Error('some as are not free within this time period')
+				if (!availability.isFreeBetween(start, end, userId !== data.tutor.id)) throw new BadRequestError('some as are not free within this time period')
 			}
 			res = await new Session({ ...data, endedAt: end }).save({ session })
 			await Availability.updateMany({ _id: { $in: participants } }, {

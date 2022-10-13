@@ -27,13 +27,6 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 		return this.mapper.mapFrom(availability)!
 	}
 
-	private async getOrCreate (userId: string, session?: any) {
-		return await Availability.findOneAndUpdate(
-			{ userId },
-			{ $setOnInsert: { userId } },
-			{ upsert: true, new: true, ...(session ? { session } : {}) })
-	}
-
 	async update (userId: string, time: number, add: boolean) {
 		const session = await mongoose.startSession()
 		let res = null as any
@@ -41,7 +34,7 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 			const availabilityModel = await this.getOrCreate(userId, session)
 			const availability = this.mapper.mapFrom(availabilityModel)!
 			const lastHour = AvailabilityEntity.getLastHour(time)
-			if (!add && availability && !availability.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000)) return null
+			if (!add && availability && !availability.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000, false)) return null
 			const updatedAvailability = await Availability.findByIdAndUpdate(availability.id,
 				{ [add ? '$addToSet' : '$pull']: { 'free': lastHour } },
 				{ session, new: true })
@@ -59,5 +52,12 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 			{ $pull: { 'free': { $lt: time } } }
 		)
 		return !!res.acknowledged
+	}
+
+	private async getOrCreate (userId: string, session?: any) {
+		return await Availability.findOneAndUpdate(
+			{ userId },
+			{ $setOnInsert: { userId } },
+			{ upsert: true, new: true, ...(session ? { session } : {}) })
 	}
 }

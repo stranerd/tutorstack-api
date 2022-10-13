@@ -34,13 +34,13 @@ export class AvailabilityEntity extends BaseEntity {
 			.map((_, i) => (i * anHourInMs) + from)
 	}
 
-	isFreeBetween (from: number, to: number) {
+	isFreeBetween (from: number, to: number, checkOnlyBooked: boolean) {
 		const hasNoBookedSession = this.booked.every((e) => from >= e.to || to <= e.from)
 		const hourFrom = AvailabilityEntity.getLastHour(from)
 		const hourTo = AvailabilityEntity.getLastHour(to)
 		const hoursBetween = AvailabilityEntity.getHoursBetween(hourFrom, hourTo)
 		const free = hoursBetween.every((hr) => this.free.includes(hr))
-		return hasNoBookedSession && free
+		return hasNoBookedSession && (checkOnlyBooked ? true : free)
 	}
 }
 
