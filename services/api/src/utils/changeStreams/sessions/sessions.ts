@@ -2,6 +2,7 @@ import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { SessionEntity, SessionFromModel } from '@modules/sessions'
 import { getSocketEmitter } from '@index'
 import { UserMeta, UsersUseCases } from '@modules/users'
+import { TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
 
 export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromModel, SessionEntity> = {
 	created: async ({ after }) => {
@@ -31,6 +32,18 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				property: UserMeta.sessionsHosted
 			})
 		])
+
+		if (changes.cancelled && after.cancelled) await Promise.all(after.paid.map(async (id) => {
+			const user = after.students.find((u) => u.id === id)
+			if (!user) return
+			await TransactionsUseCases.create({
+				userId: user.id, email: user.bio.email,
+				title: `Refund for Session: ${after.id}`,
+				amount: after.price, currency: after.currency,
+				status: TransactionStatus.fulfilled,
+				data: { type: TransactionType.RefundSession, sessionId: after.id }
+			})
+		}))
 	},
 	deleted: async ({ before }) => {
 		await Promise.all(
