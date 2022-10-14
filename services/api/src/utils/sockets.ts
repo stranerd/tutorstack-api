@@ -17,4 +17,5 @@ export const registerSockets = () => {
 	getSocketEmitter().register('users/works', isOpen)
 	getSocketEmitter().register('sessions/sessions', isMine)
 	getSocketEmitter().register('sessions/availabilities', isOpen)
+	getSocketEmitter().register('sessions/reviews', isOpen)
 }
