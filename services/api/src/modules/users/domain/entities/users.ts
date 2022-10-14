@@ -1,12 +1,4 @@
-import {
-	EmbeddedUser,
-	UserBio,
-	UserDates,
-	UserMetaType,
-	UserRoles,
-	UserStatus,
-	UserTutor
-} from '../types'
+import { EmbeddedUser, UserBio, UserDates, UserMetaType, UserRatings, UserRoles, UserStatus, UserTutor } from '../types'
 import { BaseEntity } from '@stranerd/api-commons'
 
 export class UserEntity extends BaseEntity {
@@ -18,9 +10,10 @@ export class UserEntity extends BaseEntity {
 	public readonly status: UserStatus
 	public readonly tutor: UserTutor
 	public readonly tutors: string[]
+	public readonly ratings: UserRatings
 
 	constructor ({
-		             id, bio, roles, dates, meta, status, tutors, tutor
+		             id, bio, roles, dates, meta, status, tutors, tutor, ratings
 	             }: UserConstructorArgs) {
 		super()
 		this.id = id
@@ -31,6 +24,7 @@ export class UserEntity extends BaseEntity {
 		this.status = status
 		this.tutor = tutor
 		this.tutors = tutors
+		this.ratings = ratings
 	}
 
 	static getLastHour (time: number) {
@@ -64,4 +58,5 @@ type UserConstructorArgs = {
 	status: UserStatus
 	tutor: UserTutor
 	tutors: string[]
+	ratings: UserRatings
 }

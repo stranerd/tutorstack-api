@@ -61,6 +61,26 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 		type: [String],
 		required: false,
 		default: []
+	},
+	ratings: {
+		count: {
+			type: Number,
+			required: false,
+			default: 0,
+			min: 0
+		},
+		total: {
+			type: Number,
+			required: false,
+			default: 0,
+			min: 0
+		},
+		avg: {
+			type: Number,
+			required: false,
+			default: 0,
+			min: 0
+		}
 	}
 }, { minimize: false })
 
