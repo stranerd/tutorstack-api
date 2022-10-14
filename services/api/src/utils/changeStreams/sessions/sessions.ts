@@ -20,18 +20,6 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				await getSocketEmitter().emitUpdated(`sessions/sessions/${id}/${after.id}`, after)
 			})
 		)
-		if (changes.closedAt && after.closedAt && !after.cancelled) await Promise.all([
-			UsersUseCases.incrementMeta({
-				ids: after.students.map((s) => s.id),
-				value: 1,
-				property: UserMeta.sessionsAttended
-			}),
-			UsersUseCases.incrementMeta({
-				ids: [after.tutor.id],
-				value: 1,
-				property: UserMeta.sessionsHosted
-			})
-		])
 
 		if (changes.cancelled && after.cancelled) await Promise.all(after.paid.map(async (id) => {
 			const user = after.students.find((u) => u.id === id)
@@ -44,6 +32,19 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				data: { type: TransactionType.RefundSession, sessionId: after.id }
 			})
 		}))
+
+		if (changes.closedAt && after.closedAt && !after.cancelled) await Promise.all([
+			UsersUseCases.incrementMeta({
+				ids: after.students.map((s) => s.id),
+				value: 1,
+				property: UserMeta.sessionsAttended
+			}),
+			UsersUseCases.incrementMeta({
+				ids: [after.tutor.id],
+				value: 1,
+				property: UserMeta.sessionsHosted
+			})
+		])
 	},
 	deleted: async ({ before }) => {
 		await Promise.all(
