@@ -57,6 +57,11 @@ const SessionSchema = new mongoose.Schema<SessionFromModel>({
 		type: String,
 		required: true
 	},
+	ratings: {
+		type: mongoose.Schema.Types.Mixed,
+		required: false,
+		default: {}
+	},
 	createdAt: {
 		type: Number,
 		required: false,

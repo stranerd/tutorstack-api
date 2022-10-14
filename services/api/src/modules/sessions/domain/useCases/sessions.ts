@@ -2,6 +2,7 @@ import { ISessionRepository } from '../irepositories/sessions'
 import { SessionToModel } from '../../data/models/sessions'
 import { QueryParams } from '@stranerd/api-commons'
 import { EmbeddedUser } from '../types'
+import { ReviewToModel } from '../../data/models/reviews'
 
 export class SessionsUseCase {
 	private repository: ISessionRepository
@@ -36,5 +37,9 @@ export class SessionsUseCase {
 
 	async cancel (data: { id: string, userId: string, reason: string }) {
 		return await this.repository.cancel(data.id, data.userId, data.reason)
+	}
+
+	async rate (data: Omit<ReviewToModel, 'to'>) {
+		return await this.repository.rate(data)
 	}
 }

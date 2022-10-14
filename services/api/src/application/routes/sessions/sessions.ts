@@ -80,5 +80,18 @@ export const sessionsRoutes: Route[] = [
 				}
 			})
 		]
+	},
+	{
+		path: '/sessions/sessions/:id/rate',
+		method: 'post',
+		controllers: [
+			isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await SessionsController.rateSession(req)
+				}
+			})
+		]
 	}
 ]

@@ -2,6 +2,8 @@ import { SessionEntity } from '../entities/sessions'
 import { SessionToModel } from '../../data/models/sessions'
 import { QueryParams, QueryResults } from '@stranerd/api-commons'
 import { EmbeddedUser } from '../types'
+import { ReviewToModel } from '../../data/models/reviews'
+import { ReviewEntity } from '../entities/reviews'
 
 export interface ISessionRepository {
 	add: (data: SessionToModel) => Promise<SessionEntity>
@@ -11,4 +13,5 @@ export interface ISessionRepository {
 	updatePaid: (id: string, userId: string, add: boolean) => Promise<boolean>
 	close: (id: string, userId: string) => Promise<boolean>
 	cancel: (id: string, userId: string, reason: string) => Promise<boolean>
+	rate: (data: Omit<ReviewToModel, 'to'>) => Promise<ReviewEntity>
 }

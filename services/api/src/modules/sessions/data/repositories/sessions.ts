@@ -4,17 +4,22 @@ import { AvailabilityMapper } from '../mappers/availabilities'
 import { SessionFromModel, SessionToModel } from '../models/sessions'
 import { Session } from '../mongooseModels/sessions'
 import { Availability } from '../mongooseModels/availabilities'
-import { BadRequestError, mongoose, parseQueryParams, QueryParams } from '@stranerd/api-commons'
+import { BadRequestError, mongoose, NotAuthorizedError, parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { EmbeddedUser } from '../../domain/types'
+import { ReviewToModel } from '../models/reviews'
+import { ReviewMapper } from '../mappers/reviews'
+import { Review } from '../mongooseModels/reviews'
 
 export class SessionRepository implements ISessionRepository {
 	private static instance: SessionRepository
 	private mapper: SessionMapper
 	private availabilityMapper: AvailabilityMapper
+	private reviewMapper: ReviewMapper
 
 	private constructor () {
 		this.mapper = new SessionMapper()
 		this.availabilityMapper = new AvailabilityMapper()
+		this.reviewMapper = new ReviewMapper()
 	}
 
 	static getInstance () {
@@ -110,7 +115,7 @@ export class SessionRepository implements ISessionRepository {
 		let res = false
 		const session = await mongoose.startSession()
 		await session.withTransaction(async (session) => {
-			const sessionToUpdate = this.mapper.mapFrom(await Session.findById(id))
+			const sessionToUpdate = this.mapper.mapFrom(await Session.findById(id, {}, { session }))
 			if (!sessionToUpdate || sessionToUpdate.closedAt !== null || sessionToUpdate.cancelled !== null) return false
 			// eslint-disable-next-line no-empty
 			else if (sessionToUpdate.tutor.id === userId) {
@@ -136,5 +141,29 @@ export class SessionRepository implements ISessionRepository {
 		})
 		await session.endSession()
 		return res
+	}
+
+	async rate (data: Omit<ReviewToModel, 'to'>) {
+		let res = null as any
+		const session = await mongoose.startSession()
+		await session.withTransaction(async (session) => {
+			const sessionToRate = this.mapper.mapFrom(await Session.findById(data.sessionId, {}, { session }))
+			if (!sessionToRate || sessionToRate.closedAt === null || sessionToRate.cancelled !== null) throw new NotAuthorizedError('can\'t rate this session')
+			if (!sessionToRate.students.map((s) => s.id).includes(data.user.id)) throw new NotAuthorizedError('can\'t rate this session')
+			if (sessionToRate.ratings[data.user.id]) {
+				res = await Review.findById(sessionToRate.ratings[data.user.id], { session })
+				return res
+			} else {
+				const review = await new Review({ ...data, to: sessionToRate.tutor.id }).save({ session })
+				await Session.findByIdAndUpdate(data.sessionId,
+					{ $set: { [`ratings.${data.user.id}`]: review.id } },
+					{ session }
+				)
+				res = review
+				return res
+			}
+		})
+		await session.endSession()
+		return this.reviewMapper.mapFrom(res)!
 	}
 }

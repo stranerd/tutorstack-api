@@ -133,4 +133,24 @@ export class SessionsController {
 		if (cancelled) return cancelled
 		throw new NotAuthorizedError()
 	}
+
+	static async rateSession (req: Request) {
+		const data = validate({
+			rating: parseInt(req.body.rating),
+			message: req.body.message
+		}, {
+			rating: {
+				required: true,
+				rules: [Validation.isNumber, Validation.isLessThanOrEqualToX(0), Validation.isMoreThanOrEqualToX(5)]
+			},
+			message: { required: true, rules: [Validation.isString] }
+		})
+
+		const user = await UsersUseCases.find(req.authUser!.id)
+		if (!user) throw new BadRequestError('profile not found')
+
+		return await SessionsUseCases.rate({
+			...data, sessionId: req.params.id, user: user.getEmbedded()
+		})
+	}
 }

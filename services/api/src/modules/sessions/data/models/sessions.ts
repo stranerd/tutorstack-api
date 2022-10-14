@@ -4,6 +4,7 @@ export interface SessionFromModel extends SessionToModel {
 	_id: string
 	endedAt: number
 	paid: string[]
+	ratings: Record<string, string>
 	cancelled: SessionCancelled | null
 	closedAt: number | null
 	createdAt: number
