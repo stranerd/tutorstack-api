@@ -1,7 +1,7 @@
 import { IAvailabilityRepository } from '../../domain/irepositories/availabilities'
 import { AvailabilityMapper } from '../mappers/availabilities'
 import { Availability } from '../mongooseModels/availabilities'
-import { mongoose, parseQueryParams } from '@stranerd/api-commons'
+import { BadRequestError, mongoose, parseQueryParams } from '@stranerd/api-commons'
 import { AvailabilityFromModel } from '../models/availabilities'
 import { AvailabilityEntity } from '../../domain/entities/availabilities'
 
@@ -34,7 +34,7 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 			const availabilityModel = await this.getOrCreate(userId, session)
 			const availability = this.mapper.mapFrom(availabilityModel)!
 			const lastHour = AvailabilityEntity.getLastHour(time)
-			if (!add && availability && !availability.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000, false)) return null
+			if (!availability.isFreeBetween(lastHour, lastHour + 60 * 60 * 1000, add)) throw new BadRequestError('not available')
 			const updatedAvailability = await Availability.findByIdAndUpdate(availability.id,
 				{ [add ? '$addToSet' : '$pull']: { 'free': lastHour } },
 				{ session, new: true })
