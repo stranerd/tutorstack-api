@@ -1,7 +1,7 @@
 import { IQuestionRepository } from '../irepositories/questions'
 import { QuestionToModel } from '../../data/models/questions'
 import { QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../types'
+import { EmbeddedUser, QuestionMetaType } from '../types'
 
 export class QuestionsUseCase {
 	private repository: IQuestionRepository
@@ -44,5 +44,9 @@ export class QuestionsUseCase {
 
 	async hold (data: { id: string, userId: string, hold: boolean }) {
 		return await this.repository.hold(data.id, data.userId, data.hold)
+	}
+
+	async updateMeta (data: { id: string, property: QuestionMetaType, value: 1 | -1 }) {
+		return this.repository.updateMeta(data.id, data.property, data.value)
 	}
 }

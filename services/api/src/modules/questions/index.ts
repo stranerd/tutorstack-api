@@ -20,3 +20,5 @@ export { SubjectFromModel } from './data/models/subjects'
 export { AnswerEntity } from './domain/entities/answers'
 export { QuestionEntity } from './domain/entities/questions'
 export { SubjectEntity } from './domain/entities/subjects'
+
+export { QuestionMetaType } from './domain/types'

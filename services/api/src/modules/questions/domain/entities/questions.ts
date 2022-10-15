@@ -1,5 +1,5 @@
 import { BaseEntity } from '@stranerd/api-commons'
-import { EmbeddedUser, MAX_ANSWERS_COUNT, Media, QuestionHeld } from '../types'
+import { EmbeddedUser, MAX_ANSWERS_COUNT, Media, QuestionHeld, QuestionMeta } from '../types'
 
 export class QuestionEntity extends BaseEntity {
 	public readonly id: string
@@ -10,12 +10,13 @@ export class QuestionEntity extends BaseEntity {
 	public readonly user: EmbeddedUser
 	public readonly answers: { id: string, userId: string }[]
 	public readonly heldBy: QuestionHeld
+	public readonly meta: QuestionMeta
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
 	constructor ({
 		             id, body, subjectId, topic, attachment,
-		             createdAt, user, answers, heldBy, updatedAt
+		             createdAt, user, answers, heldBy, meta, updatedAt
 	             }: QuestionConstructorArgs) {
 		super()
 		this.id = id
@@ -26,6 +27,7 @@ export class QuestionEntity extends BaseEntity {
 		this.user = user
 		this.answers = answers
 		this.heldBy = heldBy
+		this.meta = meta
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
@@ -48,6 +50,7 @@ type QuestionConstructorArgs = {
 	user: EmbeddedUser
 	answers: { id: string, userId: string }[]
 	heldBy: QuestionHeld
+	meta: QuestionMeta
 	createdAt: number
 	updatedAt: number
 }

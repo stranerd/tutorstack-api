@@ -1,9 +1,10 @@
-import { EmbeddedUser, Media, QuestionHeld } from '../../domain/types'
+import { EmbeddedUser, Media, QuestionHeld, QuestionMeta } from '../../domain/types'
 
 export interface QuestionFromModel extends QuestionToModel {
 	_id: string
 	answers: { id: string, userId: string }[]
 	heldBy: QuestionHeld
+	meta: QuestionMeta
 	createdAt: number
 	updatedAt: number
 }

@@ -1,6 +1,14 @@
 import { SessionEntity, SessionsUseCases } from '@modules/sessions'
 import { UsersUseCases } from '@modules/users'
-import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
+import {
+	BadRequestError,
+	NotAuthorizedError,
+	QueryKeys,
+	QueryParams,
+	Request,
+	validate,
+	Validation
+} from '@stranerd/api-commons'
 import { SubjectsUseCases } from '@modules/questions'
 import { StorageUseCases } from '@modules/storage'
 import { CardsUseCases, Currencies, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
@@ -11,6 +19,7 @@ export class SessionsController {
 	static async getSessions (req: Request) {
 		const query = req.query as QueryParams
 		query.auth = [{ field: 'tutor.id', value: req.authUser!.id }, { field: 'students.id', value: req.authUser!.id }]
+		query.authType = QueryKeys.or
 		return await SessionsUseCases.get(query)
 	}
 
@@ -141,7 +150,7 @@ export class SessionsController {
 		}, {
 			rating: {
 				required: true,
-				rules: [Validation.isNumber, Validation.isLessThanOrEqualToX(0), Validation.isMoreThanOrEqualToX(5)]
+				rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(0), Validation.isLessThanOrEqualToX(5)]
 			},
 			message: { required: true, rules: [Validation.isString] }
 		})

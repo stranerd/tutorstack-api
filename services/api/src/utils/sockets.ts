@@ -18,4 +18,8 @@ export const registerSockets = () => {
 	getSocketEmitter().register('sessions/sessions', isMine)
 	getSocketEmitter().register('sessions/availabilities', isOpen)
 	getSocketEmitter().register('sessions/reviews', isOpen)
+	getSocketEmitter().register('interactions/comments', isOpen)
+	getSocketEmitter().register('interactions/likes', isOpen)
+	getSocketEmitter().register('interactions/tags', isOpen)
+	getSocketEmitter().register('interactions/views', isOpen)
 }

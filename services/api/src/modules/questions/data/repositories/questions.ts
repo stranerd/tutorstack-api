@@ -3,7 +3,7 @@ import { QuestionMapper } from '../mappers/questions'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
 import { Question } from '../mongooseModels/questions'
 import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser, MAX_ANSWERS_COUNT } from '../../domain/types'
+import { EmbeddedUser, MAX_ANSWERS_COUNT, QuestionMetaType } from '../../domain/types'
 
 export class QuestionRepository implements IQuestionRepository {
 	private static instance: QuestionRepository
@@ -75,5 +75,12 @@ export class QuestionRepository implements IQuestionRepository {
 			{ $set: { heldBy: null } }
 		const question = await Question.findOneAndUpdate(find, set, { new: true })
 		return this.mapper.mapFrom(question)
+	}
+
+	async updateMeta (id: string, property: QuestionMetaType, value: 1 | -1) {
+		const question = await Question.findByIdAndUpdate(id, {
+			$inc: { [`meta.${property}`]: value }
+		})
+		return !!question
 	}
 }

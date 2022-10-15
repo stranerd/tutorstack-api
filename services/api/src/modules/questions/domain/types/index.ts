@@ -11,3 +11,9 @@ export type QuestionHeld = {
 } | null
 
 export const MAX_ANSWERS_COUNT = 1
+
+export enum QuestionMetaType {
+	comments = 'comments'
+}
+
+export type QuestionMeta = Record<QuestionMetaType, number>
