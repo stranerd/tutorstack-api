@@ -11,9 +11,9 @@ import {
 } from '@stranerd/api-commons'
 import { SubjectsUseCases } from '@modules/questions'
 import { StorageUseCases } from '@modules/storage'
-import { CardsUseCases, Currencies, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
-import { StripePayment } from '@utils/modules/payment/stripe'
+import { Currencies, MethodsUseCases, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
 import { AuthRole } from '@utils/types'
+import { BraintreePayment } from '@utils/modules/payment/braintree'
 
 export class SessionsController {
 	static async getSessions (req: Request) {
@@ -95,22 +95,21 @@ export class SessionsController {
 
 	static async payForSession (req: Request) {
 		const data = validate({
-			cardId: req.body.cardId
+			methodId: req.body.methodId
 		}, {
-			cardId: { required: true, rules: [Validation.isString] }
+			methodId: { required: true, rules: [Validation.isString] }
 		})
 
 		const userId = req.authUser!.id
 		const session = await SessionsUseCases.find(req.params.id)
 		if (!session || !session.students.map((s) => s.id).includes(userId)) throw new NotAuthorizedError()
 		if (session.paid.includes(userId)) return true
-		const card = await CardsUseCases.find(data.cardId)
-		if (!card || card.userId !== userId) throw new BadRequestError('invalid card')
+		const method = await MethodsUseCases.find(data.methodId)
+		if (!method || method.userId !== userId) throw new BadRequestError('invalid method')
 		const email = session.students.find((s) => s.id === userId)!.bio.email
 
-		const successful = await StripePayment.chargeCard({
-			userId: card.userId, email, token: card.token,
-			currency: session.currency, amount: session.price
+		const successful = await BraintreePayment.charge({
+			token: method.token, amount: session.price, currency: session.currency
 		})
 
 		await TransactionsUseCases.create({

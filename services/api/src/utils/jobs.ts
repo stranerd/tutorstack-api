@@ -5,7 +5,7 @@ import { sendMailAndCatchError } from '@utils/modules/notifications/emails'
 import { DelayedEvent, DelayedJobs } from '@utils/types'
 import { deleteUnverifiedUsers } from '@utils/modules/auth'
 import { retryTransactions } from '@utils/modules/payment/transactions'
-import { CardsUseCases } from '@modules/payment'
+import { MethodsUseCases } from '@modules/payment'
 import { releaseQuestion } from '@utils/modules/questions/questions'
 import { AvailabilitiesUseCases } from '@modules/sessions'
 
@@ -32,7 +32,7 @@ export const startJobs = async () => {
 				deleteUnverifiedUsers(), AvailabilitiesUseCases.removeOld()
 			])
 			if (type === CronTypes.weekly) await NotificationsUseCases.deleteOldSeen()
-			if (type === CronTypes.monthly) await CardsUseCases.markExpireds()
+			if (type === CronTypes.monthly) await MethodsUseCases.markExpireds()
 		}
 	})
 }
