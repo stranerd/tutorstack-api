@@ -13,7 +13,7 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 			})
 		)
 	},
-	updated: async ({ after, changes }) => {
+	updated: async ({ after, before, changes }) => {
 		await Promise.all(
 			after.getParticipants().map(async (id) => {
 				await getSocketEmitter().emitUpdated(`sessions/sessions/${id}`, after)
@@ -26,14 +26,21 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 			if (!user) return
 			await TransactionsUseCases.create({
 				userId: user.id, email: user.bio.email,
-				title: `Refund for Session: ${after.id}`,
+				title: `Refund for session: ${after.id}`,
 				amount: after.price, currency: after.currency,
 				status: TransactionStatus.fulfilled,
 				data: { type: TransactionType.RefundSession, sessionId: after.id }
 			})
 		}))
 
-		if (changes.closedAt && after.closedAt && !after.cancelled) await Promise.all([
+		if (changes.closedAt && !before.closedAt && after.closedAt && !after.cancelled) await Promise.all([
+			await TransactionsUseCases.create({
+				userId: after.tutor.id, email: after.tutor.bio.email,
+				title: `You received payment for session: ${after.id}`,
+				amount: after.price, currency: after.currency,
+				status: TransactionStatus.fulfilled,
+				data: { type: TransactionType.ReceiveSessionPayment, sessionId: after.id }
+			}),
 			UsersUseCases.incrementMeta({
 				ids: after.students.map((s) => s.id),
 				value: 1,
