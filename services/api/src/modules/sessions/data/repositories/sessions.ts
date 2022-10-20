@@ -69,9 +69,9 @@ export class SessionRepository implements ISessionRepository {
 
 	async updateUserBio (user: EmbeddedUser) {
 		const result = await Promise.all([
-			Session.updateMany({},
-				{ $set: { 'students.$[student]': user } },
-				{ arrayFilters: [{ 'student.id': user.id }] }),
+			Session.updateMany(
+				{ 'students.id': user.id },
+				{ $set: { 'students.$': user } }),
 			Session.updateMany({ 'tutor.id': user.id }, { $set: { tutor: user } })
 		])
 		return result.every((r) => r.acknowledged)
