@@ -44,6 +44,8 @@ export const appInstance = Instance.getInstance()
 
 const ms100 = JSON.parse(getEnvOrFail('100MS') || '{}')
 export const ms100Config = {
+	templateId: ms100.templateId,
+	region: ms100.region,
 	accessKey: ms100.accessKey,
 	appSecret: ms100.appSecret
 }

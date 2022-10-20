@@ -7,7 +7,7 @@ import { deleteUnverifiedUsers } from '@utils/modules/auth'
 import { retryTransactions } from '@utils/modules/payment/transactions'
 import { MethodsUseCases } from '@modules/payment'
 import { releaseQuestion } from '@utils/modules/questions/questions'
-import { AvailabilitiesUseCases } from '@modules/sessions'
+import { AvailabilitiesUseCases, SessionsUseCases } from '@modules/sessions'
 
 export const startJobs = async () => {
 	await appInstance.job.startProcessingQueues<DelayedEvent, any>([
@@ -18,6 +18,10 @@ export const startJobs = async () => {
 	], {
 		onDelayed: async (data) => {
 			if (data.type === DelayedJobs.HoldQuestion) await releaseQuestion(data.data.questionId, data.data.userId)
+			if (data.type === DelayedJobs.CloseSession) await SessionsUseCases.close({
+				id: data.data.sessionId,
+				tutorId: data.data.tutorId
+			})
 		},
 		onCronLike: async () => {
 		},

@@ -1,8 +1,11 @@
 import { ChangeStreamCallbacks } from '@stranerd/api-commons'
-import { SessionEntity, SessionFromModel } from '@modules/sessions'
+import { SessionEntity, SessionFromModel, SessionsUseCases } from '@modules/sessions'
 import { getSocketEmitter } from '@index'
 import { UserMeta, UsersUseCases } from '@modules/users'
 import { TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
+import { appInstance } from '@utils/environment'
+import { DelayedEvent, DelayedJobs } from '@utils/types'
+import { Ms100Live } from '@utils/modules/sessions/100ms'
 
 export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromModel, SessionEntity> = {
 	created: async ({ after }) => {
@@ -12,6 +15,12 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				await getSocketEmitter().emitCreated(`sessions/sessions/${id}/${after.id}`, after)
 			})
 		)
+		const delay = after.endedAt - Date.now() + (10 * 60 * 1000)
+		if (delay > 0) await appInstance.job.addDelayedJob<DelayedEvent>({
+			type: DelayedJobs.CloseSession,
+			data: { sessionId: after.id, tutorId: after.tutor.id }
+		}, delay)
+		else if (!after.closedAt) await SessionsUseCases.close({ id: after.id, tutorId: after.tutor.id })
 	},
 	updated: async ({ after, before, changes }) => {
 		await Promise.all(
@@ -50,7 +59,8 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				ids: [after.tutor.id],
 				value: 1,
 				property: UserMeta.sessionsHosted
-			})
+			}),
+			await Ms100Live.endRoom(after.id)
 		])
 	},
 	deleted: async ({ before }) => {
