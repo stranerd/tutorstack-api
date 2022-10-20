@@ -5,6 +5,7 @@ import {
 	NotAuthorizedError,
 	QueryKeys,
 	QueryParams,
+	Random,
 	Request,
 	validate,
 	Validation
@@ -14,6 +15,8 @@ import { StorageUseCases } from '@modules/storage'
 import { Currencies, MethodsUseCases, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
 import { AuthRole } from '@utils/types'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
+import jwt from 'jsonwebtoken'
+import { ms100Config } from '@utils/environment'
 
 export class SessionsController {
 	static async getSessions (req: Request) {
@@ -160,5 +163,29 @@ export class SessionsController {
 		return await SessionsUseCases.rate({
 			...data, sessionId: req.params.id, user: user.getEmbedded()
 		})
+	}
+
+	static async joinSession (req: Request) {
+		const { appSecret, accessKey } = ms100Config
+		const userId = req.authUser!.id
+		const session = await SessionsUseCases.find(req.params.id)
+		if (!session || !session.getParticipants().includes(userId)) throw new NotAuthorizedError()
+		if (session.closedAt) throw new BadRequestError('session has ended')
+		const user = session.students.concat(session.tutor).find((u) => u.id === userId)!
+		const authToken = jwt.sign({
+			access_key: accessKey,
+			room_id: session.id,
+			user_id: user.id,
+			role: session.tutor.id === userId ? 'session-tutor' : 'session-member',
+			type: 'app',
+			version: 2,
+			iat: Math.floor(Date.now() / 1000),
+			nbf: Math.floor(Date.now() / 1000)
+		}, appSecret, {
+			algorithm: 'HS256',
+			expiresIn: Math.abs(Date.now() - session.endedAt) + (10 * 60 * 1000),
+			jwtid: Random.string(24)
+		})
+		return { authToken, userName: user.bio.name.first }
 	}
 }

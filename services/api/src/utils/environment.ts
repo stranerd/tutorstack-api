@@ -41,3 +41,9 @@ Instance.initialize({
 	rabbitColumnName: 'Tutorstack'
 })
 export const appInstance = Instance.getInstance()
+
+const ms100 = JSON.parse(getEnvOrFail('100MS') || '{}')
+export const ms100Config = {
+	accessKey: ms100.accessKey,
+	appSecret: ms100.appSecret
+}

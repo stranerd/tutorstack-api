@@ -93,5 +93,18 @@ export const sessionsRoutes: Route[] = [
 				}
 			})
 		]
+	},
+	{
+		path: '/sessions/sessions/:id/join',
+		method: 'post',
+		controllers: [
+			isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await SessionsController.joinSession(req)
+				}
+			})
+		]
 	}
 ]
