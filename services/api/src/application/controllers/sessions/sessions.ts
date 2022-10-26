@@ -121,7 +121,7 @@ export class SessionsController {
 		let successful = false
 
 		if (useWallet) {
-			successful = await WalletsUseCases.updateAmount({ userId: authUserId, amount: session.price })
+			successful = await WalletsUseCases.updateAmount({ userId: authUserId, amount: 0 - session.price })
 		} else {
 			const method = await MethodsUseCases.find(methodId)
 			if (!method || method.userId !== authUserId) throw new BadRequestError('invalid method')
@@ -133,7 +133,7 @@ export class SessionsController {
 
 		await TransactionsUseCases.create({
 			email, userId: authUserId, status: successful ? TransactionStatus.fulfilled : TransactionStatus.failed,
-			title: 'Paid for session', amount: session.price, currency: session.currency,
+			title: 'Paid for session', amount: 0 - session.price, currency: session.currency,
 			data: { type: TransactionType.PayForSession, sessionId: session.id, userId }
 		})
 
