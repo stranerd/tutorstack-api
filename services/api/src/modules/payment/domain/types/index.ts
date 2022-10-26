@@ -21,7 +21,8 @@ export enum TransactionType {
 
 export type TransactionData = {
 	type: TransactionType.PayForSession,
-	sessionId: string
+	sessionId: string,
+	userId: string
 } | {
 	type: TransactionType.RefundSession,
 	sessionId: string

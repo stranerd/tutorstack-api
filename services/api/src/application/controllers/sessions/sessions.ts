@@ -11,7 +11,14 @@ import {
 } from '@stranerd/api-commons'
 import { SubjectsUseCases } from '@modules/questions'
 import { StorageUseCases } from '@modules/storage'
-import { Currencies, MethodsUseCases, TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
+import {
+	Currencies,
+	MethodsUseCases,
+	TransactionStatus,
+	TransactionsUseCases,
+	TransactionType,
+	WalletsUseCases
+} from '@modules/payment'
 import { AuthRole } from '@utils/types'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
 import { Ms100Live } from '@utils/modules/sessions/100ms'
@@ -95,31 +102,39 @@ export class SessionsController {
 	}
 
 	static async payForSession (req: Request) {
-		const data = validate({
-			methodId: req.body.methodId
+		const useWallet = !!req.body.useWallet
+		const authUserId = req.authUser!.id
+
+		const { methodId, userId } = validate({
+			methodId: req.body.methodId,
+			userId: req.body.userId ?? authUserId
 		}, {
-			methodId: { required: true, rules: [Validation.isString] }
+			methodId: { required: true, rules: [Validation.isString] },
+			userId: { required: !useWallet, rules: [Validation.isString] }
 		})
 
-		const userId = req.authUser!.id
 		const session = await SessionsUseCases.find(req.params.id)
 		if (!session || !session.students.map((s) => s.id).includes(userId)) throw new NotAuthorizedError()
 		if (session.paid.includes(userId)) return true
-		const method = await MethodsUseCases.find(data.methodId)
-		if (!method || method.userId !== userId) throw new BadRequestError('invalid method')
-		const email = session.students.find((s) => s.id === userId)!.bio.email
 
-		const successful = await BraintreePayment.charge({
-			token: method.token, amount: session.price, currency: session.currency
-		})
+		const email = session.students.find((s) => s.id === authUserId)!.bio.email
+		let successful = false
+
+		if (useWallet) {
+			successful = await WalletsUseCases.updateAmount({ userId: authUserId, amount: session.price })
+		} else {
+			const method = await MethodsUseCases.find(methodId)
+			if (!method || method.userId !== authUserId) throw new BadRequestError('invalid method')
+
+			successful = await BraintreePayment.charge({
+				token: method.token, amount: session.price, currency: session.currency
+			})
+		}
 
 		await TransactionsUseCases.create({
-			email, userId, status: successful ? TransactionStatus.fulfilled : TransactionStatus.failed,
+			email, userId: authUserId, status: successful ? TransactionStatus.fulfilled : TransactionStatus.failed,
 			title: 'Paid for session', amount: session.price, currency: session.currency,
-			data: {
-				type: TransactionType.PayForSession,
-				sessionId: session.id
-			}
+			data: { type: TransactionType.PayForSession, sessionId: session.id, userId }
 		})
 
 		return successful

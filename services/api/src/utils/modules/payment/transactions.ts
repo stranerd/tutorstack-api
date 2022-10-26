@@ -12,7 +12,8 @@ import { BraintreePayment } from '@utils/modules/payment/braintree'
 
 export const fulfillTransaction = async (transaction: TransactionEntity) => {
 	if (transaction.data.type === TransactionType.PayForSession) {
-		await SessionsUseCases.updatePaid({ id: transaction.data.sessionId, userId: transaction.userId, add: true })
+		const { sessionId, userId } = transaction.data
+		await SessionsUseCases.updatePaid({ id: sessionId, userId, add: true })
 		await TransactionsUseCases.update({
 			id: transaction.id,
 			data: { status: TransactionStatus.settled }
