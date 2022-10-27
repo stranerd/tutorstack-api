@@ -5,6 +5,8 @@ import { routes } from '@application/routes'
 import { UsersUseCases } from '@modules/users'
 import { startJobs } from '@utils/jobs'
 import { registerSockets } from '@utils/sockets'
+import { plansList } from '@utils/modules/payment/plans'
+import { PlansUseCases } from '@modules/payment'
 
 const app = getNewServerInstance(routes, {
 	onConnect: async (userId, socketId) => {
@@ -27,6 +29,7 @@ const start = async () => {
 
 	await registerSockets()
 	await UsersUseCases.resetAllUsersStatus()
+	await PlansUseCases.init(plansList)
 
 	await app.start(port)
 	await appInstance.logger.success(`${appId} service has started listening on port`, port)

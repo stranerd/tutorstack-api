@@ -10,6 +10,7 @@ export const registerSockets = () => {
 	getSocketEmitter().register('questions/subjects', isOpen)
 	getSocketEmitter().register('notifications/notifications', isMine)
 	getSocketEmitter().register('payment/methods', isMine)
+	getSocketEmitter().register('payment/plans', isOpen)
 	getSocketEmitter().register('payment/transactions', isMine)
 	getSocketEmitter().register('payment/wallets', isMine)
 	getSocketEmitter().register('users/educations', isOpen)

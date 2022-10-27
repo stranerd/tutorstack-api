@@ -6,6 +6,32 @@ export enum CurrencyCountries {
 	US = 'US'
 }
 
+export type SubscriptionModel = {
+	active: boolean
+	current: {
+		id: string
+		activatedAt: number
+		expiredAt: number
+		jobId: string
+	} | null
+	next: {
+		id: string
+		renewedAt: number
+	} | null
+	data: PlanData
+}
+
+export enum PlanDataType {
+	questions = 'questions'
+}
+
+export type PlanData = Record<PlanDataType, number>
+
+export type PlanFeatures = {
+	questions: boolean
+	recordings: boolean
+}
+
 export enum TransactionStatus {
 	initialized = 'initialized',
 	fulfilled = 'fulfilled',
