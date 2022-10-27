@@ -3,7 +3,7 @@ import { WalletFromModel } from '../models/wallets'
 import { WalletChangeStreamCallbacks } from '@utils/changeStreams/payment/wallets'
 import { WalletEntity } from '../../domain/entities/wallets'
 import { WalletMapper } from '../mappers/wallets'
-import { Currencies } from '../../domain/types'
+import { Currencies, PlanDataType } from '../../domain/types'
 
 const WalletSchema = new mongoose.Schema<WalletFromModel>({
 	_id: {
@@ -30,6 +30,30 @@ const WalletSchema = new mongoose.Schema<WalletFromModel>({
 		type: mongoose.Schema.Types.Mixed,
 		required: false,
 		default: null
+	},
+	subscription: {
+		active: {
+			type: Boolean,
+			required: false,
+			default: false
+		},
+		current: {
+			type: mongoose.Schema.Types.Mixed,
+			required: false,
+			default: null
+		},
+		next: {
+			type: mongoose.Schema.Types.Mixed,
+			required: false,
+			default: null
+		},
+		data: Object.fromEntries(
+			Object.keys(PlanDataType).map((key) => [key, {
+				type: Number,
+				required: false,
+				default: 0
+			}])
+		)
 	},
 	createdAt: {
 		type: Number,

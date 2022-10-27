@@ -8,6 +8,7 @@ import { retryTransactions } from '@utils/modules/payment/transactions'
 import { MethodsUseCases } from '@modules/payment'
 import { releaseQuestion } from '@utils/modules/questions/questions'
 import { AvailabilitiesUseCases, SessionsUseCases } from '@modules/sessions'
+import { renewSubscription } from '@utils/modules/payment/subscriptions'
 
 export const startJobs = async () => {
 	await appInstance.job.startProcessingQueues<DelayedEvent, any>([
@@ -22,6 +23,7 @@ export const startJobs = async () => {
 				id: data.data.sessionId,
 				tutorId: data.data.tutorId
 			})
+			if (data.type === DelayedJobs.RenewSubscription) await renewSubscription(data.data.userId)
 		},
 		onCronLike: async () => {
 		},

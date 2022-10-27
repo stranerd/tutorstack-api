@@ -9,6 +9,7 @@ export class WalletMapper extends BaseMapper<WalletFromModel, WalletToModel, Wal
 			userId: param.userId,
 			balance: param.balance,
 			account: param.account,
+			subscription: param.subscription,
 			createdAt: param.createdAt,
 			updatedAt: param.updatedAt
 		})

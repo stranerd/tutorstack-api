@@ -2,6 +2,7 @@ import { QuestionsUseCases, SubjectsUseCases } from '@modules/questions'
 import { UsersUseCases } from '@modules/users'
 import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
 import { StorageUseCases } from '@modules/storage'
+import { PlanDataType, WalletsUseCases } from '@modules/payment'
 
 export class QuestionController {
 	static async FindQuestion (req: Request) {
@@ -54,10 +55,12 @@ export class QuestionController {
 			attachment: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] }
 		})
 
-		const user = await UsersUseCases.find(req.authUser!.id)
-		if (!user) throw new BadRequestError('user not found')
 		const subject = await SubjectsUseCases.find(data.subjectId)
 		if (!subject) throw new BadRequestError('subject not found')
+		const user = await UsersUseCases.find(req.authUser!.id)
+		if (!user) throw new BadRequestError('user not found')
+		const wallet = await WalletsUseCases.get(user.id)
+		if (wallet.subscription.data[PlanDataType.questions] < 1) throw new BadRequestError('you don\'t have any questions left')
 		const attachment = data.attachment ? await StorageUseCases.upload('questions/questions', data.attachment) : null
 
 		return await QuestionsUseCases.add({ ...data, attachment, user: user.getEmbedded() })

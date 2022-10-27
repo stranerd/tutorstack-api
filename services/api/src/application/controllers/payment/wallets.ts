@@ -7,6 +7,7 @@ import {
 } from '@modules/payment'
 import { BadRequestError, Request, validate, Validation } from '@stranerd/api-commons'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
+import { cancelSubscription, subscribeToPlan } from '@utils/modules/payment/subscriptions'
 
 export class WalletsController {
 	static async get (req: Request) {
@@ -39,5 +40,19 @@ export class WalletsController {
 		})
 
 		return successful
+	}
+
+	static async subscribeToPlan (req: Request) {
+		const { planId } = validate({
+			planId: req.body.planId
+		}, {
+			planId: { required: true, rules: [Validation.isString] }
+		})
+
+		return await subscribeToPlan(req.authUser!.id, planId)
+	}
+
+	static async cancelSubscription (req: Request) {
+		return await cancelSubscription(req.authUser!.id)
 	}
 }

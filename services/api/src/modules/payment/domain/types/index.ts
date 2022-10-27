@@ -22,7 +22,8 @@ export type SubscriptionModel = {
 }
 
 export enum PlanDataType {
-	questions = 'questions'
+	questions = 'questions',
+	recordings = 'recordings'
 }
 
 export type PlanData = Record<PlanDataType, number>
@@ -43,7 +44,8 @@ export enum TransactionType {
 	PayForSession = 'PayForSession',
 	RefundSession = 'RefundSession',
 	ReceiveSessionPayment = 'ReceiveSessionPayment',
-	FundWallet = 'FundWallet'
+	FundWallet = 'FundWallet',
+	Subscription = 'Subscription'
 }
 
 export type TransactionData = {
@@ -58,6 +60,9 @@ export type TransactionData = {
 	sessionId: string
 } | {
 	type: TransactionType.FundWallet
+} | {
+	type: TransactionType.Subscription,
+	subscriptionId: string
 }
 
 export type AccountDetails = {

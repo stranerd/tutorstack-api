@@ -1,7 +1,7 @@
 import { IWalletRepository } from '../../domain/irepositories/wallets'
 import { WalletMapper } from '../mappers/wallets'
 import { Wallet } from '../mongooseModels/wallets'
-import { AccountDetails } from '../../domain/types'
+import { AccountDetails, PlanDataType, SubscriptionModel } from '../../domain/types'
 import { BadRequestError, mongoose } from '@stranerd/api-commons'
 
 export class WalletRepository implements IWalletRepository {
@@ -50,6 +50,18 @@ export class WalletRepository implements IWalletRepository {
 	async updateAccount (userId: string, account: AccountDetails) {
 		let wallet = await WalletRepository.getUserWallet(userId)
 		wallet = (await Wallet.findByIdAndUpdate(wallet._id, { $set: { account } }, { new: true }))!
+		return this.mapper.mapFrom(wallet)!
+	}
+
+	async updateSubscription (id: string, data: Partial<SubscriptionModel>) {
+		data = Object.fromEntries(Object.entries(data).map(([key, val]) => [`subscription.${key}`, val]))
+		const wallet = await Wallet.findByIdAndUpdate(id, { $set: data }, { new: true })
+		return this.mapper.mapFrom(wallet)!
+	}
+
+	async updateSubscriptionData (userId: string, key: PlanDataType, value: number) {
+		let wallet = await WalletRepository.getUserWallet(userId)
+		wallet = (await Wallet.findByIdAndUpdate(wallet._id, { $inc: { [`subscription.data.${key}`]: value } }, { new: true }))!
 		return this.mapper.mapFrom(wallet)!
 	}
 }

@@ -1,6 +1,7 @@
 export enum DelayedJobs {
 	HoldQuestion = 'HoldQuestion',
-	CloseSession = 'CloseSession'
+	CloseSession = 'CloseSession',
+	RenewSubscription = 'RenewSubscription'
 }
 
 export type DelayedEvent = {
@@ -9,4 +10,7 @@ export type DelayedEvent = {
 } | {
 	type: DelayedJobs.CloseSession,
 	data: { sessionId: string, tutorId: string }
+} | {
+	type: typeof DelayedJobs.RenewSubscription,
+	data: { userId: string }
 }

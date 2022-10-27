@@ -28,5 +28,31 @@ export const walletsRoutes: Route[] = [
 				}
 			})
 		]
+	},
+	{
+		path: '/payment/wallets/subscriptions',
+		method: 'post',
+		controllers: [
+			isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await WalletsController.subscribeToPlan(req)
+				}
+			})
+		]
+	},
+	{
+		path: '/payment/wallets/subscriptions',
+		method: 'delete',
+		controllers: [
+			isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await WalletsController.cancelSubscription(req)
+				}
+			})
+		]
 	}
 ]

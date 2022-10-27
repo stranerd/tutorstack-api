@@ -4,11 +4,14 @@ import { UserMeta, UsersUseCases } from '@modules/users'
 import { getSocketEmitter } from '@index'
 import { EventTypes, publishers } from '@utils/events'
 import { holdQuestion, releaseQuestion } from '@utils/modules/questions/questions'
+import { PlanDataType, WalletsUseCases } from '@modules/payment'
 
 export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromModel, QuestionEntity> = {
 	created: async ({ after }) => {
 		await getSocketEmitter().emitCreated('questions/questions', after)
 		await getSocketEmitter().emitCreated(`questions/questions/${after.id}`, after)
+
+		await WalletsUseCases.updateSubscriptionData({ userId: after.user.id, key: PlanDataType.questions, value: -1 })
 
 		await UsersUseCases.incrementMeta({ ids: [after.user.id], value: 1, property: UserMeta.questions })
 	},
