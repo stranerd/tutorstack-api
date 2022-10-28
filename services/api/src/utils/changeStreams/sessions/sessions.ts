@@ -6,6 +6,7 @@ import { TransactionStatus, TransactionsUseCases, TransactionType } from '@modul
 import { appInstance } from '@utils/environment'
 import { DelayedEvent, DelayedJobs } from '@utils/types'
 import { Ms100Live } from '@utils/modules/sessions/100ms'
+import { payTutorForSession } from '@utils/modules/sessions/sessions'
 
 export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromModel, SessionEntity> = {
 	created: async ({ after }) => {
@@ -43,13 +44,7 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 		}))
 
 		if (changes.closedAt && !before.closedAt && after.closedAt && !after.cancelled) await Promise.all([
-			await TransactionsUseCases.create({
-				userId: after.tutor.id, email: after.tutor.bio.email,
-				title: `You received payment for session: ${after.id}`,
-				amount: after.price, currency: after.currency,
-				status: TransactionStatus.fulfilled,
-				data: { type: TransactionType.ReceiveSessionPayment, sessionId: after.id }
-			}),
+			payTutorForSession(after),
 			UsersUseCases.incrementMeta({
 				ids: after.students.map((s) => s.id),
 				value: 1,
@@ -60,7 +55,7 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 				value: 1,
 				property: UserMeta.sessionsHosted
 			}),
-			await Ms100Live.endRoom(after.id)
+			Ms100Live.endRoom(after.id)
 		])
 	},
 	deleted: async ({ before }) => {
