@@ -9,7 +9,6 @@ export const plansList: PlanToModel[] = [
 		name: 'Premium',
 		interval: CronTypes.monthly,
 		data: { questions: 5, recordings: 1 },
-		features: { questions: true, recordings: true },
 		active: true
 	}
 ]

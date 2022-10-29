@@ -28,11 +28,6 @@ export enum PlanDataType {
 
 export type PlanData = Record<PlanDataType, number>
 
-export type PlanFeatures = {
-	questions: boolean
-	recordings: boolean
-}
-
 export enum TransactionStatus {
 	initialized = 'initialized',
 	fulfilled = 'fulfilled',

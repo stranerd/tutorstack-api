@@ -1,4 +1,4 @@
-import { Currencies, PlanData, PlanFeatures } from '../../domain/types'
+import { Currencies, PlanData } from '../../domain/types'
 import { CronTypes } from '@stranerd/api-commons'
 
 export interface PlanFromModel extends PlanToModel {
@@ -14,5 +14,4 @@ export interface PlanToModel {
 	interval: CronTypes
 	active: boolean
 	data: PlanData
-	features: PlanFeatures
 }

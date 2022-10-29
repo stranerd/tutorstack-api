@@ -1,5 +1,5 @@
 import { BaseEntity, CronTypes } from '@stranerd/api-commons'
-import { Currencies, PlanData, PlanFeatures } from '../types'
+import { Currencies, PlanData } from '../types'
 
 export class PlanEntity extends BaseEntity {
 	public readonly id: string
@@ -9,7 +9,6 @@ export class PlanEntity extends BaseEntity {
 	public readonly amount: number
 	public readonly currency: Currencies
 	public readonly data: PlanData
-	public readonly features: PlanFeatures
 	public readonly createdAt: number
 	public readonly updatedAt: number
 
@@ -21,7 +20,6 @@ export class PlanEntity extends BaseEntity {
 		             interval,
 		             active,
 		             data,
-		             features,
 		             createdAt,
 		             updatedAt
 	             }: PlanConstructorArgs) {
@@ -33,7 +31,6 @@ export class PlanEntity extends BaseEntity {
 		this.amount = amount
 		this.currency = currency
 		this.data = data
-		this.features = features
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}
@@ -60,7 +57,6 @@ type PlanConstructorArgs = {
 	currency: Currencies
 	interval: CronTypes
 	data: PlanData
-	features: PlanFeatures
 	createdAt: number
 	updatedAt: number
 }

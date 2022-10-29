@@ -27,7 +27,7 @@ export class PlanRepository implements IPlanRepository {
 	}
 
 	async init (data: PlanToModel[]) {
-		await Plan.updateMany({ _id: { $nin: data.map((d) => d._id) } }, { $set: { active: false } })
+		await Plan.deleteMany({ _id: { $nin: data.map((d) => d._id) } })
 		return await Promise.all(data.map(async (d) => {
 			const sub = await Plan.findByIdAndUpdate(d._id, { $set: d }, { new: true, upsert: true })
 			return this.mapper.mapFrom(sub)!

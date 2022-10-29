@@ -33,10 +33,6 @@ const PlanSchema = new mongoose.Schema<PlanFromModel>({
 			default: 0
 		}])
 	),
-	features: {
-		type: mongoose.Schema.Types.Mixed,
-		required: true
-	},
 	interval: {
 		type: mongoose.Schema.Types.Mixed,
 		required: true
