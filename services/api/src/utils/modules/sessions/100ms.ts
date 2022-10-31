@@ -13,11 +13,12 @@ export class Ms100Live {
 	static async getRoomToken (data: { sessionId: string, userId: string, userName: string, isTutor: boolean, expiresIn: number }) {
 		const { sessionId, userName, userId, isTutor, expiresIn } = data
 		const roomId = await Ms100Live.createRoom(sessionId)
+		const role = isTutor ? 'session-tutor' : 'session-member'
 		const authToken = jwt.sign({
 			access_key: accessKey,
 			room_id: roomId,
 			user_id: userId,
-			role: isTutor ? 'session-tutor' : 'session-member',
+			role,
 			type: 'app',
 			version: 2,
 			iat: Math.floor(Date.now() / 1000),
@@ -27,7 +28,7 @@ export class Ms100Live {
 			expiresIn,
 			jwtid: Random.string(24)
 		})
-		return { authToken, userName, roomId }
+		return { authToken, userName, userId, roomId, role }
 	}
 
 	static async createRoom (sessionId: string) {
@@ -56,6 +57,17 @@ export class Ms100Live {
 			}
 		})
 		return data.enabled
+	}
+
+	static async getSessions (sessionId: string) {
+		const roomId = await Ms100Live.createRoom(sessionId)
+		const { data } = await axiosInstance.get(`/sessions?room_id=${roomId}&limit=100`, {
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer: ${await Ms100Live.getManagementToken()}`
+			}
+		})
+		return data
 	}
 
 	private static async getManagementToken () {

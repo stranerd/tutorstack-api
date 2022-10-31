@@ -192,4 +192,9 @@ export class SessionsController {
 			expiresIn: Math.abs(Date.now() - session.endedAt) + (10 * 60 * 1000)
 		})
 	}
+
+	static async getSessionDetails (req: Request) {
+		const sessionId = req.params.id
+		return await Ms100Live.getSessions(sessionId)
+	}
 }

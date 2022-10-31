@@ -106,5 +106,18 @@ export const sessionsRoutes: Route[] = [
 				}
 			})
 		]
+	},
+	{
+		path: '/sessions/sessions/:id/details',
+		method: 'get',
+		controllers: [
+			// isAuthenticated,
+			makeController(async (req) => {
+				return {
+					status: StatusCodes.Ok,
+					result: await SessionsController.getSessionDetails(req)
+				}
+			})
+		]
 	}
 ]
