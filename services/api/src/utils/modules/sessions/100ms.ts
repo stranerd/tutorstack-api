@@ -67,7 +67,32 @@ export class Ms100Live {
 				'Authorization': `Bearer: ${await Ms100Live.getManagementToken()}`
 			}
 		})
-		return data
+		return data.data.reverse().map((session) => {
+			const { recording } = session
+			const res = {
+				id: session.id,
+				peers: Object.values(session.peers).map((p: any) => ({
+					userId: p.user, role: p.role,
+					joinedAt: new Date(p.joined_at).getTime(),
+					leftAt: new Date(p.left_at).getTime()
+				})),
+				roomId: session.room_id,
+				active: session.active,
+				createdAt: new Date(session.created_at).getTime(),
+				recording: null
+			}
+			if (!recording) return res
+			const link = Ms100Live.parseS3URL(recording.location)
+			const timestamp = new Date(recording.created_at).getTime()
+			return {
+				...res,
+				recording: {
+					link, timestamp,
+					size: recording.size,
+					duration: recording.duration
+				}
+			}
+		})
 	}
 
 	private static async getManagementToken () {
@@ -82,5 +107,13 @@ export class Ms100Live {
 			expiresIn: '24h',
 			jwtid: Random.string(24)
 		})
+	}
+
+	private static parseS3URL (url: string) {
+		if (!url.startsWith('s3://')) return url
+		const slices = url.slice(5).split('/')
+		const bucket = slices[0]
+		const name = slices.slice(1).join('/')
+		return `https://s3.amazonaws.com/${bucket}/${name}`
 	}
 }
