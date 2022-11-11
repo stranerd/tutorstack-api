@@ -67,7 +67,7 @@ export class Ms100Live {
 				'Authorization': `Bearer: ${await Ms100Live.getManagementToken()}`
 			}
 		})
-		return data.data.reverse().map((session) => {
+		return (data.data ?? []).reverse().map((session) => {
 			const { recording } = session
 			const res = {
 				id: session.id,
