@@ -28,7 +28,7 @@ export const hasRefreshToken = makeMiddleware(
 
 export const isAdmin = makeMiddleware(
 	async (request) => {
-		const isAdmin = request.authUser?.roles?.[AuthRole.isAdmin] || request.authUser?.roles?.['isSuperAdmin']
+		const isAdmin = request.authUser?.roles?.[AuthRole.isAdmin] || request.authUser?.roles?.[AuthRole.isSuperAdmin]
 		if (!request.authUser) throw new NotAuthenticatedError()
 		if (!isAdmin) throw new NotAuthorizedError('only admins can access this route')
 	}
