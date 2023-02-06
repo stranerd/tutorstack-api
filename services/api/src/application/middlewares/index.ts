@@ -1,5 +1,5 @@
-import { AuthRole } from '@utils/types'
 import {
+	AuthRole,
 	makeMiddleware,
 	NotAuthenticatedError,
 	NotAuthorizedError,

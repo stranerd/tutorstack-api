@@ -1,7 +1,7 @@
 import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { EducationEntity, EducationFromModel } from '@modules/users'
 import { getSocketEmitter } from '@index'
-import { EventTypes, publishers } from '@utils/events'
+import { publishers } from '@utils/events'
 
 export const EducationChangeStreamCallbacks: ChangeStreamCallbacks<EducationFromModel, EducationEntity> = {
 	created: async ({ after }) => {
@@ -12,12 +12,12 @@ export const EducationChangeStreamCallbacks: ChangeStreamCallbacks<EducationFrom
 		await getSocketEmitter().emitUpdated('users/educations', after)
 		await getSocketEmitter().emitUpdated(`users/educations/${after.id}`, after)
 
-		if (changes.verification) await publishers[EventTypes.DELETEFILE].publish(before.verification)
+		if (changes.verification) await publishers.DELETEFILE.publish(before.verification)
 	},
 	deleted: async ({ before }) => {
 		await getSocketEmitter().emitDeleted('users/educations', before)
 		await getSocketEmitter().emitDeleted(`users/educations/${before.id}`, before)
 
-		await publishers[EventTypes.DELETEFILE].publish(before.verification)
+		await publishers.DELETEFILE.publish(before.verification)
 	}
 }

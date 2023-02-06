@@ -1,7 +1,7 @@
-import { ChangeStreamCallbacks } from '@stranerd/api-commons'
+import { ChangeStreamCallbacks, EventTypes } from '@stranerd/api-commons'
 import { AuthUserEntity, UserFromModel } from '@modules/auth'
 import { UsersUseCases } from '@modules/users'
-import { EventTypes, publishers } from '@utils/events'
+import { publishers } from '@utils/events'
 
 export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, AuthUserEntity> = {
 	created: async ({ after }) => {

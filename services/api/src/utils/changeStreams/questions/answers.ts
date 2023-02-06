@@ -2,7 +2,7 @@ import { ChangeStreamCallbacks, Validation } from '@stranerd/api-commons'
 import { AnswerEntity, AnswerFromModel, QuestionsUseCases } from '@modules/questions'
 import { getSocketEmitter } from '@index'
 import { UserMeta, UsersUseCases } from '@modules/users'
-import { EventTypes, publishers } from '@utils/events'
+import { publishers } from '@utils/events'
 import { releaseQuestion } from '@utils/modules/questions/questions'
 import { sendNotification } from '@utils/modules/notifications/notifications'
 import { NotificationType } from '@modules/notifications'
@@ -34,7 +34,7 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 		await getSocketEmitter().emitUpdated('questions/answers', after)
 		await getSocketEmitter().emitUpdated(`questions/answers/${after.id}`, after)
 
-		if (changes.attachment) await publishers[EventTypes.DELETEFILE].publish(before.attachment)
+		if (changes.attachment) await publishers.DELETEFILE.publish(before.attachment)
 	},
 	deleted: async ({ before }) => {
 		await getSocketEmitter().emitDeleted('questions/answers', before)
@@ -48,6 +48,6 @@ export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel,
 			add: false
 		})
 
-		await publishers[EventTypes.DELETEFILE].publish(before.attachment)
+		await publishers.DELETEFILE.publish(before.attachment)
 	}
 }

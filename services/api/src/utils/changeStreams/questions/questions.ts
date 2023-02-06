@@ -2,7 +2,7 @@ import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { AnswersUseCases, QuestionEntity, QuestionFromModel } from '@modules/questions'
 import { UserMeta, UsersUseCases } from '@modules/users'
 import { getSocketEmitter } from '@index'
-import { EventTypes, publishers } from '@utils/events'
+import { publishers } from '@utils/events'
 import { holdQuestion, releaseQuestion } from '@utils/modules/questions/questions'
 import { PlanDataType, WalletsUseCases } from '@modules/payment'
 
@@ -19,7 +19,7 @@ export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromMo
 		await getSocketEmitter().emitUpdated('questions/questions', after)
 		await getSocketEmitter().emitUpdated(`questions/questions/${after.id}`, after)
 
-		if (changes.attachment && before.attachment) await publishers[EventTypes.DELETEFILE].publish(before.attachment)
+		if (changes.attachment && before.attachment) await publishers.DELETEFILE.publish(before.attachment)
 		if (changes.heldBy) await Promise.all([
 			holdQuestion(after),
 			before.heldBy && releaseQuestion(before.id, before.heldBy.userId)
@@ -33,6 +33,6 @@ export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromMo
 
 		await UsersUseCases.incrementMeta({ ids: [before.user.id], value: -1, property: UserMeta.questions })
 
-		if (before.attachment) await publishers[EventTypes.DELETEFILE].publish(before.attachment)
+		if (before.attachment) await publishers.DELETEFILE.publish(before.attachment)
 	}
 }

@@ -1,6 +1,7 @@
 import { SessionEntity, SessionsUseCases } from '@modules/sessions'
 import { UsersUseCases } from '@modules/users'
 import {
+	AuthRole,
 	BadRequestError,
 	NotAuthorizedError,
 	QueryKeys,
@@ -19,7 +20,6 @@ import {
 	TransactionType,
 	WalletsUseCases
 } from '@modules/payment'
-import { AuthRole } from '@utils/types'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
 import { Ms100Live } from '@utils/modules/sessions/100ms'
 

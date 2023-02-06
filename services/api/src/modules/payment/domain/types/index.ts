@@ -1,3 +1,5 @@
+import { CronTypes, Enum } from '@stranerd/api-commons'
+
 export enum Currencies {
 	USD = 'USD'
 }
@@ -27,6 +29,8 @@ export enum PlanDataType {
 }
 
 export type PlanData = Record<PlanDataType, number>
+
+export type PlanInterval = Enum<typeof CronTypes>
 
 export enum TransactionStatus {
 	initialized = 'initialized',

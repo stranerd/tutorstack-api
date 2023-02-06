@@ -1,10 +1,10 @@
 import { QuestionEntity, QuestionsUseCases } from '@modules/questions'
+import { DelayedJobs } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
-import { DelayedEvent, DelayedJobs } from '@utils/types'
 
 export const holdQuestion = async (question: QuestionEntity) => {
 	if (!question.heldBy) return
-	await appInstance.job.addDelayedJob<DelayedEvent>({
+	await appInstance.job.addDelayedJob({
 		type: DelayedJobs.HoldQuestion,
 		data: { questionId: question.id, userId: question.heldBy.userId }
 	}, question.heldBy.releasedAt)

@@ -1,12 +1,12 @@
 import { UsersUseCases } from '@modules/users'
 import {
+	AuthRole,
 	BadRequestError,
 	NotAuthorizedError,
 	QueryParams,
 	Request, validate,
 	Validation
 } from '@stranerd/api-commons'
-import { AuthRole } from '@utils/types'
 import { SubjectsUseCases } from '@modules/questions'
 
 export class UsersController {

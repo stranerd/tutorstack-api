@@ -10,14 +10,13 @@ import {
 } from '@modules/payment'
 import { UserEntity, UsersUseCases } from '@modules/users'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
-import { BadRequestError } from '@stranerd/api-commons'
-import { DelayedEvent, DelayedJobs } from '@utils/types'
+import { BadRequestError, DelayedJobs } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
 
 const activateSub = async (userId: string, walletId: string, subscription: PlanEntity, successful: boolean) => {
 	const now = Date.now()
 	const renewedAt = subscription.getNextCharge(now)
-	const jobId = await appInstance.job.addDelayedJob<DelayedEvent>({
+	const jobId = await appInstance.job.addDelayedJob({
 		type: DelayedJobs.RenewSubscription, data: { userId }
 	}, renewedAt - now)
 	return await WalletsUseCases.updateSubscription({
