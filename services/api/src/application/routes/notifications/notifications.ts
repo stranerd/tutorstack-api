@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { NotificationsController } from '../../controllers/notifications/notifications'
 import { isAuthenticated } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
+import { NotificationsController } from '../../controllers/notifications/notifications'
 
 export const notificationsRoutes: Route[] = [
 	{

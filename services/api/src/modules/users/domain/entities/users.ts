@@ -1,5 +1,5 @@
+import { BaseEntity } from 'equipped'
 import { EmbeddedUser, UserBio, UserDates, UserMetaType, UserRatings, UserRoles, UserStatus, UserTutor } from '../types'
-import { BaseEntity } from '@stranerd/api-commons'
 
 export class UserEntity extends BaseEntity {
 	public readonly id: string
@@ -13,8 +13,8 @@ export class UserEntity extends BaseEntity {
 	public readonly ratings: UserRatings
 
 	constructor ({
-		             id, bio, roles, dates, meta, status, tutors, tutor, ratings
-	             }: UserConstructorArgs) {
+		id, bio, roles, dates, meta, status, tutors, tutor, ratings
+	}: UserConstructorArgs) {
 		super()
 		this.id = id
 		this.bio = bio ?? {}

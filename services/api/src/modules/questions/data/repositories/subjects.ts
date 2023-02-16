@@ -1,8 +1,8 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { ISubjectRepository } from '../../domain/irepositories/subjects'
 import { SubjectMapper } from '../mappers/subjects'
 import { SubjectFromModel, SubjectToModel } from '../models/subjects'
 import { Subject } from '../mongooseModels/subjects'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 
 export class SubjectRepository implements ISubjectRepository {
 	private static instance: SubjectRepository

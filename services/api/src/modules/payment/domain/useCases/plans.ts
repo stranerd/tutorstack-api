@@ -1,6 +1,6 @@
-import { QueryParams } from '@stranerd/api-commons'
-import { IPlanRepository } from '../irepositories/plans'
+import { QueryParams } from 'equipped'
 import { PlanToModel } from '../../data/models/plans'
+import { IPlanRepository } from '../irepositories/plans'
 
 export class PlansUseCase {
 	repository: IPlanRepository

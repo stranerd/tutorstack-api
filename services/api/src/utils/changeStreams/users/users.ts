@@ -1,19 +1,19 @@
-import { AuthRole, ChangeStreamCallbacks } from '@stranerd/api-commons'
-import { UserEntity, UserFromModel, UserMeta, UsersUseCases } from '@modules/users'
-import { getSocketEmitter } from '@index'
-import { AnswersUseCases, QuestionsUseCases } from '@modules/questions'
-import { sendNotification } from '@utils/modules/notifications/notifications'
 import { NotificationType } from '@modules/notifications'
+import { AnswersUseCases, QuestionsUseCases } from '@modules/questions'
 import { ReviewsUseCases, SessionsUseCases } from '@modules/sessions'
+import { UserEntity, UserFromModel, UserMeta, UsersUseCases } from '@modules/users'
+import { appInstance } from '@utils/environment'
+import { sendNotification } from '@utils/modules/notifications/notifications'
+import { AuthRole, ChangeStreamCallbacks } from 'equipped'
 
 export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, UserEntity> = {
 	created: async ({ after }) => {
-		await getSocketEmitter().emitCreated('users/users', after)
-		await getSocketEmitter().emitCreated(`users/users/${after.id}`, after)
+		await appInstance.listener.created('users/users', after)
+		await appInstance.listener.created(`users/users/${after.id}`, after)
 	},
 	updated: async ({ after, before, changes }) => {
-		await getSocketEmitter().emitUpdated('users/users', after)
-		await getSocketEmitter().emitUpdated(`users/users/${after.id}`, after)
+		await appInstance.listener.updated('users/users', after)
+		await appInstance.listener.updated(`users/users/${after.id}`, after)
 		if (changes.roles?.[AuthRole.isTutor]) {
 			const upgraded = after.roles[AuthRole.isTutor]
 			if (!upgraded) await UsersUseCases.removeSavedTutors(before.id)
@@ -37,7 +37,7 @@ export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, Use
 		}
 	},
 	deleted: async ({ before }) => {
-		await getSocketEmitter().emitDeleted('users/users', before)
-		await getSocketEmitter().emitDeleted(`users/users/${before.id}`, before)
+		await appInstance.listener.deleted('users/users', before)
+		await appInstance.listener.deleted(`users/users/${before.id}`, before)
 	}
 }

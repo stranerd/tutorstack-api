@@ -1,4 +1,4 @@
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
+import { QueryParams, QueryResults } from 'equipped'
 import { AnswerToModel } from '../../data/models/answers'
 import { AnswerEntity } from '../entities/answers'
 import { EmbeddedUser } from '../types'

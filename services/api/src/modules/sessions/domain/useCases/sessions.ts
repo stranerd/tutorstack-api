@@ -1,8 +1,8 @@
-import { ISessionRepository } from '../irepositories/sessions'
-import { SessionToModel } from '../../data/models/sessions'
-import { QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../types'
+import { QueryParams } from 'equipped'
 import { ReviewToModel } from '../../data/models/reviews'
+import { SessionToModel } from '../../data/models/sessions'
+import { ISessionRepository } from '../irepositories/sessions'
+import { EmbeddedUser } from '../types'
 
 export class SessionsUseCase {
 	private repository: ISessionRepository

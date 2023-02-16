@@ -1,4 +1,4 @@
-import { AuthRoles, MediaOutput } from '@stranerd/api-commons'
+import { AuthRoles, MediaOutput } from 'equipped'
 
 export type Media = MediaOutput
 

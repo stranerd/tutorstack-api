@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { NotificationFromModel } from '../models/notifications'
 import { NotificationChangeStreamCallbacks } from '@utils/changeStreams/notifications/notifications'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { NotificationEntity } from '../../domain/entities/notifications'
 import { NotificationMapper } from '../mappers/notifications'
+import { NotificationFromModel } from '../models/notifications'
 
 const NotificationSchema = new mongoose.Schema<NotificationFromModel>({
 	_id: {

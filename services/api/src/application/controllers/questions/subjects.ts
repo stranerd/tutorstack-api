@@ -1,5 +1,5 @@
 import { SubjectsUseCases } from '@modules/questions'
-import { NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
+import { NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class SubjectController {
 	static async FindSubject (req: Request) {
@@ -12,11 +12,9 @@ export class SubjectController {
 	}
 
 	static async UpdateSubject (req: Request) {
-		const data = validate({
-			title: req.body.title
-		}, {
-			title: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] }
-		})
+		const data = validateReq({
+			title: Schema.string().min(1)
+		}, req.body)
 
 		const updatedSubject = await SubjectsUseCases.update({ id: req.params.id, data })
 
@@ -25,11 +23,9 @@ export class SubjectController {
 	}
 
 	static async CreateSubject (req: Request) {
-		const data = validate({
-			title: req.body.title,
-		}, {
-			title: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-		})
+		const data = validateReq({
+			title: Schema.string().min(1)
+		}, req.body)
 		return await SubjectsUseCases.add(data)
 	}
 

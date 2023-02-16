@@ -1,5 +1,5 @@
+import { BaseEntity } from 'equipped'
 import { EmbeddedUser } from '../types'
-import { BaseEntity } from '@stranerd/api-commons'
 
 export class ReviewEntity extends BaseEntity {
 	public readonly id: string
@@ -12,8 +12,8 @@ export class ReviewEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, sessionId, to, user, rating, message, createdAt, updatedAt
-	             }: ReviewConstructorArgs) {
+		id, sessionId, to, user, rating, message, createdAt, updatedAt
+	}: ReviewConstructorArgs) {
 		super()
 		this.id = id
 		this.sessionId = sessionId

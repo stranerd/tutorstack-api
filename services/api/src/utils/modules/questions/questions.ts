@@ -1,6 +1,6 @@
 import { QuestionEntity, QuestionsUseCases } from '@modules/questions'
-import { DelayedJobs } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
+import { DelayedJobs } from 'equipped'
 
 export const holdQuestion = async (question: QuestionEntity) => {
 	if (!question.heldBy) return

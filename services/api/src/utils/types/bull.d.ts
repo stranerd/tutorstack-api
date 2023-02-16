@@ -1,7 +1,7 @@
-import { DelayedJobs } from '@stranerd/api-commons'
+import { DelayedJobs } from 'equipped'
 
-declare module '@stranerd/api-commons/lib/bull' {
-    interface DelayedJobEvents {
+declare module 'equipped/lib/bull' {
+	interface DelayedJobEvents {
 		[DelayedJobs.HoldQuestion]: {
 			type: typeof DelayedJobs.HoldQuestion,
 			data: { questionId: string, userId: string }
@@ -16,5 +16,5 @@ declare module '@stranerd/api-commons/lib/bull' {
 		}
 	}
 
-	interface CronLikeJobEvents {}
+	interface CronLikeJobEvents { }
 }

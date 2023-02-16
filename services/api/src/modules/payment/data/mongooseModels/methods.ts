@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { MethodFromModel } from '../models/methods'
 import { MethodChangeStreamCallbacks } from '@utils/changeStreams/payment/methods'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { MethodEntity } from '../../domain/entities/methods'
 import { MethodMapper } from '../mappers/methods'
+import { MethodFromModel } from '../models/methods'
 
 const MethodSchema = new mongoose.Schema<MethodFromModel>({
 	_id: {

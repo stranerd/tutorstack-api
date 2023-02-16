@@ -1,6 +1,6 @@
 import { InteractionEntities } from '@modules/interactions'
-import { BadRequestError } from '@stranerd/api-commons'
 import { QuestionsUseCases } from '@modules/questions'
+import { BadRequestError } from 'equipped'
 
 type Interactions = 'comments' | 'likes' | 'dislikes' | 'views'
 

@@ -1,9 +1,9 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { ILikeRepository } from '../../domain/irepositories/likes'
+import { InteractionEntity } from '../../domain/types'
 import { LikeMapper } from '../mappers/likes'
 import { LikeFromModel, LikeToModel } from '../models/likes'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { Like } from '../mongooseModels/likes'
-import { InteractionEntity } from '../../domain/types'
 
 export class LikeRepository implements ILikeRepository {
 	private static instance: LikeRepository

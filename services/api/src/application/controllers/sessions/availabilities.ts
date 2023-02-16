@@ -1,5 +1,5 @@
 import { AvailabilitiesUseCases } from '@modules/sessions'
-import { NotAuthorizedError, Request, validate, Validation } from '@stranerd/api-commons'
+import { NotAuthorizedError, Request, Schema, validateReq } from 'equipped'
 
 export class AvailabilitiesController {
 	static async getUser (req: Request) {
@@ -11,16 +11,13 @@ export class AvailabilitiesController {
 		const today = Math.floor(Date.now() / aDayInMs) * aDayInMs
 		const twoWeeksFromNow = today + (aDayInMs * 14)
 
-		const data = validate({
-			time: req.body.time,
-			add: req.body.add
-		}, {
-			time: {
-				required: true,
-				rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(today, 'cannot set time less than today'), Validation.isLessThanOrEqualToX(twoWeeksFromNow, 'cannot set time more than 2 weeks ahead')]
-			},
-			add: { required: true, rules: [Validation.isBoolean] }
-		})
+		const data = validateReq({
+			time: Schema.time()
+				.min(today, 'cannot set time less than today')
+				.max(twoWeeksFromNow, 'cannot set time more than 2 weeks ahead')
+				.asStamp(),
+			add: Schema.boolean()
+		}, req.body)
 
 		const availability = await AvailabilitiesUseCases.update({ ...data, userId: req.authUser!.id })
 		if (availability) return availability

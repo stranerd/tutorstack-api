@@ -1,5 +1,5 @@
+import { QueryParams, QueryResults } from 'equipped'
 import { AvailabilityEntity } from '../entities/availabilities'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
 
 export interface IAvailabilityRepository {
 	get (query: QueryParams): Promise<QueryResults<AvailabilityEntity>>

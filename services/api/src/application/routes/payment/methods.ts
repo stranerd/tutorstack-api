@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
 import { MethodsController } from '@application/controllers/payment/methods'
 import { isAuthenticated } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
 
 export const methodsRoutes: Route[] = [
 	{

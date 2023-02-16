@@ -1,9 +1,9 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { PlanFromModel } from '../models/plans'
 import { PlanChangeStreamCallbacks } from '@utils/changeStreams/payment/plans'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { PlanEntity } from '../../domain/entities/plans'
-import { PlanMapper } from '../mappers/plans'
 import { PlanDataType } from '../../domain/types'
+import { PlanMapper } from '../mappers/plans'
+import { PlanFromModel } from '../models/plans'
 
 const PlanSchema = new mongoose.Schema<PlanFromModel>({
 	_id: {

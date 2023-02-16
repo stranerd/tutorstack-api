@@ -1,3 +1,4 @@
+import { AuthOutput, AuthUserEntity, AuthUsersUseCases } from '@modules/auth'
 import {
 	BadRequestError,
 	Conditions,
@@ -6,8 +7,7 @@ import {
 	exchangeOldForNewTokens,
 	makeAccessToken,
 	makeRefreshToken
-} from '@stranerd/api-commons'
-import { AuthOutput, AuthUserEntity, AuthUsersUseCases } from '@modules/auth'
+} from 'equipped'
 
 export const signOutUser = async (userId: string): Promise<boolean> => {
 	await deleteCachedAccessToken(userId)

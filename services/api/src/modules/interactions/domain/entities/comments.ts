@@ -1,4 +1,4 @@
-import { BaseEntity } from '@stranerd/api-commons'
+import { BaseEntity } from 'equipped'
 import { CommentMeta, EmbeddedUser, InteractionEntity } from '../types'
 
 export class CommentEntity extends BaseEntity {

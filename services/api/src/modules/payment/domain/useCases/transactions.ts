@@ -1,6 +1,6 @@
-import { QueryParams } from '@stranerd/api-commons'
-import { ITransactionRepository } from '../irepositories/transactions'
+import { QueryParams } from 'equipped'
 import { TransactionToModel } from '../../data/models/transactions'
+import { ITransactionRepository } from '../irepositories/transactions'
 
 export class TransactionsUseCase {
 	repository: ITransactionRepository

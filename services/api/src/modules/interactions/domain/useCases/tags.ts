@@ -1,6 +1,6 @@
-import { ITagRepository } from '../irepositories/tags'
+import { QueryParams } from 'equipped'
 import { TagToModel } from '../../data/models/tags'
-import { QueryParams } from '@stranerd/api-commons'
+import { ITagRepository } from '../irepositories/tags'
 
 export class TagsUseCase {
 	private repository: ITagRepository

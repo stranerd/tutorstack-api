@@ -5,9 +5,9 @@ import {
 	TransactionType,
 	WalletsUseCases
 } from '@modules/payment'
-import { BadRequestError, Request, validate, Validation } from '@stranerd/api-commons'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
 import { cancelSubscription, subscribeToPlan } from '@utils/modules/payment/subscriptions'
+import { BadRequestError, Request, Schema, validateReq } from 'equipped'
 
 export class WalletsController {
 	static async get (req: Request) {
@@ -15,13 +15,10 @@ export class WalletsController {
 	}
 
 	static async fund (req: Request) {
-		const { methodId, amount } = validate({
-			methodId: req.body.methodId,
-			amount: req.body.amount
-		}, {
-			methodId: { required: true, rules: [Validation.isString] },
-			amount: { required: true, rules: [Validation.isNumber, Validation.isMoreThanX(0)] }
-		})
+		const { methodId, amount } = validateReq({
+			methodId: Schema.string().min(1),
+			amount: Schema.number().gt(0)
+		}, req.body)
 
 		const email = req.authUser!.email
 		const userId = req.authUser!.id
@@ -43,11 +40,9 @@ export class WalletsController {
 	}
 
 	static async subscribeToPlan (req: Request) {
-		const { planId } = validate({
-			planId: req.body.planId
-		}, {
-			planId: { required: true, rules: [Validation.isString] }
-		})
+		const { planId } = validateReq({
+			planId: Schema.string()
+		}, req.body)
 
 		return await subscribeToPlan(req.authUser!.id, planId)
 	}

@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { LikeFromModel } from '../models/likes'
 import { LikeChangeStreamCallbacks } from '@utils/changeStreams/interactions/likes'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { LikeEntity } from '../../domain/entities/likes'
 import { LikeMapper } from '../mappers/likes'
+import { LikeFromModel } from '../models/likes'
 
 const LikeSchema = new mongoose.Schema<LikeFromModel>({
 	_id: {

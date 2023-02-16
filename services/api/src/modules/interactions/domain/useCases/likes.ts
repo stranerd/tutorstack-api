@@ -1,6 +1,6 @@
-import { QueryParams } from '@stranerd/api-commons'
-import { ILikeRepository } from '../irepositories/likes'
+import { QueryParams } from 'equipped'
 import { LikeToModel } from '../../data/models/likes'
+import { ILikeRepository } from '../irepositories/likes'
 
 export class LikesUseCase {
 	repository: ILikeRepository

@@ -1,8 +1,8 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IWorkRepository } from '../../domain/irepositories/works'
 import { WorkMapper } from '../mappers/works'
 import { WorkFromModel, WorkToModel } from '../models/works'
 import { Work } from '../mongooseModels/works'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 
 export class WorkRepository implements IWorkRepository {
 	private static instance: WorkRepository

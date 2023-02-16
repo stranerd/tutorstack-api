@@ -1,6 +1,6 @@
+import { QueryParams, QueryResults } from 'equipped'
 import { CommentToModel } from '../../data/models/comments'
 import { CommentEntity } from '../entities/comments'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
 import { CommentMetaType, InteractionEntity } from '../types'
 
 export interface ICommentRepository {

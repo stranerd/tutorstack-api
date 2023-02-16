@@ -1,4 +1,4 @@
-import { BaseEntity } from '@stranerd/api-commons'
+import { BaseEntity } from 'equipped'
 
 export class SubjectEntity extends BaseEntity {
 	public readonly id: string
@@ -7,8 +7,8 @@ export class SubjectEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, title, createdAt, updatedAt
-	             }: SubjectConstructorArgs) {
+		id, title, createdAt, updatedAt
+	}: SubjectConstructorArgs) {
 		super()
 		this.id = id
 		this.title = title

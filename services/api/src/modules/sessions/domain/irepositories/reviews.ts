@@ -1,7 +1,7 @@
-import { ReviewEntity } from '../entities/reviews'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../types'
+import { QueryParams, QueryResults } from 'equipped'
 import { ReviewToModel } from '../../data/models/reviews'
+import { ReviewEntity } from '../entities/reviews'
+import { EmbeddedUser } from '../types'
 
 export interface IReviewRepository {
 	get: (condition: QueryParams) => Promise<QueryResults<ReviewEntity>>

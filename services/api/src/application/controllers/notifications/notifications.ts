@@ -1,5 +1,5 @@
 import { NotificationsUseCases } from '@modules/notifications'
-import { QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
+import { QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class NotificationsController {
 	static async getNotifications (req: Request) {
@@ -15,11 +15,9 @@ export class NotificationsController {
 	}
 
 	static async markNotificationSeen (req: Request) {
-		const data = validate({
-			seen: req.body.seen
-		}, {
-			seen: { required: true, rules: [Validation.isBoolean] }
-		})
+		const data = validateReq({
+			seen: Schema.boolean()
+		}, req.body)
 
 		await NotificationsUseCases.markSeen({
 			ids: [req.params.id],

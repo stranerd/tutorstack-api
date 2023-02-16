@@ -1,6 +1,6 @@
+import { QueryParams, QueryResults } from 'equipped'
 import { TransactionToModel } from '../../data/models/transactions'
 import { TransactionEntity } from '../entities/transactions'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
 
 export interface ITransactionRepository {
 	create: (data: TransactionToModel) => Promise<TransactionEntity>

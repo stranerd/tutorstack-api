@@ -1,14 +1,12 @@
 import { AuthUseCases } from '@modules/auth'
-import { Request, validate, Validation } from '@stranerd/api-commons'
 import { generateAuthOutput } from '@utils/modules/auth'
+import { Request, Schema, validateReq } from 'equipped'
 
 export class IdentitiesController {
 	static async googleSignIn (req: Request) {
-		const validatedData = validate({
-			idToken: req.body.idToken
-		}, {
-			idToken: { required: true, rules: [Validation.isString] }
-		})
+		const validatedData = validateReq({
+			idToken: Schema.string(),
+		}, req.body)
 
 		const data = await AuthUseCases.googleSignIn(validatedData)
 		return await generateAuthOutput(data)

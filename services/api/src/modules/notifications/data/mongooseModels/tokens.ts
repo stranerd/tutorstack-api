@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { TokenFromModel } from '../models/tokens'
 import { TokenChangeStreamCallbacks } from '@utils/changeStreams/notifications/tokens'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { TokenEntity } from '../../domain/entities/tokens'
 import { TokenMapper } from '../mappers/tokens'
+import { TokenFromModel } from '../models/tokens'
 
 const Schema = new mongoose.Schema<TokenFromModel>({
 	_id: {

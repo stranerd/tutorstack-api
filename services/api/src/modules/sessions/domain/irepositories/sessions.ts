@@ -1,9 +1,9 @@
-import { SessionEntity } from '../entities/sessions'
-import { SessionToModel } from '../../data/models/sessions'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../types'
+import { QueryParams, QueryResults } from 'equipped'
 import { ReviewToModel } from '../../data/models/reviews'
+import { SessionToModel } from '../../data/models/sessions'
 import { ReviewEntity } from '../entities/reviews'
+import { SessionEntity } from '../entities/sessions'
+import { EmbeddedUser } from '../types'
 
 export interface ISessionRepository {
 	add: (data: SessionToModel) => Promise<SessionEntity>

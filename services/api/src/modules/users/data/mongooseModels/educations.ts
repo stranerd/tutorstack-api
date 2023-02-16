@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { EducationFromModel } from '../models/educations'
 import { EducationChangeStreamCallbacks } from '@utils/changeStreams/users/educations'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { EducationEntity } from '../../domain/entities/educations'
 import { EducationMapper } from '../mappers/educations'
+import { EducationFromModel } from '../models/educations'
 
 const EducationSchema = new mongoose.Schema<EducationFromModel>({
 	_id: {

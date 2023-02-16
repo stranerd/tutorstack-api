@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { ViewsController } from '../../controllers/interactions/views'
 import { isAuthenticated } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
+import { ViewsController } from '../../controllers/interactions/views'
 
 export const viewsRoutes: Route[] = [
 	{

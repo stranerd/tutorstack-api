@@ -1,22 +1,22 @@
-import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { EducationEntity, EducationFromModel } from '@modules/users'
-import { getSocketEmitter } from '@index'
+import { appInstance } from '@utils/environment'
 import { publishers } from '@utils/events'
+import { ChangeStreamCallbacks } from 'equipped'
 
 export const EducationChangeStreamCallbacks: ChangeStreamCallbacks<EducationFromModel, EducationEntity> = {
 	created: async ({ after }) => {
-		await getSocketEmitter().emitCreated('users/educations', after)
-		await getSocketEmitter().emitCreated(`users/educations/${after.id}`, after)
+		await appInstance.listener.created('users/educations', after)
+		await appInstance.listener.created(`users/educations/${after.id}`, after)
 	},
 	updated: async ({ after, before, changes }) => {
-		await getSocketEmitter().emitUpdated('users/educations', after)
-		await getSocketEmitter().emitUpdated(`users/educations/${after.id}`, after)
+		await appInstance.listener.updated('users/educations', after)
+		await appInstance.listener.updated(`users/educations/${after.id}`, after)
 
 		if (changes.verification) await publishers.DELETEFILE.publish(before.verification)
 	},
 	deleted: async ({ before }) => {
-		await getSocketEmitter().emitDeleted('users/educations', before)
-		await getSocketEmitter().emitDeleted(`users/educations/${before.id}`, before)
+		await appInstance.listener.deleted('users/educations', before)
+		await appInstance.listener.deleted(`users/educations/${before.id}`, before)
 
 		await publishers.DELETEFILE.publish(before.verification)
 	}

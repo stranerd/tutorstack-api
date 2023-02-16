@@ -1,6 +1,6 @@
-import { QueryParams } from '@stranerd/api-commons'
-import { IViewRepository } from '../irepositories/views'
+import { QueryParams } from 'equipped'
 import { ViewToModel } from '../../data/models/views'
+import { IViewRepository } from '../irepositories/views'
 
 export class ViewsUseCase {
 	repository: IViewRepository

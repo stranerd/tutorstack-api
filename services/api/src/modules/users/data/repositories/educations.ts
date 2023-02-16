@@ -1,8 +1,8 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IEducationRepository } from '../../domain/irepositories/educations'
 import { EducationMapper } from '../mappers/educations'
 import { EducationFromModel, EducationToModel } from '../models/educations'
 import { Education } from '../mongooseModels/educations'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 
 export class EducationRepository implements IEducationRepository {
 	private static instance: EducationRepository

@@ -1,6 +1,6 @@
+import { QueryParams, QueryResults } from 'equipped'
 import { ViewToModel } from '../../data/models/views'
 import { ViewEntity } from '../entities/views'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
 import { InteractionEntity } from '../types'
 
 export interface IViewRepository {

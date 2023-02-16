@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { ViewEntity } from '../../domain/entities/views'
 import { ViewFromModel, ViewToModel } from '../models/views'
 

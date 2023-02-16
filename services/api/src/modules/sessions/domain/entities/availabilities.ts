@@ -1,5 +1,5 @@
+import { BaseEntity } from 'equipped'
 import { Booked } from '../types'
-import { BaseEntity } from '@stranerd/api-commons'
 
 export class AvailabilityEntity extends BaseEntity {
 	public readonly id: string
@@ -10,8 +10,8 @@ export class AvailabilityEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, userId, free, booked, createdAt, updatedAt
-	             }: AvailabilityConstructorArgs) {
+		id, userId, free, booked, createdAt, updatedAt
+	}: AvailabilityConstructorArgs) {
 		super()
 		this.id = id
 		this.userId = userId

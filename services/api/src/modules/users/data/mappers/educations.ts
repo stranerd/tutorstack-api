@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { EducationEntity } from '../../domain/entities/educations'
 import { EducationFromModel, EducationToModel } from '../models/educations'
 

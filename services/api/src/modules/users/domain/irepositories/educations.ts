@@ -1,6 +1,6 @@
-import { EducationEntity } from '../entities/educations'
+import { QueryParams, QueryResults } from 'equipped'
 import { EducationToModel } from '../../data/models/educations'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
+import { EducationEntity } from '../entities/educations'
 
 export interface IEducationRepository {
 	add: (data: EducationToModel) => Promise<EducationEntity>

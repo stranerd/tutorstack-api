@@ -1,6 +1,6 @@
-import { IQuestionRepository } from '../irepositories/questions'
+import { QueryParams } from 'equipped'
 import { QuestionToModel } from '../../data/models/questions'
-import { QueryParams } from '@stranerd/api-commons'
+import { IQuestionRepository } from '../irepositories/questions'
 import { EmbeddedUser, QuestionMetaType } from '../types'
 
 export class QuestionsUseCase {

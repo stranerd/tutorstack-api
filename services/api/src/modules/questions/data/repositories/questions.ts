@@ -1,9 +1,9 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IQuestionRepository } from '../../domain/irepositories/questions'
+import { EmbeddedUser, MAX_ANSWERS_COUNT, QuestionMetaType } from '../../domain/types'
 import { QuestionMapper } from '../mappers/questions'
 import { QuestionFromModel, QuestionToModel } from '../models/questions'
 import { Question } from '../mongooseModels/questions'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser, MAX_ANSWERS_COUNT, QuestionMetaType } from '../../domain/types'
 
 export class QuestionRepository implements IQuestionRepository {
 	private static instance: QuestionRepository

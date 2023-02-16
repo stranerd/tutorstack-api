@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { PlanEntity } from '../../domain/entities/plans'
 import { PlanFromModel, PlanToModel } from '../models/plans'
 

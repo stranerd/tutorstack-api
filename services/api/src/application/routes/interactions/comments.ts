@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { CommentsController } from '../../controllers/interactions/comments'
 import { isAuthenticated } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
+import { CommentsController } from '../../controllers/interactions/comments'
 
 export const commentsRoutes: Route[] = [
 	{

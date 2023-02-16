@@ -1,6 +1,6 @@
-import { IReviewRepository } from '../irepositories/reviews'
+import { QueryParams } from 'equipped'
 import { ReviewToModel } from '../../data/models/reviews'
-import { QueryParams } from '@stranerd/api-commons'
+import { IReviewRepository } from '../irepositories/reviews'
 import { EmbeddedUser } from '../types'
 
 export class ReviewsUseCase {

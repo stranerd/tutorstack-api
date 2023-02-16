@@ -1,9 +1,9 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { UserFromModel } from '../models/users'
 import { UserChangeStreamCallbacks } from '@utils/changeStreams/users/users'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { UserEntity } from '../../domain/entities/users'
-import { UserMapper } from '../mappers/users'
 import { UserMeta } from '../../domain/types'
+import { UserMapper } from '../mappers/users'
+import { UserFromModel } from '../models/users'
 
 const UserSchema = new mongoose.Schema<UserFromModel>({
 	_id: {

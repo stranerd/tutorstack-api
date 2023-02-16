@@ -1,9 +1,9 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { CommentFromModel } from '../models/comments'
 import { CommentChangeStreamCallbacks } from '@utils/changeStreams/interactions/comments'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { CommentEntity } from '../../domain/entities/comments'
-import { CommentMapper } from '../mappers/comments'
 import { CommentMetaType } from '../../domain/types'
+import { CommentMapper } from '../mappers/comments'
+import { CommentFromModel } from '../models/comments'
 
 const CommentSchema = new mongoose.Schema<CommentFromModel>({
 	_id: {

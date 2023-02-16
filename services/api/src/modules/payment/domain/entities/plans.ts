@@ -1,4 +1,4 @@
-import { BaseEntity, CronTypes } from '@stranerd/api-commons'
+import { BaseEntity, CronTypes } from 'equipped'
 import { Currencies, PlanData, PlanInterval } from '../types'
 
 export class PlanEntity extends BaseEntity {
@@ -13,16 +13,16 @@ export class PlanEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id,
-		             amount,
-		             currency,
-		             name,
-		             interval,
-		             active,
-		             data,
-		             createdAt,
-		             updatedAt
-	             }: PlanConstructorArgs) {
+		id,
+		amount,
+		currency,
+		name,
+		interval,
+		active,
+		data,
+		createdAt,
+		updatedAt
+	}: PlanConstructorArgs) {
 		super()
 		this.id = id
 		this.name = name

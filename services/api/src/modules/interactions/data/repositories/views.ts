@@ -1,9 +1,9 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IViewRepository } from '../../domain/irepositories/views'
+import { InteractionEntity } from '../../domain/types'
 import { ViewMapper } from '../mappers/views'
 import { ViewFromModel, ViewToModel } from '../models/views'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { View } from '../mongooseModels/views'
-import { InteractionEntity } from '../../domain/types'
 
 export class ViewRepository implements IViewRepository {
 	private static instance: ViewRepository

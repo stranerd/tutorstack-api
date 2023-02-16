@@ -1,5 +1,5 @@
+import { QueryParams } from 'equipped'
 import { IAvailabilityRepository } from '../irepositories/availabilities'
-import { QueryParams } from '@stranerd/api-commons'
 
 export class AvailabilitiesUseCase {
 	repository: IAvailabilityRepository

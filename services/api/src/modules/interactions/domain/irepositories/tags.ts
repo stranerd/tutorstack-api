@@ -1,4 +1,4 @@
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
+import { QueryParams, QueryResults } from 'equipped'
 import { TagToModel } from '../../data/models/tags'
 import { TagEntity } from '../entities/tags'
 

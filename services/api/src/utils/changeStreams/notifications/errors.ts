@@ -1,6 +1,6 @@
-import { ChangeStreamCallbacks } from '@stranerd/api-commons'
 import { ErrorEntity, ErrorFromModel } from '@modules/notifications'
 import { appInstance } from '@utils/environment'
+import { ChangeStreamCallbacks } from 'equipped'
 
 export const ErrorChangeStreamCallbacks: ChangeStreamCallbacks<ErrorFromModel, ErrorEntity> = {
 	created: async ({ after }) => {

@@ -1,8 +1,8 @@
+import { BadRequestError, mongoose } from 'equipped'
 import { IWalletRepository } from '../../domain/irepositories/wallets'
+import { AccountDetails, PlanDataType, SubscriptionModel } from '../../domain/types'
 import { WalletMapper } from '../mappers/wallets'
 import { Wallet } from '../mongooseModels/wallets'
-import { AccountDetails, PlanDataType, SubscriptionModel } from '../../domain/types'
-import { BadRequestError, mongoose } from '@stranerd/api-commons'
 
 export class WalletRepository implements IWalletRepository {
 	private static instance: WalletRepository

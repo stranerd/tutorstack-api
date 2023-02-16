@@ -1,6 +1,6 @@
-import { QuestionEntity } from '../entities/questions'
+import { QueryParams, QueryResults } from 'equipped'
 import { QuestionToModel } from '../../data/models/questions'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
+import { QuestionEntity } from '../entities/questions'
 import { EmbeddedUser, QuestionMetaType } from '../types'
 
 export interface IQuestionRepository {

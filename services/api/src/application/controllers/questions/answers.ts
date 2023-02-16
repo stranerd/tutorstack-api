@@ -1,7 +1,7 @@
 import { AnswersUseCases, QuestionsUseCases } from '@modules/questions'
-import { UsersUseCases } from '@modules/users'
-import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
 import { StorageUseCases } from '@modules/storage'
+import { UsersUseCases } from '@modules/users'
+import { BadRequestError, NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class AnswerController {
 	static async FindAnswer (req: Request) {
@@ -18,20 +18,18 @@ export class AnswerController {
 		const uploadedAttachment = req.files.attachment?.[0] ?? null
 		const changedAttachment = !!uploadedAttachment || req.body.attachment === null
 
-		const data = validate({
-			attachment: uploadedAttachment as any
-		}, {
-			attachment: { required: true, rules: [Validation.isNotTruncated, Validation.isVideo] }
-		})
-		if (uploadedAttachment) data.attachment = await StorageUseCases.upload('questions/answers', uploadedAttachment)
-		const validateData = {
-			...(changedAttachment ? { attachment: data.attachment } : {})
-		}
+		validateReq({
+			attachment: Schema.file().video()
+		}, { ...req.body, attachment: uploadedAttachment })
+
+		const attachment = uploadedAttachment ? await StorageUseCases.upload('questions/answers', uploadedAttachment) : undefined
 
 		const updatedAnswer = await AnswersUseCases.update({
 			id: req.params.id,
 			userId: authUserId,
-			data: validateData
+			data: {
+				...(changedAttachment ? { attachment } : {})
+			}
 		})
 
 		if (updatedAnswer) return updatedAnswer
@@ -39,13 +37,10 @@ export class AnswerController {
 	}
 
 	static async CreateAnswer (req: Request) {
-		const data = validate({
-			questionId: req.body.questionId,
-			attachment: req.files.attachment?.[0] ?? null
-		}, {
-			questionId: { required: true, rules: [Validation.isString] },
-			attachment: { required: true, rules: [Validation.isNotTruncated, Validation.isVideo] }
-		})
+		const data = validateReq({
+			questionId: Schema.string().min(1),
+			attachment: Schema.file().video()
+		}, { ...req.body, attachment: req.files.attachment?.[0] ?? null })
 
 		const authUserId = req.authUser!.id
 		const question = await QuestionsUseCases.find(data.questionId)

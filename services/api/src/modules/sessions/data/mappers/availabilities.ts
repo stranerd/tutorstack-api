@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { AvailabilityEntity } from '../../domain/entities/availabilities'
 import { AvailabilityFromModel, AvailabilityToModel } from '../models/availabilities'
 

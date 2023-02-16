@@ -1,4 +1,4 @@
-import { BaseEntity } from '@stranerd/api-commons'
+import { BaseEntity } from 'equipped'
 import { TagTypes } from '../types'
 
 export class TagEntity extends BaseEntity {
@@ -10,8 +10,8 @@ export class TagEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, type, title, parent, createdAt, updatedAt
-	             }: TagConstructorArgs) {
+		id, type, title, parent, createdAt, updatedAt
+	}: TagConstructorArgs) {
 		super()
 		this.id = id
 		this.type = type

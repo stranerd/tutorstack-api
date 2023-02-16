@@ -1,7 +1,7 @@
 import { InteractionEntities, ViewsUseCases } from '@modules/interactions'
-import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
 import { UsersUseCases } from '@modules/users'
 import { verifyInteractionEntity } from '@utils/modules/interactions'
+import { BadRequestError, NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class ViewsController {
 	static async getViews (req: Request) {
@@ -14,27 +14,18 @@ export class ViewsController {
 	}
 
 	static async createView (req: Request) {
-		const { entityType, entityId } = validate({
-			body: req.body.body,
-			entityType: req.body.entity?.type,
-			entityId: req.body.entity?.id
-		}, {
-			body: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			entityType: {
-				required: true,
-				rules: [Validation.isString, Validation.arrayContainsX(Object.values(InteractionEntities), (cur, val) => cur === val)]
-			},
-			entityId: { required: true, rules: [Validation.isString] }
-		})
+		const { entity } = validateReq({
+			entity: Schema.object({
+				id: Schema.string().min(1),
+				type: Schema.any<InteractionEntities>().in(Object.values(InteractionEntities))
+			})
+		}, req.body)
 
-		await verifyInteractionEntity(entityType, entityId, 'views')
+		await verifyInteractionEntity(entity.type, entity.id, 'views')
 		const user = await UsersUseCases.find(req.authUser!.id)
 		if (!user) throw new BadRequestError('profile not found')
 
-		return await ViewsUseCases.create({
-			entity: { id: entityId, type: entityType },
-			user: user.getEmbedded()
-		})
+		return await ViewsUseCases.create({ entity, user: user.getEmbedded() })
 	}
 
 	static async deleteView (req: Request) {

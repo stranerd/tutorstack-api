@@ -1,9 +1,9 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { QuestionFromModel } from '../models/questions'
+import { QuestionMetaType } from '@modules/questions/domain/types'
 import { QuestionChangeStreamCallbacks } from '@utils/changeStreams/questions/questions'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { QuestionEntity } from '../../domain/entities/questions'
 import { QuestionMapper } from '../mappers/questions'
-import { QuestionMetaType } from '@modules/questions/domain/types'
+import { QuestionFromModel } from '../models/questions'
 
 const Schema = new mongoose.Schema<QuestionFromModel>({
 	_id: {

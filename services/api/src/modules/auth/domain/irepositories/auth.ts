@@ -1,7 +1,7 @@
-import { Credential, PasswordResetInput } from '../types'
-import { AuthTypes, Enum } from '@stranerd/api-commons'
+import { AuthTypes, Enum } from 'equipped'
 import { UserToModel } from '../../data/models/users'
 import { AuthUserEntity } from '../entities/users'
+import { Credential, PasswordResetInput } from '../types'
 
 export interface IAuthRepository {
 	addNewUser (user: UserToModel, type: Enum<typeof AuthTypes>): Promise<AuthUserEntity>

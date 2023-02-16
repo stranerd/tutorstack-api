@@ -1,8 +1,8 @@
-import { ViewMapper } from './../mappers/views'
-import { ViewEntity } from '../../domain/entities/views'
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
 import { ViewChangeStreamCallbacks } from '@utils/changeStreams/interactions/views'
+import { generateChangeStreams, mongoose } from 'equipped'
+import { ViewEntity } from '../../domain/entities/views'
 import { ViewFromModel } from '../models/views'
+import { ViewMapper } from './../mappers/views'
 
 const ViewSchema = new mongoose.Schema<ViewFromModel>({
 	_id: {

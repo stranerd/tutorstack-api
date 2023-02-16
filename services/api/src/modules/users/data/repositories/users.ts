@@ -1,9 +1,9 @@
+import { mongoose, parseQueryParams } from 'equipped'
 import { IUserRepository } from '../../domain/irepositories/users'
 import { UserBio, UserMeta, UserRoles } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
-import { User } from '../mongooseModels/users'
-import { mongoose, parseQueryParams } from '@stranerd/api-commons'
 import { UserFromModel } from '../models/users'
+import { User } from '../mongooseModels/users'
 
 export class UserRepository implements IUserRepository {
 	private static instance: UserRepository

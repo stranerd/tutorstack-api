@@ -1,23 +1,23 @@
-import { ChangeStreamCallbacks } from '@stranerd/api-commons'
+import { PlanDataType, WalletsUseCases } from '@modules/payment'
 import { AnswersUseCases, QuestionEntity, QuestionFromModel } from '@modules/questions'
 import { UserMeta, UsersUseCases } from '@modules/users'
-import { getSocketEmitter } from '@index'
+import { appInstance } from '@utils/environment'
 import { publishers } from '@utils/events'
 import { holdQuestion, releaseQuestion } from '@utils/modules/questions/questions'
-import { PlanDataType, WalletsUseCases } from '@modules/payment'
+import { ChangeStreamCallbacks } from 'equipped'
 
 export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromModel, QuestionEntity> = {
 	created: async ({ after }) => {
-		await getSocketEmitter().emitCreated('questions/questions', after)
-		await getSocketEmitter().emitCreated(`questions/questions/${after.id}`, after)
+		await appInstance.listener.created('questions/questions', after)
+		await appInstance.listener.created(`questions/questions/${after.id}`, after)
 
 		await WalletsUseCases.updateSubscriptionData({ userId: after.user.id, key: PlanDataType.questions, value: -1 })
 
 		await UsersUseCases.incrementMeta({ ids: [after.user.id], value: 1, property: UserMeta.questions })
 	},
 	updated: async ({ before, after, changes }) => {
-		await getSocketEmitter().emitUpdated('questions/questions', after)
-		await getSocketEmitter().emitUpdated(`questions/questions/${after.id}`, after)
+		await appInstance.listener.updated('questions/questions', after)
+		await appInstance.listener.updated(`questions/questions/${after.id}`, after)
 
 		if (changes.attachment && before.attachment) await publishers.DELETEFILE.publish(before.attachment)
 		if (changes.heldBy) await Promise.all([
@@ -26,8 +26,8 @@ export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromMo
 		])
 	},
 	deleted: async ({ before }) => {
-		await getSocketEmitter().emitDeleted('questions/questions', before)
-		await getSocketEmitter().emitDeleted(`questions/questions/${before.id}`, before)
+		await appInstance.listener.deleted('questions/questions', before)
+		await appInstance.listener.deleted(`questions/questions/${before.id}`, before)
 
 		await AnswersUseCases.deleteQuestionAnswers(before.id)
 

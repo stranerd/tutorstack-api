@@ -1,13 +1,13 @@
-import { CronTypes, DelayedJobs } from '@stranerd/api-commons'
-import { appInstance } from '@utils/environment'
 import { EmailsUseCases, NotificationsUseCases } from '@modules/notifications'
-import { sendMailAndCatchError } from '@utils/modules/notifications/emails'
-import { deleteUnverifiedUsers } from '@utils/modules/auth'
-import { retryTransactions } from '@utils/modules/payment/transactions'
 import { MethodsUseCases } from '@modules/payment'
-import { releaseQuestion } from '@utils/modules/questions/questions'
 import { AvailabilitiesUseCases, SessionsUseCases } from '@modules/sessions'
+import { appInstance } from '@utils/environment'
+import { deleteUnverifiedUsers } from '@utils/modules/auth'
+import { sendMailAndCatchError } from '@utils/modules/notifications/emails'
 import { renewSubscription } from '@utils/modules/payment/subscriptions'
+import { retryTransactions } from '@utils/modules/payment/transactions'
+import { releaseQuestion } from '@utils/modules/questions/questions'
+import { CronTypes, DelayedJobs } from 'equipped'
 
 export const startJobs = async () => {
 	await appInstance.job.startProcessingQueues([

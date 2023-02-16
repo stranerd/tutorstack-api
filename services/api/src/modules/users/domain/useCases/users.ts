@@ -1,6 +1,6 @@
+import { QueryParams } from 'equipped'
 import { IUserRepository } from '../irepositories/users'
 import { UserBio, UserMeta, UserRoles } from '../types'
-import { QueryParams } from '@stranerd/api-commons'
 
 export class UsersUseCase {
 	repository: IUserRepository

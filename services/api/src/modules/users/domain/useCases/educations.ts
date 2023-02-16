@@ -1,6 +1,6 @@
-import { IEducationRepository } from '../irepositories/educations'
+import { QueryParams } from 'equipped'
 import { EducationToModel } from '../../data/models/educations'
-import { QueryParams } from '@stranerd/api-commons'
+import { IEducationRepository } from '../irepositories/educations'
 
 export class EducationsUseCase {
 	private repository: IEducationRepository

@@ -1,6 +1,6 @@
-import { BaseMapper } from '@stranerd/api-commons'
-import { SubjectFromModel, SubjectToModel } from '../models/subjects'
+import { BaseMapper } from 'equipped'
 import { SubjectEntity } from '../../domain/entities/subjects'
+import { SubjectFromModel, SubjectToModel } from '../models/subjects'
 
 export class SubjectMapper extends BaseMapper<SubjectFromModel, SubjectToModel, SubjectEntity> {
 	mapFrom (model: SubjectFromModel | null) {

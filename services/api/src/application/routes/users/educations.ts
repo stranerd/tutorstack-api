@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { EducationController } from '../../controllers/users/educations'
 import { isAuthenticated, isTutor } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
+import { EducationController } from '../../controllers/users/educations'
 
 export const educationsRoutes: Route[] = [
 	{

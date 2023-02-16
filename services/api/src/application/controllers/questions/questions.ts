@@ -1,8 +1,8 @@
-import { QuestionsUseCases, SubjectsUseCases } from '@modules/questions'
-import { UsersUseCases } from '@modules/users'
-import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
-import { StorageUseCases } from '@modules/storage'
 import { PlanDataType, WalletsUseCases } from '@modules/payment'
+import { QuestionsUseCases, SubjectsUseCases } from '@modules/questions'
+import { StorageUseCases } from '@modules/storage'
+import { UsersUseCases } from '@modules/users'
+import { BadRequestError, NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class QuestionController {
 	static async FindQuestion (req: Request) {
@@ -19,23 +19,20 @@ export class QuestionController {
 		const uploadedAttachment = req.files.attachment?.[0] ?? null
 		const changedAttachment = !!uploadedAttachment || req.body.attachment === null
 
-		const data = validate({
-			body: req.body.body,
-			attachment: uploadedAttachment as any
-		}, {
-			body: { required: true, rules: [Validation.isString, Validation.isExtractedHTMLLongerThanX(2)] },
-			attachment: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] }
-		})
-		if (uploadedAttachment) data.attachment = await StorageUseCases.upload('questions/questions', uploadedAttachment)
-		const validateData = {
-			body: data.body,
-			...(changedAttachment ? { attachment: data.attachment } : {})
-		}
+		const data = validateReq({
+			body: Schema.string().min(1, true),
+			attachment: Schema.file().image().nullable()
+		}, { ...req.body, attachment: uploadedAttachment })
+
+		const attachment = uploadedAttachment ? await StorageUseCases.upload('questions/questions', uploadedAttachment) : null
 
 		const updatedQuestion = await QuestionsUseCases.update({
 			id: req.params.id,
 			userId: authUserId,
-			data: validateData
+			data: {
+				body: data.body,
+				...(changedAttachment ? { attachment } : {})
+			}
 		})
 
 		if (updatedQuestion) return updatedQuestion
@@ -43,17 +40,12 @@ export class QuestionController {
 	}
 
 	static async CreateQuestion (req: Request) {
-		const data = validate({
-			body: req.body.body,
-			subjectId: req.body.subjectId,
-			topic: req.body.topic,
-			attachment: req.files.attachment?.[0] ?? null
-		}, {
-			body: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			subjectId: { required: true, rules: [Validation.isString] },
-			topic: { required: true, rules: [Validation.isString, Validation.isLongerThanX(2)] },
-			attachment: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isImage] }
-		})
+		const data = validateReq({
+			body: Schema.string().min(1, true),
+			subjectId: Schema.string().min(1),
+			topic: Schema.string().min(3),
+			attachment: Schema.file().image().nullable()
+		}, { ...req.body, attachment: req.files.attachment?.[0] ?? null })
 
 		const subject = await SubjectsUseCases.find(data.subjectId)
 		if (!subject) throw new BadRequestError('subject not found')
@@ -61,6 +53,7 @@ export class QuestionController {
 		if (!user) throw new BadRequestError('user not found')
 		const wallet = await WalletsUseCases.get(user.id)
 		if (wallet.subscription.data[PlanDataType.questions] < 1) throw new BadRequestError('you don\'t have any questions left')
+
 		const attachment = data.attachment ? await StorageUseCases.upload('questions/questions', data.attachment) : null
 
 		return await QuestionsUseCases.add({ ...data, attachment, user: user.getEmbedded() })

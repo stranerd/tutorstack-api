@@ -1,5 +1,5 @@
 import { PlansUseCases } from '@modules/payment'
-import { QueryParams, Request } from '@stranerd/api-commons'
+import { QueryParams, Request } from 'equipped'
 
 export class PlansController {
 	static async find (req: Request) {

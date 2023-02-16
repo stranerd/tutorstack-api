@@ -1,6 +1,6 @@
+import { QueryParams, QueryResults } from 'equipped'
 import { PlanToModel } from '../../data/models/plans'
 import { PlanEntity } from '../entities/plans'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
 
 export interface IPlanRepository {
 	init: (data: PlanToModel[]) => Promise<PlanEntity[]>

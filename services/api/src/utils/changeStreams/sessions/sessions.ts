@@ -1,18 +1,17 @@
-import { ChangeStreamCallbacks, DelayedJobs } from '@stranerd/api-commons'
-import { SessionEntity, SessionFromModel, SessionsUseCases } from '@modules/sessions'
-import { getSocketEmitter } from '@index'
-import { UserMeta, UsersUseCases } from '@modules/users'
 import { TransactionStatus, TransactionsUseCases, TransactionType } from '@modules/payment'
+import { SessionEntity, SessionFromModel, SessionsUseCases } from '@modules/sessions'
+import { UserMeta, UsersUseCases } from '@modules/users'
 import { appInstance } from '@utils/environment'
 import { Ms100Live } from '@utils/modules/sessions/100ms'
 import { payTutorForSession } from '@utils/modules/sessions/sessions'
+import { ChangeStreamCallbacks, DelayedJobs } from 'equipped'
 
 export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromModel, SessionEntity> = {
 	created: async ({ after }) => {
 		await Promise.all(
 			after.getParticipants().map(async (id) => {
-				await getSocketEmitter().emitCreated(`sessions/sessions/${id}`, after)
-				await getSocketEmitter().emitCreated(`sessions/sessions/${id}/${after.id}`, after)
+				await appInstance.listener.created(`sessions/sessions/${id}`, after)
+				await appInstance.listener.created(`sessions/sessions/${id}/${after.id}`, after)
 			})
 		)
 		const delay = after.endedAt - Date.now() + (10 * 60 * 1000)
@@ -25,8 +24,8 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 	updated: async ({ after, before, changes }) => {
 		await Promise.all(
 			after.getParticipants().map(async (id) => {
-				await getSocketEmitter().emitUpdated(`sessions/sessions/${id}`, after)
-				await getSocketEmitter().emitUpdated(`sessions/sessions/${id}/${after.id}`, after)
+				await appInstance.listener.updated(`sessions/sessions/${id}`, after)
+				await appInstance.listener.updated(`sessions/sessions/${id}/${after.id}`, after)
 			})
 		)
 
@@ -60,8 +59,8 @@ export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromMode
 	deleted: async ({ before }) => {
 		await Promise.all(
 			before.getParticipants().map(async (id) => {
-				await getSocketEmitter().emitDeleted(`sessions/sessions/${id}`, before)
-				await getSocketEmitter().emitDeleted(`sessions/sessions/${id}/${before.id}`, before)
+				await appInstance.listener.deleted(`sessions/sessions/${id}`, before)
+				await appInstance.listener.deleted(`sessions/sessions/${id}/${before.id}`, before)
 			})
 		)
 		if (before.closedAt && !before.cancelled) await Promise.all([

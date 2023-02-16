@@ -1,6 +1,6 @@
-import { WorksUseCases } from '@modules/users'
-import { NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
 import { StorageUseCases } from '@modules/storage'
+import { WorksUseCases } from '@modules/users'
+import { NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class WorkController {
 	static async FindWork (req: Request) {
@@ -17,29 +17,23 @@ export class WorkController {
 		const uploadedVerification = req.files.verification?.[0] ?? null
 		const changedVerification = !!uploadedVerification || req.body.verification === null
 
-		const data = validate({
-			institution: req.body.institution,
-			position: req.body.position,
-			from: req.body.from,
-			to: req.body.to,
-			verification: uploadedVerification as any
-		}, {
-			institution: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			position: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			from: { required: true, rules: [Validation.isNumber] },
-			to: { required: true, rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(req.body.from)] },
-			verification: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isFile] }
-		})
-		if (uploadedVerification) data.verification = await StorageUseCases.upload('users/works', uploadedVerification)
-		const validateData = {
-			institution: data.institution, position: data.position, from: data.from, to: data.to,
-			...(changedVerification ? { verification: data.verification } : {})
-		}
+		const data = validateReq({
+			institution: Schema.string().min(1),
+			position: Schema.string().min(1),
+			from: Schema.time().asStamp(),
+			to: Schema.time().min(req.body.from).asStamp(),
+			verification: Schema.file().nullable()
+		}, { ...req.body, verification: uploadedVerification })
+
+		const verification = uploadedVerification ? await StorageUseCases.upload('users/works', uploadedVerification) : undefined
 
 		const updatedWork = await WorksUseCases.update({
 			id: req.params.id,
 			userId: authUserId,
-			data: validateData
+			data: {
+				institution: data.institution, position: data.position, from: data.from, to: data.to,
+				...(changedVerification ? { verification } : {})
+			}
 		})
 
 		if (updatedWork) return updatedWork
@@ -47,19 +41,13 @@ export class WorkController {
 	}
 
 	static async CreateWork (req: Request) {
-		const data = validate({
-			institution: req.body.institution,
-			position: req.body.position,
-			from: req.body.from,
-			to: req.body.to,
-			verification: req.files.verification?.[0] ?? null
-		}, {
-			institution: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			position: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			from: { required: true, rules: [Validation.isNumber] },
-			to: { required: true, rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(req.body.from)] },
-			verification: { required: true, rules: [Validation.isNotTruncated, Validation.isFile] }
-		})
+		const data = validateReq({
+			institution: Schema.string().min(1),
+			position: Schema.string().min(1),
+			from: Schema.time().asStamp(),
+			to: Schema.time().min(req.body.from).asStamp(),
+			verification: Schema.file()
+		}, { ...req.body, verification: req.files.verification?.[0] ?? null })
 
 		const authUserId = req.authUser!.id
 		const verification = await StorageUseCases.upload('users/works', data.verification)

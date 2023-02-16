@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { SessionFromModel } from '../models/sessions'
 import { SessionChangeStreamCallbacks } from '@utils/changeStreams/sessions/sessions'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { SessionEntity } from '../../domain/entities/sessions'
 import { SessionMapper } from '../mappers/sessions'
+import { SessionFromModel } from '../models/sessions'
 
 const SessionSchema = new mongoose.Schema<SessionFromModel>({
 	_id: {

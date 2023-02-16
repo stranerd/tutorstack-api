@@ -1,6 +1,6 @@
-import { IAnswerRepository } from '../irepositories/answers'
+import { QueryParams } from 'equipped'
 import { AnswerToModel } from '../../data/models/answers'
-import { QueryParams } from '@stranerd/api-commons'
+import { IAnswerRepository } from '../irepositories/answers'
 import { EmbeddedUser } from '../types'
 
 export class AnswersUseCase {
@@ -38,4 +38,3 @@ export class AnswersUseCase {
 		return await this.repository.deleteQuestionAnswers(questionId)
 	}
 }
-

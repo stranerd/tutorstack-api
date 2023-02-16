@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { LikeEntity } from '../../domain/entities/likes'
 import { LikeFromModel, LikeToModel } from '../models/likes'
 

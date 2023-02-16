@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { AvailabilityFromModel } from '../models/availabilities'
+import { AvailabilityChangeStreamCallbacks } from '@utils/changeStreams/sessions/availabilities'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { AvailabilityEntity } from '../../domain/entities/availabilities'
 import { AvailabilityMapper } from '../mappers/availabilities'
-import { AvailabilityChangeStreamCallbacks } from '@utils/changeStreams/sessions/availabilities'
+import { AvailabilityFromModel } from '../models/availabilities'
 
 const AvailabilitySchema = new mongoose.Schema<AvailabilityFromModel>({
 	_id: {

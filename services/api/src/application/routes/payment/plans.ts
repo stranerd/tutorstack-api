@@ -1,5 +1,5 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
 import { PlansController } from '@application/controllers/payment/plans'
+import { makeController, Route, StatusCodes } from 'equipped'
 
 export const plansRoutes: Route[] = [
 	{

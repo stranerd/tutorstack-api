@@ -1,4 +1,4 @@
-import { CronTypes, Enum } from '@stranerd/api-commons'
+import { CronTypes, Enum } from 'equipped'
 
 export enum Currencies {
 	USD = 'USD'

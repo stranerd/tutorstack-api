@@ -1,4 +1,4 @@
-import { AuthRoles, AuthTypes, BaseEntity, Enum, MediaOutput } from '@stranerd/api-commons'
+import { AuthRoles, AuthTypes, BaseEntity, Enum, MediaOutput } from 'equipped'
 import { UserUpdateInput } from '../types'
 
 export class AuthUserEntity extends BaseEntity {
@@ -42,15 +42,15 @@ export class AuthUserEntity extends BaseEntity {
 }
 
 interface UserConstructorArgs {
-	id: string;
-	email: string;
-	password: string;
-	description: string;
-	roles: AuthRoles;
+	id: string
+	email: string
+	password: string
+	description: string
+	roles: AuthRoles
 	name: { first: string, last: string }
-	photo: MediaOutput | null;
-	isVerified: boolean;
-	authTypes: Enum<typeof AuthTypes>[];
-	lastSignedInAt: number;
+	photo: MediaOutput | null
+	isVerified: boolean
+	authTypes: Enum<typeof AuthTypes>[]
+	lastSignedInAt: number
 	signedUpAt: number
 }

@@ -1,9 +1,9 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IReviewRepository } from '../../domain/irepositories/reviews'
+import { EmbeddedUser } from '../../domain/types'
 import { ReviewMapper } from '../mappers/reviews'
 import { ReviewFromModel, ReviewToModel } from '../models/reviews'
 import { Review } from '../mongooseModels/reviews'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../../domain/types'
 
 export class ReviewRepository implements IReviewRepository {
 	private static instance: ReviewRepository

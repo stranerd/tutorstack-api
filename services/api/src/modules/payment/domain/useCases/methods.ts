@@ -1,6 +1,6 @@
-import { QueryParams } from '@stranerd/api-commons'
-import { IMethodRepository } from '../irepositories/methods'
+import { QueryParams } from 'equipped'
 import { MethodToModel } from '../../data/models/methods'
+import { IMethodRepository } from '../irepositories/methods'
 
 export class MethodsUseCase {
 	repository: IMethodRepository

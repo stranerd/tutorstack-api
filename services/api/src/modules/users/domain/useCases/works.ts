@@ -1,6 +1,6 @@
-import { IWorkRepository } from '../irepositories/works'
+import { QueryParams } from 'equipped'
 import { WorkToModel } from '../../data/models/works'
-import { QueryParams } from '@stranerd/api-commons'
+import { IWorkRepository } from '../irepositories/works'
 
 export class WorksUseCase {
 	private repository: IWorkRepository

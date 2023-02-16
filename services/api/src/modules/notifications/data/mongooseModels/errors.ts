@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { ErrorFromModel } from '../models/errors'
 import { ErrorChangeStreamCallbacks } from '@utils/changeStreams/notifications/errors'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { ErrorEntity } from '../../domain/entities/errors'
 import { ErrorMapper } from '../mappers/errors'
+import { ErrorFromModel } from '../models/errors'
 
 const Schema = new mongoose.Schema<ErrorFromModel>({
 	_id: {

@@ -1,6 +1,6 @@
-import { NotificationEntity } from '../entities/notifications'
+import { QueryParams, QueryResults } from 'equipped'
 import { NotificationToModel } from '../../data/models/notifications'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
+import { NotificationEntity } from '../entities/notifications'
 
 export interface INotificationRepository {
 	find (id: string): Promise<NotificationEntity | null>

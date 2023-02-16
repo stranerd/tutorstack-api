@@ -1,6 +1,6 @@
-import { WorkEntity } from '../entities/works'
+import { QueryParams, QueryResults } from 'equipped'
 import { WorkToModel } from '../../data/models/works'
-import { QueryParams, QueryResults } from '@stranerd/api-commons'
+import { WorkEntity } from '../entities/works'
 
 export interface IWorkRepository {
 	add: (data: WorkToModel) => Promise<WorkEntity>

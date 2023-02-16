@@ -1,7 +1,7 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IPlanRepository } from '../../domain/irepositories/plans'
 import { PlanMapper } from '../mappers/plans'
 import { PlanFromModel, PlanToModel } from '../models/plans'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { Plan } from '../mongooseModels/plans'
 
 export class PlanRepository implements IPlanRepository {

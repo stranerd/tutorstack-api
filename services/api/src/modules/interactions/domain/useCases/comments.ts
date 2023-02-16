@@ -1,6 +1,6 @@
-import { QueryParams } from '@stranerd/api-commons'
-import { ICommentRepository } from '../irepositories/comments'
+import { QueryParams } from 'equipped'
 import { CommentToModel } from '../../data/models/comments'
+import { ICommentRepository } from '../irepositories/comments'
 import { CommentMetaType } from '../types'
 
 export class CommentsUseCase {

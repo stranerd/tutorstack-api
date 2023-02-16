@@ -1,6 +1,6 @@
-import { ISubjectRepository } from '../irepositories/subjects'
+import { QueryParams } from 'equipped'
 import { SubjectToModel } from '../../data/models/subjects'
-import { QueryParams } from '@stranerd/api-commons'
+import { ISubjectRepository } from '../irepositories/subjects'
 
 export class SubjectsUseCase {
 	private repository: ISubjectRepository
@@ -29,4 +29,3 @@ export class SubjectsUseCase {
 		return await this.repository.update(input.id, input.data)
 	}
 }
-

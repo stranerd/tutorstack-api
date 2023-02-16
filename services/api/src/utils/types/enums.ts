@@ -1,4 +1,4 @@
-import { makeEnum } from '@stranerd/api-commons'
+import { makeEnum } from 'equipped'
 
 const Ar = makeEnum('AuthRole', {
 	isAdmin: 'isAdmin',
@@ -12,7 +12,7 @@ const El = makeEnum('EmailsList', {
 
 const Ev = makeEnum('EventTypes', {
 	SENDMAIL: 'SENDMAIL',
-	SENDTEXT:'SENDTEXT',
+	SENDTEXT: 'SENDTEXT',
 	DELETEFILE: 'DELETEFILE'
 } as const)
 
@@ -22,13 +22,13 @@ const Dj = makeEnum('DelayedJobs', {
 	RenewSubscription: 'RenewSubscription'
 } as const)
 
-declare module '@stranerd/api-commons/lib/enums/types' {
+declare module 'equipped/lib/enums/types' {
 	type TAr = typeof Ar
 	type TEl = typeof El
 	type TEv = typeof Ev
 	type TDj = typeof Dj
-    interface IAuthRole extends TAr {}
-    interface IEmailsList extends TEl {}
-    interface IEventTypes extends TEv {}
-    interface IDelayedJobs extends TDj {}
+	interface IAuthRole extends TAr { }
+	interface IEmailsList extends TEl { }
+	interface IEventTypes extends TEv { }
+	interface IDelayedJobs extends TDj { }
 }

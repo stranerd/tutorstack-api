@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { TagController } from '../../controllers/interactions/tags'
 import { isAdmin } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
+import { TagController } from '../../controllers/interactions/tags'
 
 export const tagsRoutes: Route[] = [
 	{

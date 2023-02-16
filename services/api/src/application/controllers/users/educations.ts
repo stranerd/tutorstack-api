@@ -1,6 +1,6 @@
-import { EducationsUseCases } from '@modules/users'
-import { NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
 import { StorageUseCases } from '@modules/storage'
+import { EducationsUseCases } from '@modules/users'
+import { NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class EducationController {
 	static async FindEducation (req: Request) {
@@ -17,29 +17,23 @@ export class EducationController {
 		const uploadedVerification = req.files.verification?.[0] ?? null
 		const changedVerification = !!uploadedVerification || req.body.verification === null
 
-		const data = validate({
-			school: req.body.school,
-			degree: req.body.degree,
-			from: req.body.from,
-			to: req.body.to,
-			verification: uploadedVerification as any
-		}, {
-			school: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			degree: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			from: { required: true, rules: [Validation.isNumber] },
-			to: { required: true, rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(req.body.from)] },
-			verification: { required: true, nullable: true, rules: [Validation.isNotTruncated, Validation.isFile] }
-		})
-		if (uploadedVerification) data.verification = await StorageUseCases.upload('users/educations', uploadedVerification)
-		const validateData = {
-			school: data.school, degree: data.degree, from: data.from, to: data.to,
-			...(changedVerification ? { verification: data.verification } : {})
-		}
+		const data = validateReq({
+			school: Schema.string().min(1),
+			degree: Schema.string().min(1),
+			from: Schema.time().asStamp(),
+			to: Schema.time().min(req.body.from).asStamp(),
+			verification: Schema.file().nullable()
+		}, { ...req.body, verification: uploadedVerification })
+
+		const verification = uploadedVerification ? await StorageUseCases.upload('users/educations', uploadedVerification) : undefined
 
 		const updatedEducation = await EducationsUseCases.update({
 			id: req.params.id,
 			userId: authUserId,
-			data: validateData
+			data: {
+				school: data.school, degree: data.degree, from: data.from, to: data.to,
+				...(changedVerification ? { verification } : {})
+			}
 		})
 
 		if (updatedEducation) return updatedEducation
@@ -47,19 +41,13 @@ export class EducationController {
 	}
 
 	static async CreateEducation (req: Request) {
-		const data = validate({
-			school: req.body.school,
-			degree: req.body.degree,
-			from: req.body.from,
-			to: req.body.to,
-			verification: req.files.verification?.[0] ?? null
-		}, {
-			school: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			degree: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			from: { required: true, rules: [Validation.isNumber] },
-			to: { required: true, rules: [Validation.isNumber, Validation.isMoreThanOrEqualToX(req.body.from)] },
-			verification: { required: true, rules: [Validation.isNotTruncated, Validation.isFile] }
-		})
+		const data = validateReq({
+			school: Schema.string().min(1),
+			degree: Schema.string().min(1),
+			from: Schema.time().asStamp(),
+			to: Schema.time().min(req.body.from).asStamp(),
+			verification: Schema.file()
+		}, { ...req.body, verification: req.files.verification?.[0] ?? null })
 
 		const authUserId = req.authUser!.id
 		const verification = await StorageUseCases.upload('users/educations', data.verification)

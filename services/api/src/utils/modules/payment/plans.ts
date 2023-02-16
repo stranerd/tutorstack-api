@@ -1,5 +1,5 @@
 import { Currencies, PlanToModel } from '@modules/payment'
-import { CronTypes } from '@stranerd/api-commons'
+import { CronTypes } from 'equipped'
 
 export const plansList: PlanToModel[] = [
 	{

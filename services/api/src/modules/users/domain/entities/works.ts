@@ -1,5 +1,5 @@
+import { BaseEntity } from 'equipped'
 import { Media } from '../types'
-import { BaseEntity } from '@stranerd/api-commons'
 
 export class WorkEntity extends BaseEntity {
 	public readonly id: string
@@ -13,9 +13,9 @@ export class WorkEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, userId, institution, position, from, to,
-		             verification, createdAt, updatedAt
-	             }: WorkConstructorArgs) {
+		id, userId, institution, position, from, to,
+		verification, createdAt, updatedAt
+	}: WorkConstructorArgs) {
 		super()
 		this.id = id
 		this.userId = userId

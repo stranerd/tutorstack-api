@@ -1,9 +1,9 @@
-import { MediaOutput } from '@stranerd/api-commons'
+import { MediaOutput } from 'equipped'
 
-export { EmbeddedUser } from '@modules/users'
 export { Currencies } from '@modules/payment'
+export { EmbeddedUser } from '@modules/users'
 export type Booked = { sessionId: string, from: number, to: number }
-export type Media  = MediaOutput
+export type Media = MediaOutput
 
 export type SessionCancelled = {
 	userId: string

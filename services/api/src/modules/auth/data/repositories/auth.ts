@@ -1,7 +1,5 @@
-import { IAuthRepository } from '../../domain/irepositories/auth'
-import { Credential, PasswordResetInput } from '../../domain/types'
-import User from '../mongooseModels/users'
-import { UserFromModel, UserToModel } from '../models/users'
+import { appInstance } from '@utils/environment'
+import { publishers } from '@utils/events'
 import {
 	AuthTypes,
 	BadRequestError,
@@ -14,10 +12,12 @@ import {
 	readEmailFromPug,
 	signinWithGoogle,
 	ValidationError
-} from '@stranerd/api-commons'
-import { appInstance } from '@utils/environment'
+} from 'equipped'
+import { IAuthRepository } from '../../domain/irepositories/auth'
+import { Credential, PasswordResetInput } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
-import { publishers } from '@utils/events'
+import { UserFromModel, UserToModel } from '../models/users'
+import User from '../mongooseModels/users'
 
 const TOKENS_TTL_IN_SECS = 60 * 60
 
@@ -116,8 +116,12 @@ export class AuthRepository implements IAuthRepository {
 		if (!userEmail) throw new BadRequestError('Invalid token')
 		await appInstance.cache.delete('password-reset-token-' + input.token)
 
-		const user = await User.findOneAndUpdate({ email: userEmail }, { $set: { password: await 
-		Hash.hash(input.password) }, $addToSet: { authTypes: AuthTypes.email } }, { new: true })
+		const user = await User.findOneAndUpdate({ email: userEmail }, {
+			$set: {
+				password: await
+				Hash.hash(input.password)
+			}, $addToSet: { authTypes: AuthTypes.email }
+		}, { new: true })
 		if (!user) throw new BadRequestError('No account with saved email exists')
 
 		return this.mapper.mapFrom(user)!

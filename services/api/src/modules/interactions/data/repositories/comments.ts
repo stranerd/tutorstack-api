@@ -1,9 +1,9 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { ICommentRepository } from '../../domain/irepositories/comments'
+import { CommentMetaType, InteractionEntity } from '../../domain/types'
 import { CommentMapper } from '../mappers/comments'
 import { CommentFromModel, CommentToModel } from '../models/comments'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { Comment } from '../mongooseModels/comments'
-import { CommentMetaType, InteractionEntity } from '../../domain/types'
 
 export class CommentRepository implements ICommentRepository {
 	private static instance: CommentRepository

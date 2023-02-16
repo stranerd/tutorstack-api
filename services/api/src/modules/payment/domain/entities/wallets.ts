@@ -1,4 +1,4 @@
-import { BaseEntity } from '@stranerd/api-commons'
+import { BaseEntity } from 'equipped'
 import { AccountDetails, Currencies, SubscriptionModel } from '../types'
 
 export class WalletEntity extends BaseEntity {
@@ -11,8 +11,8 @@ export class WalletEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, userId, balance, account, subscription, createdAt, updatedAt
-	             }: WalletConstructorArgs) {
+		id, userId, balance, account, subscription, createdAt, updatedAt
+	}: WalletConstructorArgs) {
 		super()
 		this.id = id
 		this.userId = userId

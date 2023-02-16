@@ -1,9 +1,9 @@
+import { BadRequestError, mongoose, parseQueryParams } from 'equipped'
+import { AvailabilityEntity } from '../../domain/entities/availabilities'
 import { IAvailabilityRepository } from '../../domain/irepositories/availabilities'
 import { AvailabilityMapper } from '../mappers/availabilities'
-import { Availability } from '../mongooseModels/availabilities'
-import { BadRequestError, mongoose, parseQueryParams } from '@stranerd/api-commons'
 import { AvailabilityFromModel } from '../models/availabilities'
-import { AvailabilityEntity } from '../../domain/entities/availabilities'
+import { Availability } from '../mongooseModels/availabilities'
 
 export class AvailabilityRepository implements IAvailabilityRepository {
 	private static instance: AvailabilityRepository

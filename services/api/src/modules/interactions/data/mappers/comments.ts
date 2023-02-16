@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { CommentEntity } from '../../domain/entities/comments'
 import { CommentFromModel, CommentToModel } from '../models/comments'
 

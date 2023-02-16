@@ -1,6 +1,6 @@
 export { EmbeddedUser } from '@modules/users'
 
-import { MediaOutput } from '@stranerd/api-commons'
+import { MediaOutput } from 'equipped'
 
 export type Media = MediaOutput
 

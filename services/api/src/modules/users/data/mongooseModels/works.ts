@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { WorkFromModel } from '../models/works'
 import { WorkChangeStreamCallbacks } from '@utils/changeStreams/users/works'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { WorkEntity } from '../../domain/entities/works'
 import { WorkMapper } from '../mappers/works'
+import { WorkFromModel } from '../models/works'
 
 const WorkSchema = new mongoose.Schema<WorkFromModel>({
 	_id: {

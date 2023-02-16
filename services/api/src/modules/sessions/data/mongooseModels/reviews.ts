@@ -1,8 +1,8 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { ReviewFromModel } from '../models/reviews'
+import { ReviewChangeStreamCallbacks } from '@utils/changeStreams/sessions/reviews'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { ReviewEntity } from '../../domain/entities/reviews'
 import { ReviewMapper } from '../mappers/reviews'
-import { ReviewChangeStreamCallbacks } from '@utils/changeStreams/sessions/reviews'
+import { ReviewFromModel } from '../models/reviews'
 
 const ReviewSchema = new mongoose.Schema<ReviewFromModel>({
 	_id: {

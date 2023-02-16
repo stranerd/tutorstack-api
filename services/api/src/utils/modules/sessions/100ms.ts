@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken'
-import { Random } from '@stranerd/api-commons'
 import { ms100Config } from '@utils/environment'
 import axios from 'axios'
+import { Random } from 'equipped'
+import jwt from 'jsonwebtoken'
 
 const { appSecret, accessKey, templateId, region } = ms100Config
 

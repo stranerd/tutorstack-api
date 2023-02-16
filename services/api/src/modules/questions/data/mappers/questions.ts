@@ -1,6 +1,6 @@
-import { QuestionFromModel, QuestionToModel } from '../models/questions'
+import { BaseMapper } from 'equipped'
 import { QuestionEntity } from '../../domain/entities/questions'
-import { BaseMapper } from '@stranerd/api-commons'
+import { QuestionFromModel, QuestionToModel } from '../models/questions'
 
 export class QuestionMapper extends BaseMapper<QuestionFromModel, QuestionToModel, QuestionEntity> {
 	mapFrom (model: QuestionFromModel | null) {

@@ -1,7 +1,7 @@
+import { BadRequestError, mongoose, parseQueryParams, QueryParams } from 'equipped'
 import { IMethodRepository } from '../../domain/irepositories/methods'
 import { MethodMapper } from '../mappers/methods'
 import { MethodFromModel, MethodToModel } from '../models/methods'
-import { BadRequestError, mongoose, parseQueryParams, QueryParams } from '@stranerd/api-commons'
 import { Method } from '../mongooseModels/methods'
 
 export class MethodRepository implements IMethodRepository {

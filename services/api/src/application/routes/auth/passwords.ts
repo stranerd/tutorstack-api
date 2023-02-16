@@ -1,6 +1,6 @@
-import { makeController, Route, StatusCodes } from '@stranerd/api-commons'
-import { PasswordsController } from '../../controllers/auth/passwords'
 import { isAuthenticated } from '@application/middlewares'
+import { makeController, Route, StatusCodes } from 'equipped'
+import { PasswordsController } from '../../controllers/auth/passwords'
 
 const resetPasswordEmail: Route = {
 	path: '/auth/passwords/reset/mail',

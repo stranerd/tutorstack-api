@@ -1,9 +1,9 @@
-import { generateChangeStreams, mongoose } from '@stranerd/api-commons'
-import { WalletFromModel } from '../models/wallets'
 import { WalletChangeStreamCallbacks } from '@utils/changeStreams/payment/wallets'
+import { generateChangeStreams, mongoose } from 'equipped'
 import { WalletEntity } from '../../domain/entities/wallets'
-import { WalletMapper } from '../mappers/wallets'
 import { Currencies, PlanDataType } from '../../domain/types'
+import { WalletMapper } from '../mappers/wallets'
+import { WalletFromModel } from '../models/wallets'
 
 const WalletSchema = new mongoose.Schema<WalletFromModel>({
 	_id: {

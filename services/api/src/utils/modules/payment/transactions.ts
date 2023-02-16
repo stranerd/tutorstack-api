@@ -6,9 +6,9 @@ import {
 	TransactionType,
 	WalletsUseCases
 } from '@modules/payment'
-import { Conditions } from '@stranerd/api-commons'
 import { SessionsUseCases } from '@modules/sessions'
 import { BraintreePayment } from '@utils/modules/payment/braintree'
+import { Conditions } from 'equipped'
 
 export const fulfillTransaction = async (transaction: TransactionEntity) => {
 	if (transaction.data.type === TransactionType.PayForSession) {
@@ -50,15 +50,19 @@ export const fulfillTransaction = async (transaction: TransactionEntity) => {
 
 export const retryTransactions = async (timeInMs: number) => {
 	const { results: fulfilledTransactions } = await TransactionsUseCases.get({
-		where: [{ field: 'status', value: TransactionStatus.fulfilled },
-			{ field: 'createdAt', condition: Conditions.gt, value: Date.now() - timeInMs }],
+		where: [
+			{ field: 'status', value: TransactionStatus.fulfilled },
+			{ field: 'createdAt', condition: Conditions.gt, value: Date.now() - timeInMs }
+		],
 		all: true
 	})
 	await Promise.all(fulfilledTransactions.map(fulfillTransaction))
 
 	const { results: initializedTransactions } = await TransactionsUseCases.get({
-		where: [{ field: 'status', value: TransactionStatus.initialized },
-			{ field: 'createdAt', condition: Conditions.gt, value: Date.now() - timeInMs }],
+		where: [
+			{ field: 'status', value: TransactionStatus.initialized },
+			{ field: 'createdAt', condition: Conditions.gt, value: Date.now() - timeInMs }
+		],
 		all: true
 	})
 	await TransactionsUseCases.delete(initializedTransactions.map((t) => t.id))

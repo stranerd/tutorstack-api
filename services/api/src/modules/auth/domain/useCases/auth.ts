@@ -1,7 +1,7 @@
+import { AuthTypes } from 'equipped'
+import { UserToModel } from '../../data/models/users'
 import { IAuthRepository } from '../irepositories/auth'
 import { Credential, PasswordResetInput, RegisterInput } from '../types'
-import { AuthTypes } from '@stranerd/api-commons'
-import { UserToModel } from '../../data/models/users'
 
 export class AuthUseCase {
 	private repository: IAuthRepository

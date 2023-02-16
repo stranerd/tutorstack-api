@@ -1,9 +1,9 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { IAnswerRepository } from '../../domain/irepositories/answers'
+import { EmbeddedUser } from '../../domain/types'
 import { AnswerMapper } from '../mappers/answers'
 import { AnswerFromModel, AnswerToModel } from '../models/answers'
 import { Answer } from '../mongooseModels/answers'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
-import { EmbeddedUser } from '../../domain/types'
 
 export class AnswerRepository implements IAnswerRepository {
 	private static instance: AnswerRepository

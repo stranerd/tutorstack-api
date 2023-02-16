@@ -1,8 +1,8 @@
+import { parseQueryParams, QueryParams } from 'equipped'
 import { ITagRepository } from '../../domain/irepositories/tags'
 import { TagMapper } from '../mappers/tags'
 import { TagFromModel, TagToModel } from '../models/tags'
 import { Tag } from '../mongooseModels/tags'
-import { parseQueryParams, QueryParams } from '@stranerd/api-commons'
 
 export class TagRepository implements ITagRepository {
 	private static instance: TagRepository

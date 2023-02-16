@@ -1,4 +1,4 @@
-import { BaseMapper } from '@stranerd/api-commons'
+import { BaseMapper } from 'equipped'
 import { WorkEntity } from '../../domain/entities/works'
 import { WorkFromModel, WorkToModel } from '../models/works'
 

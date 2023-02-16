@@ -1,4 +1,4 @@
-import { BaseEntity } from '@stranerd/api-commons'
+import { BaseEntity } from 'equipped'
 import { EmbeddedUser, MAX_ANSWERS_COUNT, Media, QuestionHeld, QuestionMeta } from '../types'
 
 export class QuestionEntity extends BaseEntity {
@@ -15,9 +15,9 @@ export class QuestionEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, body, subjectId, topic, attachment,
-		             createdAt, user, answers, heldBy, meta, updatedAt
-	             }: QuestionConstructorArgs) {
+		id, body, subjectId, topic, attachment,
+		createdAt, user, answers, heldBy, meta, updatedAt
+	}: QuestionConstructorArgs) {
 		super()
 		this.id = id
 		this.body = body

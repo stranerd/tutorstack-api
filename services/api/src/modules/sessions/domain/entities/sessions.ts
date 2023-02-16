@@ -1,5 +1,5 @@
+import { BaseEntity } from 'equipped'
 import { Currencies, EmbeddedUser, Media, SessionCancelled } from '../types'
-import { BaseEntity } from '@stranerd/api-commons'
 
 export class SessionEntity extends BaseEntity {
 	static lengthsInMinutes = [60, 120, 180]
@@ -24,10 +24,10 @@ export class SessionEntity extends BaseEntity {
 	public readonly updatedAt: number
 
 	constructor ({
-		             id, tutor, students, paid, subjectId, topic, description, attachments,
-		             startedAt, closedAt, lengthInMinutes, price, currency, ratings,
-		             cancelled, endedAt, createdAt, updatedAt
-	             }: SessionConstructorArgs) {
+		id, tutor, students, paid, subjectId, topic, description, attachments,
+		startedAt, closedAt, lengthInMinutes, price, currency, ratings,
+		cancelled, endedAt, createdAt, updatedAt
+	}: SessionConstructorArgs) {
 		super()
 		this.id = id
 		this.tutor = tutor

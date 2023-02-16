@@ -9,9 +9,9 @@ import {
 	WalletsUseCases
 } from '@modules/payment'
 import { UserEntity, UsersUseCases } from '@modules/users'
-import { BraintreePayment } from '@utils/modules/payment/braintree'
-import { BadRequestError, DelayedJobs } from '@stranerd/api-commons'
 import { appInstance } from '@utils/environment'
+import { BraintreePayment } from '@utils/modules/payment/braintree'
+import { BadRequestError, DelayedJobs } from 'equipped'
 
 const activateSub = async (userId: string, walletId: string, subscription: PlanEntity, successful: boolean) => {
 	const now = Date.now()

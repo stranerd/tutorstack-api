@@ -1,5 +1,5 @@
 import { TagsUseCases, TagTypes } from '@modules/interactions'
-import { BadRequestError, NotAuthorizedError, QueryParams, Request, validate, Validation } from '@stranerd/api-commons'
+import { BadRequestError, NotAuthorizedError, QueryParams, Request, Schema, validateReq } from 'equipped'
 
 export class TagController {
 	static async FindTag (req: Request) {
@@ -12,11 +12,9 @@ export class TagController {
 	}
 
 	static async UpdateTag (req: Request) {
-		const data = validate({
-			title: req.body.title
-		}, {
-			title: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] }
-		})
+		const data = validateReq({
+			title: Schema.string().min(1)
+		}, req.body)
 
 		const updatedTag = await TagsUseCases.update({ id: req.params.id, data })
 
@@ -25,18 +23,11 @@ export class TagController {
 	}
 
 	static async CreateTag (req: Request) {
-		const data = validate({
-			title: req.body.title,
-			type: req.body.type,
-			parent: req.body.parent
-		}, {
-			title: { required: true, rules: [Validation.isString, Validation.isLongerThanX(0)] },
-			type: {
-				required: true,
-				rules: [Validation.isString, Validation.arrayContainsX(Object.keys(TagTypes), (cur, val) => cur === val)]
-			},
-			parent: { required: true, nullable: true, rules: [Validation.isString] }
-		})
+		const data = validateReq({
+			title: Schema.string().min(1),
+			type: Schema.any<TagTypes>().in(Object.values(TagTypes)),
+			parent: Schema.string().nullable()
+		}, req.body)
 
 		if (data.parent !== null) {
 			const parent = await TagsUseCases.find(data.parent)

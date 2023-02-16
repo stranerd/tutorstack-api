@@ -1,5 +1,5 @@
-import { Request } from '@stranerd/api-commons'
 import { getNewTokens } from '@utils/modules/auth'
+import { Request } from 'equipped'
 
 export class TokenController {
 	static async getNewTokens (req: Request) {

@@ -1,7 +1,3 @@
-import { IUserRepository } from '../../domain/irepositories/users'
-import { RegisterInput, RoleInput, UserUpdateInput } from '../../domain/types'
-import { UserMapper } from '../mappers/users'
-import { UserFromModel } from '../models/users'
 import {
 	AuthTypes,
 	deleteCachedAccessToken,
@@ -9,7 +5,11 @@ import {
 	NotFoundError,
 	parseQueryParams,
 	QueryParams
-} from '@stranerd/api-commons'
+} from 'equipped'
+import { IUserRepository } from '../../domain/irepositories/users'
+import { RegisterInput, RoleInput, UserUpdateInput } from '../../domain/types'
+import { UserMapper } from '../mappers/users'
+import { UserFromModel } from '../models/users'
 import User from '../mongooseModels/users'
 
 export class UserRepository implements IUserRepository {
