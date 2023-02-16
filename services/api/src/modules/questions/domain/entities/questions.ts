@@ -1,3 +1,4 @@
+import { generateDefaultUser } from '@modules/users'
 import { BaseEntity } from 'equipped'
 import { EmbeddedUser, MAX_ANSWERS_COUNT, Media, QuestionHeld, QuestionMeta } from '../types'
 
@@ -24,7 +25,7 @@ export class QuestionEntity extends BaseEntity {
 		this.attachment = attachment
 		this.subjectId = subjectId
 		this.topic = topic
-		this.user = user
+		this.user = generateDefaultUser(user)
 		this.answers = answers
 		this.heldBy = heldBy
 		this.meta = meta

@@ -1,4 +1,4 @@
-import { BaseEntity } from 'equipped'
+import { BaseEntity, Validation } from 'equipped'
 import { EmbeddedUser, UserBio, UserDates, UserMetaType, UserRatings, UserRoles, UserStatus, UserTutor } from '../types'
 
 export class UserEntity extends BaseEntity {
@@ -59,4 +59,29 @@ type UserConstructorArgs = {
 	tutor: UserTutor
 	tutors: string[]
 	ratings: UserRatings
+}
+
+
+const generateDefaultBio = (bio: Partial<UserBio>): UserBio => {
+	const first = Validation.capitalize(bio?.name?.first ?? 'Anon')
+	const last = Validation.capitalize(bio?.name?.last ?? 'Ymous')
+	const full = Validation.capitalize(bio?.name?.full ?? (first + ' ' + last))
+	const email = bio?.email ?? 'anon@ymous.com'
+	const description = bio?.description ?? ''
+	const photo = bio?.photo ?? null
+	return {
+		name: { first, last, full },
+		email, photo, description
+	}
+}
+
+const generateDefaultRoles = (roles: Partial<UserRoles>): UserRoles => {
+	return roles ?? {}
+}
+
+export const generateDefaultUser = (user: Partial<EmbeddedUser>): EmbeddedUser => {
+	const id = user?.id ?? ''
+	const bio = generateDefaultBio(user?.bio ?? {})
+	const roles = generateDefaultRoles(user?.roles ?? {})
+	return { id, bio, roles }
 }

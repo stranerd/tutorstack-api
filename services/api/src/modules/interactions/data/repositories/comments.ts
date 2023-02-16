@@ -1,6 +1,6 @@
 import { parseQueryParams, QueryParams } from 'equipped'
 import { ICommentRepository } from '../../domain/irepositories/comments'
-import { CommentMetaType, InteractionEntity } from '../../domain/types'
+import { CommentMetaType, Interaction } from '../../domain/types'
 import { CommentMapper } from '../mappers/comments'
 import { CommentFromModel, CommentToModel } from '../models/comments'
 import { Comment } from '../mongooseModels/comments'
@@ -47,7 +47,7 @@ export class CommentRepository implements ICommentRepository {
 		return !!comment
 	}
 
-	async deleteEntityComments ({ type, id }: InteractionEntity) {
+	async deleteEntityComments ({ type, id }: Interaction) {
 		const comments = await Comment.deleteMany({ 'entity.type': type, 'entity.id': id })
 		return !!comments.acknowledged
 	}

@@ -1,6 +1,7 @@
 import { QueryParams } from 'equipped'
 import { LikeToModel } from '../../data/models/likes'
 import { ILikeRepository } from '../irepositories/likes'
+import { Interaction } from '../types'
 
 export class LikesUseCase {
 	repository: ILikeRepository
@@ -21,7 +22,7 @@ export class LikesUseCase {
 		return await this.repository.like(data)
 	}
 
-	async deleteEntityLikes (entity: LikeToModel['entity']) {
+	async deleteEntityLikes (entity: Interaction) {
 		return await this.repository.deleteEntityLikes(entity)
 	}
 

@@ -1,3 +1,4 @@
+import { generateDefaultUser } from '@modules/users'
 import { BaseEntity } from 'equipped'
 import { Currencies, EmbeddedUser, Media, SessionCancelled } from '../types'
 
@@ -30,8 +31,8 @@ export class SessionEntity extends BaseEntity {
 	}: SessionConstructorArgs) {
 		super()
 		this.id = id
-		this.tutor = tutor
-		this.students = students
+		this.tutor = generateDefaultUser(tutor)
+		this.students = students.map(generateDefaultUser)
 		this.paid = paid
 		this.subjectId = subjectId
 		this.topic = topic

@@ -1,3 +1,4 @@
+import { generateDefaultUser } from '@modules/users'
 import { BaseEntity } from 'equipped'
 import { EmbeddedUser } from '../types'
 
@@ -18,7 +19,7 @@ export class ReviewEntity extends BaseEntity {
 		this.id = id
 		this.sessionId = sessionId
 		this.to = to
-		this.user = user
+		this.user = generateDefaultUser(user)
 		this.rating = rating
 		this.message = message
 		this.createdAt = createdAt

@@ -22,10 +22,14 @@ export class LikesController {
 			})
 		}, req.body)
 
-		await verifyInteractionEntity(entity.type, entity.id, value ? 'likes' : 'dislikes')
+		const userId = await verifyInteractionEntity(entity.type, entity.id, value ? 'likes' : 'dislikes')
 		const user = await UsersUseCases.find(req.authUser!.id)
 		if (!user) throw new BadRequestError('profile not found')
 
-		return await LikesUseCases.like({ value, entity, user: user.getEmbedded() })
+		return await LikesUseCases.like({
+			value,
+			entity: { ...entity, userId },
+			user: user.getEmbedded()
+		})
 	}
 }

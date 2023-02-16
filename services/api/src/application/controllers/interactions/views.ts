@@ -21,11 +21,14 @@ export class ViewsController {
 			})
 		}, req.body)
 
-		await verifyInteractionEntity(entity.type, entity.id, 'views')
+		const userId = await verifyInteractionEntity(entity.type, entity.id, 'views')
 		const user = await UsersUseCases.find(req.authUser!.id)
 		if (!user) throw new BadRequestError('profile not found')
 
-		return await ViewsUseCases.create({ entity, user: user.getEmbedded() })
+		return await ViewsUseCases.create({
+			entity: { ...entity, userId },
+			user: user.getEmbedded()
+		})
 	}
 
 	static async deleteView (req: Request) {

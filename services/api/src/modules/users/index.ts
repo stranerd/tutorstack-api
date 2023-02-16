@@ -16,7 +16,7 @@ export const WorksUseCases = new WorksUseCase(workRepository)
 export { UserFromModel } from './data/models/users'
 export { EducationFromModel } from './data/models/educations'
 export { WorkFromModel } from './data/models/works'
-export { UserEntity } from './domain/entities/users'
+export { generateDefaultUser, UserEntity } from './domain/entities/users'
 export { EducationEntity } from './domain/entities/educations'
 export { WorkEntity } from './domain/entities/works'
 export { UserBio, UserRoles, EmbeddedUser, UserMeta } from './domain/types'

@@ -1,3 +1,4 @@
+import { generateDefaultUser } from '@modules/users'
 import { BaseEntity } from 'equipped'
 import { EmbeddedUser, InteractionEntity } from '../types'
 
@@ -14,7 +15,7 @@ export class LikeEntity extends BaseEntity {
 		this.id = id
 		this.value = value
 		this.entity = entity
-		this.user = user
+		this.user = generateDefaultUser(user)
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}

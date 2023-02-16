@@ -1,6 +1,6 @@
 import { parseQueryParams, QueryParams } from 'equipped'
 import { ILikeRepository } from '../../domain/irepositories/likes'
-import { InteractionEntity } from '../../domain/types'
+import { Interaction } from '../../domain/types'
 import { LikeMapper } from '../mappers/likes'
 import { LikeFromModel, LikeToModel } from '../models/likes'
 import { Like } from '../mongooseModels/likes'
@@ -43,7 +43,7 @@ export class LikeRepository implements ILikeRepository {
 		return this.mapper.mapFrom(like)
 	}
 
-	async deleteEntityLikes ({ type, id }: InteractionEntity) {
+	async deleteEntityLikes ({ type, id }: Interaction) {
 		const likes = await Like.deleteMany({ 'entity.type': type, 'entity.id': id })
 		return !!likes.acknowledged
 	}

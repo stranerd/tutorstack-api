@@ -1,7 +1,7 @@
 import { QueryParams, QueryResults } from 'equipped'
 import { CommentToModel } from '../../data/models/comments'
 import { CommentEntity } from '../entities/comments'
-import { CommentMetaType, InteractionEntity } from '../types'
+import { CommentMetaType, Interaction } from '../types'
 
 export interface ICommentRepository {
 	add: (data: CommentToModel) => Promise<CommentEntity>
@@ -9,7 +9,7 @@ export interface ICommentRepository {
 	find: (id: string) => Promise<CommentEntity | null>
 	update: (id: string, userId: string, data: Partial<CommentToModel>) => Promise<CommentEntity | null>
 	delete: (id: string, userId: string) => Promise<boolean>
-	deleteEntityComments: (entity: InteractionEntity) => Promise<boolean>
+	deleteEntityComments: (entity: Interaction) => Promise<boolean>
 	updateMeta: (commentId: string, property: CommentMetaType, value: 1 | -1) => Promise<void>
 	updateUserBio: (user: CommentToModel['user']) => Promise<boolean>
 }

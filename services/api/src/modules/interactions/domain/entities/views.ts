@@ -1,3 +1,4 @@
+import { generateDefaultUser } from '@modules/users'
 import { BaseEntity } from 'equipped'
 import { EmbeddedUser, InteractionEntity } from '../types'
 
@@ -12,7 +13,7 @@ export class ViewEntity extends BaseEntity {
 		super()
 		this.id = id
 		this.entity = entity
-		this.user = user
+		this.user = generateDefaultUser(user)
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt
 	}

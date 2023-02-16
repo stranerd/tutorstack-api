@@ -1,6 +1,7 @@
 import { QueryParams } from 'equipped'
 import { ViewToModel } from '../../data/models/views'
 import { IViewRepository } from '../irepositories/views'
+import { Interaction } from '../types'
 
 export class ViewsUseCase {
 	repository: IViewRepository
@@ -25,7 +26,7 @@ export class ViewsUseCase {
 		return await this.repository.delete(input.id, input.userId)
 	}
 
-	async deleteEntityViews (entity: ViewToModel['entity']) {
+	async deleteEntityViews (entity: Interaction) {
 		return await this.repository.deleteEntityViews(entity)
 	}
 

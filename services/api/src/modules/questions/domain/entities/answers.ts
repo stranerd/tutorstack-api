@@ -1,3 +1,4 @@
+import { generateDefaultUser } from '@modules/users'
 import { BaseEntity } from 'equipped'
 import { EmbeddedUser, Media } from '../types'
 
@@ -15,7 +16,7 @@ export class AnswerEntity extends BaseEntity {
 		super()
 		this.id = id
 		this.questionId = questionId
-		this.user = user
+		this.user = generateDefaultUser(user)
 		this.attachment = attachment
 		this.createdAt = createdAt
 		this.updatedAt = updatedAt

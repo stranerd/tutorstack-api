@@ -1,6 +1,6 @@
 import { parseQueryParams, QueryParams } from 'equipped'
 import { IViewRepository } from '../../domain/irepositories/views'
-import { InteractionEntity } from '../../domain/types'
+import { Interaction } from '../../domain/types'
 import { ViewMapper } from '../mappers/views'
 import { ViewFromModel, ViewToModel } from '../models/views'
 import { View } from '../mongooseModels/views'
@@ -46,7 +46,7 @@ export class ViewRepository implements IViewRepository {
 		return !!view
 	}
 
-	async deleteEntityViews ({ type, id }: InteractionEntity) {
+	async deleteEntityViews ({ type, id }: Interaction) {
 		const views = await View.deleteMany({ 'entity.type': type, 'entity.id': id })
 		return !!views.acknowledged
 	}
