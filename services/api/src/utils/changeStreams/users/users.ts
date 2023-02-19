@@ -4,9 +4,9 @@ import { ReviewsUseCases, SessionsUseCases } from '@modules/sessions'
 import { UserEntity, UserFromModel, UserMeta, UsersUseCases } from '@modules/users'
 import { appInstance } from '@utils/environment'
 import { sendNotification } from '@utils/modules/notifications/notifications'
-import { AuthRole, ChangeStreamCallbacks } from 'equipped'
+import { AuthRole, DbChangeCallbacks } from 'equipped'
 
-export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, UserEntity> = {
+export const UserDbChangeCallbacks: DbChangeCallbacks<UserFromModel, UserEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('users/users', after)
 		await appInstance.listener.created(`users/users/${after.id}`, after)

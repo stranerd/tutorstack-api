@@ -1,9 +1,9 @@
 import { EducationEntity, EducationFromModel } from '@modules/users'
 import { appInstance } from '@utils/environment'
 import { publishers } from '@utils/events'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const EducationChangeStreamCallbacks: ChangeStreamCallbacks<EducationFromModel, EducationEntity> = {
+export const EducationDbChangeCallbacks: DbChangeCallbacks<EducationFromModel, EducationEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('users/educations', after)
 		await appInstance.listener.created(`users/educations/${after.id}`, after)

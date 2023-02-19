@@ -1,5 +1,6 @@
-import { EducationChangeStreamCallbacks } from '@utils/changeStreams/users/educations'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { EducationDbChangeCallbacks } from '@utils/changeStreams/users/educations'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { EducationEntity } from '../../domain/entities/educations'
 import { EducationMapper } from '../mappers/educations'
 import { EducationFromModel } from '../models/educations'
@@ -47,4 +48,5 @@ const EducationSchema = new mongoose.Schema<EducationFromModel>({
 
 export const Education = mongoose.model<EducationFromModel>('UsersEducation', EducationSchema)
 
-generateChangeStreams<EducationFromModel, EducationEntity>(Education, EducationChangeStreamCallbacks, new EducationMapper().mapFrom).then()
+export const EducationChange = appInstance.db
+	.generateDbChange<EducationFromModel, EducationEntity>(Education, EducationDbChangeCallbacks, new EducationMapper().mapFrom)

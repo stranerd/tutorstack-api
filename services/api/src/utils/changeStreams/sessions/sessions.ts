@@ -4,9 +4,9 @@ import { UserMeta, UsersUseCases } from '@modules/users'
 import { appInstance } from '@utils/environment'
 import { Ms100Live } from '@utils/modules/sessions/100ms'
 import { payTutorForSession } from '@utils/modules/sessions/sessions'
-import { ChangeStreamCallbacks, DelayedJobs } from 'equipped'
+import { DbChangeCallbacks, DelayedJobs } from 'equipped'
 
-export const SessionChangeStreamCallbacks: ChangeStreamCallbacks<SessionFromModel, SessionEntity> = {
+export const SessionDbChangeCallbacks: DbChangeCallbacks<SessionFromModel, SessionEntity> = {
 	created: async ({ after }) => {
 		await Promise.all(
 			after.getParticipants().map(async (id) => {

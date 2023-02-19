@@ -1,5 +1,6 @@
-import { UserChangeStreamCallbacks } from '@utils/changeStreams/users/users'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { UserDbChangeCallbacks } from '@utils/changeStreams/users/users'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { UserEntity } from '../../domain/entities/users'
 import { UserMeta } from '../../domain/types'
 import { UserMapper } from '../mappers/users'
@@ -86,4 +87,5 @@ const UserSchema = new mongoose.Schema<UserFromModel>({
 
 export const User = mongoose.model<UserFromModel>('User', UserSchema)
 
-generateChangeStreams<UserFromModel, UserEntity>(User, UserChangeStreamCallbacks, new UserMapper().mapFrom).then()
+export const UserChange = appInstance.db
+	.generateDbChange<UserFromModel, UserEntity>(User, UserDbChangeCallbacks, new UserMapper().mapFrom)

@@ -1,8 +1,8 @@
 import { ViewEntity, ViewFromModel } from '@modules/interactions'
 import { appInstance } from '@utils/environment'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const ViewChangeStreamCallbacks: ChangeStreamCallbacks<ViewFromModel, ViewEntity> = {
+export const ViewDbChangeCallbacks: DbChangeCallbacks<ViewFromModel, ViewEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('interactions/views', after)
 		await appInstance.listener.created(`interactions/views/${after.id}`, after)

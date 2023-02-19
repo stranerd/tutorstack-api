@@ -1,5 +1,6 @@
-import { SessionChangeStreamCallbacks } from '@utils/changeStreams/sessions/sessions'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { SessionDbChangeCallbacks } from '@utils/changeStreams/sessions/sessions'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { SessionEntity } from '../../domain/entities/sessions'
 import { SessionMapper } from '../mappers/sessions'
 import { SessionFromModel } from '../models/sessions'
@@ -86,4 +87,5 @@ const SessionSchema = new mongoose.Schema<SessionFromModel>({
 
 export const Session = mongoose.model<SessionFromModel>('Session', SessionSchema)
 
-generateChangeStreams<SessionFromModel, SessionEntity>(Session, SessionChangeStreamCallbacks, new SessionMapper().mapFrom).then()
+export const SessionChange = appInstance.db
+	.generateDbChange<SessionFromModel, SessionEntity>(Session, SessionDbChangeCallbacks, new SessionMapper().mapFrom)

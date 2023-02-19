@@ -1,4 +1,5 @@
-import { BadRequestError, mongoose, NotAuthorizedError, parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { BadRequestError, mongoose, NotAuthorizedError, QueryParams } from 'equipped'
 import { ISessionRepository } from '../../domain/irepositories/sessions'
 import { EmbeddedUser } from '../../domain/types'
 import { AvailabilityMapper } from '../mappers/availabilities'
@@ -28,7 +29,7 @@ export class SessionRepository implements ISessionRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<SessionFromModel>(Session, query)
+		const data = await appInstance.db.parseQueryParams<SessionFromModel>(Session, query)
 
 		return {
 			...data,

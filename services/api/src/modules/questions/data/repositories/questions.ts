@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { IQuestionRepository } from '../../domain/irepositories/questions'
 import { EmbeddedUser, MAX_ANSWERS_COUNT, QuestionMetaType } from '../../domain/types'
 import { QuestionMapper } from '../mappers/questions'
@@ -19,7 +20,7 @@ export class QuestionRepository implements IQuestionRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<QuestionFromModel>(Question, query)
+		const data = await appInstance.db.parseQueryParams<QuestionFromModel>(Question, query)
 
 		return {
 			...data,

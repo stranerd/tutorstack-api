@@ -1,5 +1,6 @@
-import { CommentChangeStreamCallbacks } from '@utils/changeStreams/interactions/comments'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { CommentDbChangeCallbacks } from '@utils/changeStreams/interactions/comments'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { CommentEntity } from '../../domain/entities/comments'
 import { CommentMetaType } from '../../domain/types'
 import { CommentMapper } from '../mappers/comments'
@@ -43,4 +44,5 @@ const CommentSchema = new mongoose.Schema<CommentFromModel>({
 
 export const Comment = mongoose.model<CommentFromModel>('InteractionsComment', CommentSchema)
 
-generateChangeStreams<CommentFromModel, CommentEntity>(Comment, CommentChangeStreamCallbacks, new CommentMapper().mapFrom).then()
+export const CommentChange = appInstance.db
+	.generateDbChange<CommentFromModel, CommentEntity>(Comment, CommentDbChangeCallbacks, new CommentMapper().mapFrom)

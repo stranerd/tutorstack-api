@@ -1,5 +1,6 @@
-import { NotificationChangeStreamCallbacks } from '@utils/changeStreams/notifications/notifications'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { NotificationDbChangeCallbacks } from '@utils/changeStreams/notifications/notifications'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { NotificationEntity } from '../../domain/entities/notifications'
 import { NotificationMapper } from '../mappers/notifications'
 import { NotificationFromModel } from '../models/notifications'
@@ -51,4 +52,5 @@ const NotificationSchema = new mongoose.Schema<NotificationFromModel>({
 
 export const Notification = mongoose.model<NotificationFromModel>('Notification', NotificationSchema)
 
-generateChangeStreams<NotificationFromModel, NotificationEntity>(Notification, NotificationChangeStreamCallbacks, new NotificationMapper().mapFrom).then()
+export const NotificationChange = appInstance.db
+	.generateDbChange<NotificationFromModel, NotificationEntity>(Notification, NotificationDbChangeCallbacks, new NotificationMapper().mapFrom)

@@ -1,5 +1,6 @@
-import { AvailabilityChangeStreamCallbacks } from '@utils/changeStreams/sessions/availabilities'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { AvailabilityDbChangeCallbacks } from '@utils/changeStreams/sessions/availabilities'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { AvailabilityEntity } from '../../domain/entities/availabilities'
 import { AvailabilityMapper } from '../mappers/availabilities'
 import { AvailabilityFromModel } from '../models/availabilities'
@@ -37,4 +38,5 @@ const AvailabilitySchema = new mongoose.Schema<AvailabilityFromModel>({
 
 export const Availability = mongoose.model<AvailabilityFromModel>('SessionsAvailability', AvailabilitySchema)
 
-generateChangeStreams<AvailabilityFromModel, AvailabilityEntity>(Availability, AvailabilityChangeStreamCallbacks, new AvailabilityMapper().mapFrom).then()
+export const AvailabilityChange = appInstance.db
+	.generateDbChange<AvailabilityFromModel, AvailabilityEntity>(Availability, AvailabilityDbChangeCallbacks, new AvailabilityMapper().mapFrom)

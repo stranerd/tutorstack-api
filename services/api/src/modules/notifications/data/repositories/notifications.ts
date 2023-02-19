@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { INotificationRepository } from '../../domain/irepositories/notifications'
 import { NotificationMapper } from '../mappers/notifications'
 import { NotificationFromModel, NotificationToModel } from '../models/notifications'
@@ -14,7 +15,7 @@ export class NotificationRepository implements INotificationRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<NotificationFromModel>(Notification, query)
+		const data = await appInstance.db.parseQueryParams<NotificationFromModel>(Notification, query)
 		return {
 			...data,
 			results: data.results.map((n) => this.mapper.mapFrom(n)!)

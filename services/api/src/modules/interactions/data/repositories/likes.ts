@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { ILikeRepository } from '../../domain/irepositories/likes'
 import { Interaction } from '../../domain/types'
 import { LikeMapper } from '../mappers/likes'
@@ -19,7 +20,7 @@ export class LikeRepository implements ILikeRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<LikeFromModel>(Like, query)
+		const data = await appInstance.db.parseQueryParams<LikeFromModel>(Like, query)
 
 		return {
 			...data,

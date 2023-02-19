@@ -1,5 +1,6 @@
-import { WorkChangeStreamCallbacks } from '@utils/changeStreams/users/works'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { WorkDbChangeCallbacks } from '@utils/changeStreams/users/works'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { WorkEntity } from '../../domain/entities/works'
 import { WorkMapper } from '../mappers/works'
 import { WorkFromModel } from '../models/works'
@@ -47,4 +48,5 @@ const WorkSchema = new mongoose.Schema<WorkFromModel>({
 
 export const Work = mongoose.model<WorkFromModel>('UsersWork', WorkSchema)
 
-generateChangeStreams<WorkFromModel, WorkEntity>(Work, WorkChangeStreamCallbacks, new WorkMapper().mapFrom).then()
+export const WorkChange = appInstance.db
+	.generateDbChange<WorkFromModel, WorkEntity>(Work, WorkDbChangeCallbacks, new WorkMapper().mapFrom)

@@ -1,5 +1,6 @@
-import { PlanChangeStreamCallbacks } from '@utils/changeStreams/payment/plans'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { PlanDbChangeCallbacks } from '@utils/changeStreams/payment/plans'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { PlanEntity } from '../../domain/entities/plans'
 import { PlanDataType } from '../../domain/types'
 import { PlanMapper } from '../mappers/plans'
@@ -51,4 +52,5 @@ const PlanSchema = new mongoose.Schema<PlanFromModel>({
 
 export const Plan = mongoose.model<PlanFromModel>('PaymentPlan', PlanSchema)
 
-generateChangeStreams<PlanFromModel, PlanEntity>(Plan, PlanChangeStreamCallbacks, new PlanMapper().mapFrom).then()
+export const PlanChange = appInstance.db
+	.generateDbChange<PlanFromModel, PlanEntity>(Plan, PlanDbChangeCallbacks, new PlanMapper().mapFrom)

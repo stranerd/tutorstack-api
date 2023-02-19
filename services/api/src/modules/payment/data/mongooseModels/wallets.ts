@@ -1,5 +1,6 @@
-import { WalletChangeStreamCallbacks } from '@utils/changeStreams/payment/wallets'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { WalletDbChangeCallbacks } from '@utils/changeStreams/payment/wallets'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { WalletEntity } from '../../domain/entities/wallets'
 import { Currencies, PlanDataType } from '../../domain/types'
 import { WalletMapper } from '../mappers/wallets'
@@ -69,4 +70,5 @@ const WalletSchema = new mongoose.Schema<WalletFromModel>({
 
 export const Wallet = mongoose.model<WalletFromModel>('PaymentWallet', WalletSchema)
 
-generateChangeStreams<WalletFromModel, WalletEntity>(Wallet, WalletChangeStreamCallbacks, new WalletMapper().mapFrom).then()
+export const WalletChange = appInstance.db
+	.generateDbChange<WalletFromModel, WalletEntity>(Wallet, WalletDbChangeCallbacks, new WalletMapper().mapFrom)

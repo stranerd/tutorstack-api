@@ -1,5 +1,6 @@
-import { SubjectChangeStreamCallbacks } from '@utils/changeStreams/questions/subjects'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { SubjectDbChangeCallbacks } from '@utils/changeStreams/questions/subjects'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { SubjectEntity } from '../../domain/entities/subjects'
 import { SubjectMapper } from '../mappers/subjects'
 import { SubjectFromModel } from '../models/subjects'
@@ -27,4 +28,5 @@ const Schema = new mongoose.Schema<SubjectFromModel>({
 
 export const Subject = mongoose.model<SubjectFromModel>('QuestionsSubject', Schema)
 
-generateChangeStreams<SubjectFromModel, SubjectEntity>(Subject, SubjectChangeStreamCallbacks, new SubjectMapper().mapFrom).then()
+export const SubjectChange = appInstance.db
+	.generateDbChange<SubjectFromModel, SubjectEntity>(Subject, SubjectDbChangeCallbacks, new SubjectMapper().mapFrom)

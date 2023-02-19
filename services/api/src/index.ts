@@ -8,7 +8,7 @@ import { plansList } from '@utils/modules/payment/plans'
 import { registerSockets } from '@utils/sockets'
 
 const start = async () => {
-	await appInstance.startDbConnection()
+	await appInstance.startConnections()
 	await Promise.all(
 		Object.values(subscribers)
 			.map(async (subscriber) => {

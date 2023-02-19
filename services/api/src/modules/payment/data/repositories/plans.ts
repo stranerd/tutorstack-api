@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { IPlanRepository } from '../../domain/irepositories/plans'
 import { PlanMapper } from '../mappers/plans'
 import { PlanFromModel, PlanToModel } from '../models/plans'
@@ -18,7 +19,7 @@ export class PlanRepository implements IPlanRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<PlanFromModel>(Plan, query)
+		const data = await appInstance.db.parseQueryParams<PlanFromModel>(Plan, query)
 
 		return {
 			...data,

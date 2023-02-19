@@ -5,9 +5,9 @@ import { appInstance } from '@utils/environment'
 import { publishers } from '@utils/events'
 import { sendNotification } from '@utils/modules/notifications/notifications'
 import { releaseQuestion } from '@utils/modules/questions/questions'
-import { ChangeStreamCallbacks, Validation } from 'equipped'
+import { DbChangeCallbacks, Validation } from 'equipped'
 
-export const AnswerChangeStreamCallbacks: ChangeStreamCallbacks<AnswerFromModel, AnswerEntity> = {
+export const AnswerDbChangeCallbacks: DbChangeCallbacks<AnswerFromModel, AnswerEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('questions/answers', after)
 		await appInstance.listener.created(`questions/answers/${after.id}`, after)

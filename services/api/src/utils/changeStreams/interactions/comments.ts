@@ -1,9 +1,9 @@
 import { CommentEntity, CommentFromModel, InteractionEntities } from '@modules/interactions'
 import { QuestionMetaType, QuestionsUseCases } from '@modules/questions'
 import { appInstance } from '@utils/environment'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const CommentChangeStreamCallbacks: ChangeStreamCallbacks<CommentFromModel, CommentEntity> = {
+export const CommentDbChangeCallbacks: DbChangeCallbacks<CommentFromModel, CommentEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('interactions/comments', after)
 		await appInstance.listener.created(`interactions/comments/${after.id}`, after)

@@ -1,5 +1,6 @@
-import { ViewChangeStreamCallbacks } from '@utils/changeStreams/interactions/views'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { ViewDbChangeCallbacks } from '@utils/changeStreams/interactions/views'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { ViewEntity } from '../../domain/entities/views'
 import { ViewFromModel } from '../models/views'
 import { ViewMapper } from './../mappers/views'
@@ -31,4 +32,5 @@ const ViewSchema = new mongoose.Schema<ViewFromModel>({
 
 export const View = mongoose.model<ViewFromModel>('InteractionsView', ViewSchema)
 
-generateChangeStreams<ViewFromModel, ViewEntity>(View, ViewChangeStreamCallbacks, new ViewMapper().mapFrom).then()
+export const ViewChange = appInstance.db
+	.generateDbChange<ViewFromModel, ViewEntity>(View, ViewDbChangeCallbacks, new ViewMapper().mapFrom)

@@ -1,9 +1,9 @@
 import { AuthUserEntity, UserFromModel } from '@modules/auth'
 import { UsersUseCases } from '@modules/users'
 import { publishers } from '@utils/events'
-import { ChangeStreamCallbacks, EventTypes } from 'equipped'
+import { DbChangeCallbacks, EventTypes } from 'equipped'
 
-export const UserChangeStreamCallbacks: ChangeStreamCallbacks<UserFromModel, AuthUserEntity> = {
+export const UserDbChangeCallbacks: DbChangeCallbacks<UserFromModel, AuthUserEntity> = {
 	created: async ({ after }) => {
 		await UsersUseCases.createUserWithBio({
 			id: after.id,

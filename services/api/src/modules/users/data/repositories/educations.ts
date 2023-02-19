@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { IEducationRepository } from '../../domain/irepositories/educations'
 import { EducationMapper } from '../mappers/educations'
 import { EducationFromModel, EducationToModel } from '../models/educations'
@@ -18,7 +19,7 @@ export class EducationRepository implements IEducationRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<EducationFromModel>(Education, query)
+		const data = await appInstance.db.parseQueryParams<EducationFromModel>(Education, query)
 
 		return {
 			...data,

@@ -1,6 +1,7 @@
 import { QuestionMetaType } from '@modules/questions/domain/types'
-import { QuestionChangeStreamCallbacks } from '@utils/changeStreams/questions/questions'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { QuestionDbChangeCallbacks } from '@utils/changeStreams/questions/questions'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { QuestionEntity } from '../../domain/entities/questions'
 import { QuestionMapper } from '../mappers/questions'
 import { QuestionFromModel } from '../models/questions'
@@ -62,4 +63,5 @@ const Schema = new mongoose.Schema<QuestionFromModel>({
 
 export const Question = mongoose.model<QuestionFromModel>('Question', Schema)
 
-generateChangeStreams<QuestionFromModel, QuestionEntity>(Question, QuestionChangeStreamCallbacks, new QuestionMapper().mapFrom).then()
+export const QuestionChange = appInstance.db
+	.generateDbChange<QuestionFromModel, QuestionEntity>(Question, QuestionDbChangeCallbacks, new QuestionMapper().mapFrom)

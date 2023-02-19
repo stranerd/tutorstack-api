@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { ITagRepository } from '../../domain/irepositories/tags'
 import { TagMapper } from '../mappers/tags'
 import { TagFromModel, TagToModel } from '../models/tags'
@@ -18,7 +19,7 @@ export class TagRepository implements ITagRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<TagFromModel>(Tag, query)
+		const data = await appInstance.db.parseQueryParams<TagFromModel>(Tag, query)
 
 		return {
 			...data,

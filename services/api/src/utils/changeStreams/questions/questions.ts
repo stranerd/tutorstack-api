@@ -4,9 +4,9 @@ import { UserMeta, UsersUseCases } from '@modules/users'
 import { appInstance } from '@utils/environment'
 import { publishers } from '@utils/events'
 import { holdQuestion, releaseQuestion } from '@utils/modules/questions/questions'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const QuestionChangeStreamCallbacks: ChangeStreamCallbacks<QuestionFromModel, QuestionEntity> = {
+export const QuestionDbChangeCallbacks: DbChangeCallbacks<QuestionFromModel, QuestionEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('questions/questions', after)
 		await appInstance.listener.created(`questions/questions/${after.id}`, after)

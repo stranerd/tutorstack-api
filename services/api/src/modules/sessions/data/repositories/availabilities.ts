@@ -1,4 +1,5 @@
-import { BadRequestError, mongoose, parseQueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { BadRequestError, mongoose } from 'equipped'
 import { AvailabilityEntity } from '../../domain/entities/availabilities'
 import { IAvailabilityRepository } from '../../domain/irepositories/availabilities'
 import { AvailabilityMapper } from '../mappers/availabilities'
@@ -15,7 +16,7 @@ export class AvailabilityRepository implements IAvailabilityRepository {
 	}
 
 	async get (query) {
-		const data = await parseQueryParams<AvailabilityFromModel>(Availability, query)
+		const data = await appInstance.db.parseQueryParams<AvailabilityFromModel>(Availability, query)
 		return {
 			...data,
 			results: data.results.map((u) => this.mapper.mapFrom(u)!)

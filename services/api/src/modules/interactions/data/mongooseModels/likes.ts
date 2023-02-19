@@ -1,5 +1,6 @@
-import { LikeChangeStreamCallbacks } from '@utils/changeStreams/interactions/likes'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { LikeDbChangeCallbacks } from '@utils/changeStreams/interactions/likes'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { LikeEntity } from '../../domain/entities/likes'
 import { LikeMapper } from '../mappers/likes'
 import { LikeFromModel } from '../models/likes'
@@ -35,4 +36,5 @@ const LikeSchema = new mongoose.Schema<LikeFromModel>({
 
 export const Like = mongoose.model<LikeFromModel>('InteractionsLike', LikeSchema)
 
-generateChangeStreams<LikeFromModel, LikeEntity>(Like, LikeChangeStreamCallbacks, new LikeMapper().mapFrom).then()
+export const LikeChange = appInstance.db
+	.generateDbChange<LikeFromModel, LikeEntity>(Like, LikeDbChangeCallbacks, new LikeMapper().mapFrom)

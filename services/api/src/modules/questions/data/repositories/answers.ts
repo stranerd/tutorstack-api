@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { IAnswerRepository } from '../../domain/irepositories/answers'
 import { EmbeddedUser } from '../../domain/types'
 import { AnswerMapper } from '../mappers/answers'
@@ -19,7 +20,7 @@ export class AnswerRepository implements IAnswerRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<AnswerFromModel>(Answer, query)
+		const data = await appInstance.db.parseQueryParams<AnswerFromModel>(Answer, query)
 
 		return {
 			...data,

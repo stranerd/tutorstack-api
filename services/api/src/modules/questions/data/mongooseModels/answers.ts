@@ -1,5 +1,6 @@
-import { AnswerChangeStreamCallbacks } from '@utils/changeStreams/questions/answers'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { AnswerDbChangeCallbacks } from '@utils/changeStreams/questions/answers'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { AnswerEntity } from '../../domain/entities/answers'
 import { AnswerMapper } from '../mappers/answers'
 import { AnswerFromModel } from '../models/answers'
@@ -35,4 +36,5 @@ const Schema = new mongoose.Schema<AnswerFromModel>({
 
 export const Answer = mongoose.model<AnswerFromModel>('QuestionsAnswer', Schema)
 
-generateChangeStreams<AnswerFromModel, AnswerEntity>(Answer, AnswerChangeStreamCallbacks, new AnswerMapper().mapFrom).then()
+export const AnswerChange = appInstance.db
+	.generateDbChange<AnswerFromModel, AnswerEntity>(Answer, AnswerDbChangeCallbacks, new AnswerMapper().mapFrom)

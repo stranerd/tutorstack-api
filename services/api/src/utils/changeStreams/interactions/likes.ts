@@ -1,8 +1,8 @@
 import { LikeEntity, LikeFromModel } from '@modules/interactions'
 import { appInstance } from '@utils/environment'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const LikeChangeStreamCallbacks: ChangeStreamCallbacks<LikeFromModel, LikeEntity> = {
+export const LikeDbChangeCallbacks: DbChangeCallbacks<LikeFromModel, LikeEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('interactions/likes', after)
 		await appInstance.listener.created(`interactions/likes/${after.id}`, after)

@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { IViewRepository } from '../../domain/irepositories/views'
 import { Interaction } from '../../domain/types'
 import { ViewMapper } from '../mappers/views'
@@ -19,7 +20,7 @@ export class ViewRepository implements IViewRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<ViewFromModel>(View, query)
+		const data = await appInstance.db.parseQueryParams<ViewFromModel>(View, query)
 
 		return {
 			...data,

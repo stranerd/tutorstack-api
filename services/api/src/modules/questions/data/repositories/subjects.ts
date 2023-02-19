@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { ISubjectRepository } from '../../domain/irepositories/subjects'
 import { SubjectMapper } from '../mappers/subjects'
 import { SubjectFromModel, SubjectToModel } from '../models/subjects'
@@ -18,7 +19,7 @@ export class SubjectRepository implements ISubjectRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<SubjectFromModel>(Subject, query)
+		const data = await appInstance.db.parseQueryParams<SubjectFromModel>(Subject, query)
 
 		return {
 			...data,

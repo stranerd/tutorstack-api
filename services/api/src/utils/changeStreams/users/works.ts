@@ -1,9 +1,9 @@
 import { WorkEntity, WorkFromModel } from '@modules/users'
 import { appInstance } from '@utils/environment'
 import { publishers } from '@utils/events'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const WorkChangeStreamCallbacks: ChangeStreamCallbacks<WorkFromModel, WorkEntity> = {
+export const WorkDbChangeCallbacks: DbChangeCallbacks<WorkFromModel, WorkEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('users/works', after)
 		await appInstance.listener.created(`users/works/${after.id}`, after)

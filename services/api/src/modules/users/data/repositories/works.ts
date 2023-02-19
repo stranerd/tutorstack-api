@@ -1,4 +1,5 @@
-import { parseQueryParams, QueryParams } from 'equipped'
+import { appInstance } from '@utils/environment'
+import { QueryParams } from 'equipped'
 import { IWorkRepository } from '../../domain/irepositories/works'
 import { WorkMapper } from '../mappers/works'
 import { WorkFromModel, WorkToModel } from '../models/works'
@@ -18,7 +19,7 @@ export class WorkRepository implements IWorkRepository {
 	}
 
 	async get (query: QueryParams) {
-		const data = await parseQueryParams<WorkFromModel>(Work, query)
+		const data = await appInstance.db.parseQueryParams<WorkFromModel>(Work, query)
 
 		return {
 			...data,

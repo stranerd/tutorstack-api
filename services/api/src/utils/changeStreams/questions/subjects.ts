@@ -1,9 +1,9 @@
 import { QuestionsUseCases, SubjectEntity, SubjectFromModel } from '@modules/questions'
 import { UsersUseCases } from '@modules/users'
 import { appInstance } from '@utils/environment'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const SubjectChangeStreamCallbacks: ChangeStreamCallbacks<SubjectFromModel, SubjectEntity> = {
+export const SubjectDbChangeCallbacks: DbChangeCallbacks<SubjectFromModel, SubjectEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('questions/subjects', after)
 		await appInstance.listener.created(`questions/subjects/${after.id}`, after)

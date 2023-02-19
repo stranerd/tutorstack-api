@@ -1,5 +1,6 @@
-import { MethodChangeStreamCallbacks } from '@utils/changeStreams/payment/methods'
-import { generateChangeStreams, mongoose } from 'equipped'
+import { MethodDbChangeCallbacks } from '@utils/changeStreams/payment/methods'
+import { appInstance } from '@utils/environment'
+import { mongoose } from 'equipped'
 import { MethodEntity } from '../../domain/entities/methods'
 import { MethodMapper } from '../mappers/methods'
 import { MethodFromModel } from '../models/methods'
@@ -40,4 +41,5 @@ const MethodSchema = new mongoose.Schema<MethodFromModel>({
 
 export const Method = mongoose.model<MethodFromModel>('PaymentMethod', MethodSchema)
 
-generateChangeStreams<MethodFromModel, MethodEntity>(Method, MethodChangeStreamCallbacks, new MethodMapper().mapFrom).then()
+export const MethodChange = appInstance.db
+	.generateDbChange<MethodFromModel, MethodEntity>(Method, MethodDbChangeCallbacks, new MethodMapper().mapFrom)

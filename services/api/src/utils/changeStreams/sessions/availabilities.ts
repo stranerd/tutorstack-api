@@ -1,8 +1,8 @@
 import { AvailabilityEntity, AvailabilityFromModel } from '@modules/sessions'
 import { appInstance } from '@utils/environment'
-import { ChangeStreamCallbacks } from 'equipped'
+import { DbChangeCallbacks } from 'equipped'
 
-export const AvailabilityChangeStreamCallbacks: ChangeStreamCallbacks<AvailabilityFromModel, AvailabilityEntity> = {
+export const AvailabilityDbChangeCallbacks: DbChangeCallbacks<AvailabilityFromModel, AvailabilityEntity> = {
 	created: async ({ after }) => {
 		await appInstance.listener.created('sessions/availabilities', after)
 		await appInstance.listener.created(`sessions/availabilities/${after.id}`, after)
